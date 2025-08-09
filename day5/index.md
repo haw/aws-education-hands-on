@@ -7,6 +7,6 @@ title: Day 5
 
 ## 資料
 
-- [成果発表フォーマット](presentation_format.md)
+- [成果発表フォーマット](./materials/presentation_format.md)
 
 [← ホームに戻る](../)
