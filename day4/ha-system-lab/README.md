@@ -37,7 +37,10 @@
 
 ### Step 1: VPC・RDS構築（15分）
 
-Day3と同じ手順でVPCとRDSを構築します。
+Day 3と同じ手順でVPCとRDSを構築します。  
+参考: <a href="../../day3/db-lab/" target="_blank" rel="noopener noreferrer">Day 3の手順</a>  
+
+以下、Day 3のポイントのみ示します。  
 
 #### VPC作成
 1. **VPCコンソール**→「VPCを作成」
