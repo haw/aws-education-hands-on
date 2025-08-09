@@ -285,16 +285,16 @@
    ```
 
 ### **アプリケーションが「Unknown database」エラー**
-🚨 **原因**: RDS作成時に初期データベース名 `employeedb` を入力し忘れた
-🔧 **解決策**: RDSを削除して再作成、またはMySQLクライアントで手動作成
+🚨 **原因**: RDS作成時に初期データベース名 `employeedb` を入力し忘れた  
+🔧 **解決策**: RDSを削除して再作成、またはMySQLクライアントで手動作成  
 
 ### **ポート3000にアクセスできない**
-🚨 **原因**: セキュリティグループでポート3000が開放されていない
-🔧 **解決策**: `web-server-sg`のインバウンドルールでカスタムTCP（ポート3000）を追加
+🚨 **原因**: セキュリティグループでポート3000が開放されていない  
+🔧 **解決策**: `web-server-sg`のインバウンドルールでカスタムTCP（ポート3000）を追加  
 
 ### **「Can't add new command when connection is in closed state」エラー**
-🚨 **原因**: server.jsを更新後、Node.jsアプリケーションの再起動が必要
-🔧 **解決策**: 
+🚨 **原因**: server.jsを更新後、Node.jsアプリケーションの再起動が必要  
+🔧 **解決策**:  
 ```bash
 sudo systemctl restart employee-app
 sudo systemctl status employee-app  # 状態確認
