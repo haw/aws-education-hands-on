@@ -34,7 +34,7 @@
 2. 「バケットを作成」をクリック
 
 ### バケット設定
-- **バケット名**: `hiroshima-cu-ac-jp-website-[random-number]`
+- **バケット名**: `awesome-cloud-challenge-[random-number]`
   ※グローバルで一意である必要があります
 - **リージョン**: デフォルト（us-east-1）
 
@@ -80,7 +80,7 @@
 1. 「アクセス許可」タブを選択
 2. 「バケットポリシー」→「編集」
 3. 用意された <a href="https://github.com/haw/aws-education-materials/blob/main/day1/5min-impact-lab/materials/bucket-policy.json" target="_blank" rel="noopener noreferrer">bucket-policy.json</a>  の内容をコピーして貼り付け
-4. **YOUR-BUCKET-NAME**を実際のバケット名に変更 （例: arn:aws:s3:::hiroshima-cu-ac-jp-website-[random-number]）
+4. **YOUR-BUCKET-NAME**を実際のバケット名に変更 （例: arn:aws:s3:::awesome-cloud-challenge-[random-number]）
 
 ⚠️ **重要**: バケット名の変更を忘れずに！
 
