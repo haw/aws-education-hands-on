@@ -274,7 +274,7 @@ RDSが「available」状態になることを確認
 - **マルチAZ配置**: 異なるデータセンターでの冗長化
 - **セキュリティ強化**: ALB経由のみのアクセス制限で多層防御を実現
 
-<a href="./day5/materials/presentation_format.html" target="_blank" rel="noopener noreferrer">成果発表フォーマット</a>  
+<a href="../../day5/materials/presentation_format.html" target="_blank" rel="noopener noreferrer">成果発表フォーマット</a>  
 
 ---
 
