@@ -122,9 +122,16 @@ RDSが「利用可能」状態になるまで、5分〜10分程度時間がか�
 
 #### 高度な詳細
 - **IAMプロファイル**: `LabInstanceProfile`
-- **ユーザーデータ**: Day3の <a href="https://github.com/haw/aws-education-materials/blob/main/day3/db-lab/materials/user-data-webapp.txt" target="_blank" rel="noopener noreferrer">user-data-webapp.txt</a> をコピー（Node.js版）
+- **ユーザーデータ**: Day3の <a href="https://github.com/haw/aws-education-materials/blob/main/day3/db-lab/materials/user-data-webapp.txt" target="_blank" rel="noopener noreferrer">user-data-webapp.txt</a> をコピー（Node.js版）  
 
-### Step 3: データベース接続設定（5分）
+### Step 3: データベースセキュリティグループ更新（5分）
+
+1. **EC2コンソール**→「セキュリティグループ」
+2. `database-sg` を選択
+3. 「インバウンドルール」→「インバウンドルールを編集」
+4. タイプ「MySQL/Auroraルール」にソースを「`ha-web-server-sg` のセキュリティグループID」とするルールを追加
+
+### Step 4: データベース接続設定（5分）
 
 **RDSコンソールにて、作成したデータベースの状態が「利用可能」となっていることを確認する。**  
 「利用可能」となるまで待つ。  
