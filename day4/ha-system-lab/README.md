@@ -142,6 +142,10 @@ RDSが「利用可能」状態になるまで、5分〜10分程度時間がか�
    sudo sed -i 's/YOUR_RDS_ENDPOINT_HERE/[実際のエンドポイント]/' server.js
    sudo sed -i 's/YOUR_RDS_ENDPOINT_HERE/[実際のエンドポイント]/' init_db.js
    ```
+
+   💡 **RDSエンドポイント取得方法**: RDSコンソール→データベース→`employee-database`→接続とセキュリティ→エンドポイント
+   `[RDSエンドポイント]`を置き換えて、コマンドを実行すること。  
+
 4. **データベース初期化**:
    ```bash
    node init_db.js
