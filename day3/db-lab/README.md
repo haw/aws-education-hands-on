@@ -203,7 +203,7 @@
    sudo sed -i 's/YOUR_RDS_ENDPOINT_HERE/[RDSエンドポイント]/' init_db.js
    ```
    
-   💡 **RDSエンドポイント取得方法**: RDSコンソール→データベース→`employee-database`→接続とセキュリティ→エンドポイント
+   💡 **RDSエンドポイント取得方法**: RDSコンソール→データベース→`employee-database`→接続とセキュリティ→エンドポイント  
    `[RDSエンドポイント]`を置き換えて、コマンドを実行すること。  
 
 4. データベース初期化スクリプト実行
