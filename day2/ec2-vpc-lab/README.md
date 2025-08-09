@@ -1,4 +1,4 @@
-# 💻 Day2: コンピュート・ネットワーク ハンズオン
+# 💻 Day 2: コンピュート・ネットワーク ハンズオン
 
 ## 🎯 このハンズオンで学ぶこと
 
@@ -68,7 +68,7 @@
 
 #### 高度な詳細
 - **IAMインスタンスプロファイル**: `LabInstanceProfile`
-- **ユーザーデータ**: `user-data-apache.txt` の内容をコピー
+- **ユーザーデータ**: <a href="https://github.com/haw/aws-education-materials/blob/main/day2/ec2-vpc-lab/materials/user-data-apache.txt" target="_blank" rel="noopener noreferrer">user-data-apache.txt</a> の内容をコピー
 
 `user-data-apache.txt`: Apacheの自動セットアップとカスタムWebページ作成を行うスクリプト  
 
@@ -149,7 +149,7 @@
 
 #### 高度な詳細
 - **IAMインスタンスプロファイル**: `LabInstanceProfile`
-- **ユーザーデータ**: `user-data-apache.txt` の内容をコピー
+- **ユーザーデータ**: <a href="https://github.com/haw/aws-education-materials/blob/main/day2/ec2-vpc-lab/materials/user-data-apache.txt" target="_blank" rel="noopener noreferrer">user-data-apache.txt</a>  の内容をコピー
 
 ### Step 3: 動作確認と比較（5分）
 
