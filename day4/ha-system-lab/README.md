@@ -45,23 +45,24 @@ Day 3と同じ手順でVPCとRDSを構築します。
 #### VPC作成
 1. **VPCコンソール**→「VPCを作成」
 2. **設定**:
-   - **名前**: `ha-system-vpc`
+   - **名前**: `employee-app-vpc` （`プロジェクト` => `employee-app` に変更で `-vpc` はサフィックスされる)
    - **IPv4 CIDR**: `10.0.0.0/16`
    - **AZ数**: 2、**パブリック**: 2、**プライベート**: 2
    - **NATゲートウェイ**: なし
 
 #### RDS作成
-1. **サブネットグループ作成**: `ha-db-subnet-group`
-2. **セキュリティグループ作成**: `ha-database-sg`
+1. **サブネットグループ作成**: `employee-db-subnet-group`
+2. **セキュリティグループ作成**: `database-sg`
 3. **RDS作成**:
-   - **識別子**: `ha-employee-database`
+   - **識別子**: `employee-database`
    - **エンジン**: MySQL 8.4.6
    - **🚨初期データベース名**: `employeedb`
-   - **VPC**: `ha-system-vpc`
+   - **VPC**: `employee-app-vpc`
 
-### Step 2: 動作確認（5分）
+### Step 2: 状態確認（5分〜10分）
 
-RDSが「available」状態になることを確認
+RDSが「利用可能」状態になるまで、5分〜10分程度時間がかかります。  
+ここで待つ必要はありませんので、次へ進みましょう。  
 
 ---
 
@@ -76,8 +77,15 @@ RDSが「available」状態になることを確認
 - **AMI**: Amazon Linux 2023 AMI
 - **インスタンスタイプ**: t3.micro
 
+#### キーペア（ログイン）
+
+- キーベアなしで続行（推奨されません）
+
 #### ネットワーク設定
-- **VPC**: `ha-system-vpc`
+
+「編集」ボタンを押す  
+
+- **VPC**: `employee-app-vpc`
 - **サブネット**: パブリックサブネット1
 - **パブリックIP**: 有効
 
@@ -100,8 +108,12 @@ RDSが「available」状態になることを確認
 - **AMI**: Amazon Linux 2023 AMI
 - **インスタンスタイプ**: t3.micro
 
+#### キーペア（ログイン）
+
+- キーベアなしで続行（推奨されません）
+
 #### ネットワーク設定
-- **VPC**: `ha-system-vpc`
+- **VPC**: `employee-app-vpc`
 - **サブネット**: パブリックサブネット2（異なるAZ）
 - **パブリックIP**: 有効
 
@@ -113,6 +125,9 @@ RDSが「available」状態になることを確認
 - **ユーザーデータ**: Day3の <a href="https://github.com/haw/aws-education-materials/blob/main/day3/db-lab/materials/user-data-webapp.txt" target="_blank" rel="noopener noreferrer">user-data-webapp.txt</a> をコピー（Node.js版）
 
 ### Step 3: データベース接続設定（5分）
+
+**RDSコンソールにて、作成したデータベースの状態が「利用可能」となっていることを確認する。**  
+「利用可能」となるまで待つ。  
 
 #### 1台目のみで実行（ha-web-server-1）
 
