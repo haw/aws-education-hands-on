@@ -69,8 +69,8 @@
 4. 「オブジェクト」タブを選択
 5. 「アップロード」→「ファイルを追加」
 6. 以下のファイルをアップロード：
-   - 編集済みの`index.html`（目標入り）
-   - `JumpingBallRunner-SingleFile.html`（ゲーム）
+   - 編集済みの <a href="https://github.com/haw/aws-education-materials/blob/main/day1/5min-impact-lab/materials/index.html" target="_blank" rel="noopener noreferrer">index.html</a> （目標入り）
+   - <a href="https://github.com/haw/aws-education-materials/blob/main/day1/5min-impact-lab/materials/JumpingBallRunner-SingleFile.html" target="_blank" rel="noopener noreferrer">JumpingBallRunner-SingleFile.html</a> （ゲーム）
 7. 「アップロード」ボタンをクリック
 
 💡 **例**: `5年後にはフルスタックエンジニアとして世界で活躍したい！`
@@ -79,7 +79,7 @@
 
 1. 「アクセス許可」タブを選択
 2. 「バケットポリシー」→「編集」
-3. 用意された`bucket-policy.json`の内容をコピーして貼り付け
+3. 用意された <a href="https://github.com/haw/aws-education-materials/blob/main/day1/5min-impact-lab/materials/bucket-policy.json" target="_blank" rel="noopener noreferrer">bucket-policy.json</a>  の内容をコピーして貼り付け
 4. **YOUR-BUCKET-NAME**を実際のバケット名に変更 （例: arn:aws:s3:::hiroshima-cu-ac-jp-website-[random-number]）
 
 ⚠️ **重要**: バケット名の変更を忘れずに！

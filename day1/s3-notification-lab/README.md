@@ -65,10 +65,12 @@
 6. 「関数の作成」をクリック
 
 #### Python版コード
-`lambda-python.py` を参照してください。AWSコンソール上の「コード」タブで、Copy & Pasteしてください。  
+
+<a href="./lambda-python.py" target="_blank" rel="noopener noreferrer">lambda-python.py</a> を参照してください。AWSコンソール上の「コード」タブで、Copy & Pasteしてください。  
 
 #### Node.js版コード
-`lambda-nodejs.js` を参照してください。AWSコンソール上の「コード」タブで、Copy & Pasteしてください。  
+
+<a href="./lambda-nodejs.js" target="_blank" rel="noopener noreferrer">lambda-nodejs.js</a>  を参照してください。AWSコンソール上の「コード」タブで、Copy & Pasteしてください。  
 
 ### Step 5: SNSトピックARNの設定（2分）
 
