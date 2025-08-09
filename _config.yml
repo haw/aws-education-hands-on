@@ -1,0 +1,22 @@
+title: AWS教育プログラム ハンズオン資料
+description: 「構築しただけでは終わらせない。学びを言葉にして、"自分の技術"にする。」
+theme: minima
+plugins:
+  - jekyll-feed
+
+# GitHub Pages settings
+url: ""
+baseurl: ""
+
+# Navigation
+header_pages:
+  - index.md
+
+# Markdown settings
+markdown: kramdown
+highlighter: rouge
+
+# Exclude files
+exclude:
+  - .gitignore
+  - README.md
