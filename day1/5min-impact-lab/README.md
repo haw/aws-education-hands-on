@@ -34,7 +34,7 @@
 2. 「バケットを作成」をクリック
 
 ### バケット設定
-- **バケット名**: `awesome-cloud-challenge-[random-number]`
+- **バケット名**: `awesome-cloud-challenge-[random-number]`  
   ※バケット名は、グローバルで一意である必要があります  
   ※`[random-number]`は好きな数字に置き換えてください  
 - **リージョン**: デフォルト（us-east-1）
