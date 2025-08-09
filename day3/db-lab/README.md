@@ -1,4 +1,4 @@
-# 🗄️ Day3: ストレージ・データベース ハンズオン
+# 🗄️ Day 3: ストレージ・データベース ハンズオン
 
 ## 🎯 このハンズオンで学ぶこと
 
@@ -179,7 +179,7 @@
 
 #### 高度な詳細
 - **IAMインスタンスプロファイル**: `LabInstanceProfile`
-- **ユーザーデータ**: `user-data-webapp.txt` の内容をコピー
+- **ユーザーデータ**: <a href="https://github.com/haw/aws-education-materials/blob/main/day3/db-lab/materials/user-data-webapp.txt" target="_blank" rel="noopener noreferrer">user-data-webapp.txt</a> の内容をコピー
 
 ### Step 2: データベースセキュリティグループ更新（5分）
 
