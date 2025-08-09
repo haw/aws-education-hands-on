@@ -1,4 +1,4 @@
-# ⚖️ Day4: 高可用性システム ハンズオン
+# ⚖️ Day 4: 高可用性システム ハンズオン
 
 > **HA = High Availability（高可用性）**  
 > High Availabilityの略語として「HA」は広く使われていますが、  
@@ -86,7 +86,7 @@ RDSが「available」状態になることを確認
 
 #### 高度な詳細
 - **IAMプロファイル**: `LabInstanceProfile`
-- **ユーザーデータ**: Day3の`user-data-webapp.txt`をコピー（Node.js版）
+- **ユーザーデータ**: Day3の <a href="https://github.com/haw/aws-education-materials/blob/main/day3/db-lab/materials/user-data-webapp.txt" target="_blank" rel="noopener noreferrer">user-data-webapp.txt</a> をコピー（Node.js版）
 
 ### Step 2: 2台目のEC2インスタンス作成（10分）
 
@@ -107,7 +107,7 @@ RDSが「available」状態になることを確認
 
 #### 高度な詳細
 - **IAMプロファイル**: `LabInstanceProfile`
-- **ユーザーデータ**: Day3の`user-data-webapp.txt`をコピー（Node.js版）
+- **ユーザーデータ**: Day3の <a href="https://github.com/haw/aws-education-materials/blob/main/day3/db-lab/materials/user-data-webapp.txt" target="_blank" rel="noopener noreferrer">user-data-webapp.txt</a> をコピー（Node.js版）
 
 ### Step 3: データベース接続設定（5分）
 
