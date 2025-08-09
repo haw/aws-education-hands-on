@@ -66,11 +66,11 @@
 
 #### Python版コード
 
-<a href="./lambda-python.py" target="_blank" rel="noopener noreferrer">lambda-python.py</a> を参照してください。AWSコンソール上の「コード」タブで、Copy & Pasteしてください。  
+<a href="https://github.com/haw/aws-education-materials/blob/main/day1/s3-notification-lab/materials/lambda-python.py" target="_blank" rel="noopener noreferrer">lambda-python.py</a> を参照してください。AWSコンソール上の「コード」タブで、Copy & Pasteしてください。  
 
 #### Node.js版コード
 
-<a href="./lambda-nodejs.js" target="_blank" rel="noopener noreferrer">lambda-nodejs.js</a>  を参照してください。AWSコンソール上の「コード」タブで、Copy & Pasteしてください。  
+<a href="https://github.com/haw/aws-education-materials/blob/main/day1/s3-notification-lab/materials/lambda-nodejs.js" target="_blank" rel="noopener noreferrer">lambda-nodejs.js</a> を参照してください。AWSコンソール上の「コード」タブで、Copy & Pasteしてください。  
 
 ### Step 5: SNSトピックARNの設定（2分）
 
