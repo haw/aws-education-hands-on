@@ -62,17 +62,23 @@
 ## 🚀 Step 3: 目標記入とHTMLファイルアップロード（5分）
 
 ### 目標記入
-1. 手元の`index.html`をテキストエディタで開く
-2. `[ここに各自の目標を記入してください]` をあなたの目標に書き換え (※ 1分考えて、どうしても思い浮かばなければ手順4へ進む)
-3. 保存する
+
+1. <a href="https://github.com/haw/aws-education-materials/blob/main/day1/5min-impact-lab/materials/index.html" target="_blank" rel="noopener noreferrer">index.html</a>と<a href="https://github.com/haw/aws-education-materials/blob/main/day1/5min-impact-lab/materials/JumpingBallRunner-SingleFile.html" target="_blank" rel="noopener noreferrer">JumpingBallRunner-SingleFile.html</a>をダウンロードする
+
+    ![](images/github-download.png)
+
+2. 手元の`index.html`をテキストエディタで開く
+3. `[ここに各自の目標を記入してください]` をあなたの目標に書き換え (※ 1分考えて、どうしても思い浮かばなければ、次の「ファイルアップロード」へ進む)
+4. 保存する
 
 ### ファイルアップロード
-4. 「オブジェクト」タブを選択
-5. 「アップロード」→「ファイルを追加」
-6. 以下のファイルをアップロード：
-   - 編集済みの <a href="https://github.com/haw/aws-education-materials/blob/main/day1/5min-impact-lab/materials/index.html" target="_blank" rel="noopener noreferrer">index.html</a> （目標入り）
-   - <a href="https://github.com/haw/aws-education-materials/blob/main/day1/5min-impact-lab/materials/JumpingBallRunner-SingleFile.html" target="_blank" rel="noopener noreferrer">JumpingBallRunner-SingleFile.html</a> （ゲーム）
-7. 「アップロード」ボタンをクリック
+
+1. 「オブジェクト」タブを選択
+2. 「アップロード」→「ファイルを追加」
+3. 以下のファイルをアップロード：
+   - 編集済みの index.html （目標入り）
+   - JumpingBallRunner-SingleFile.html （ゲーム）
+4. 「アップロード」ボタンをクリック
 
 💡 **例**: `5年後にはフルスタックエンジニアとして世界で活躍したい！`
 
