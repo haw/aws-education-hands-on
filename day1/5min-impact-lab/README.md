@@ -9,11 +9,7 @@
 
 ## 🏗️ 構築するシステム
 
-```
-🌐 インターネット → 🪣 S3バケット → 📄 挑戦宣言ページ
-                    ↓
-              静的ウェブサイトホスティング
-```
+![](images/Hosting_a_static_website_using_Amazon_S3.png)
 
 **動作**: 匿名の挑戦宣言ページを世界に公開し、仲間と共有
 
@@ -30,8 +26,12 @@
 
 ## 🚀 Step 1: バケット作成（3分）
 
+![](images/AWS-Conole-S3.png)
+
 1. **S3コンソール**にアクセス
 2. 「バケットを作成」をクリック
+
+※ 特に指示がないところは、デフォルト値のまま進めてください。  
 
 ### バケット設定
 - **バケット名**: `awesome-cloud-challenge-[random-number]`  
@@ -41,7 +41,8 @@
 
 ### パブリックアクセス設定
 - **「パブリックアクセスをすべてブロック」**: ✅チェックを外す ← 重要！
-- 警告が出ますが「承認します」にチェック
+- ⚠️警告が出ますが「承認します」にチェック
+    - 「現在の設定により、このバケットとバケット内のオブジェクトが公開される可能性があることを承認します。」に✅️チェック
 - その他はデフォルト設定のまま
 
 3. 「バケットを作成」をクリック
@@ -50,6 +51,9 @@
 
 1. 作成したバケットをクリック
 2. 「プロパティ」タブを選択
+
+    ![](images/S3-bucket-property.png)
+
 3. 一番下の「静的ウェブサイトホスティング」→「編集」
 
 ### ホスティング設定
@@ -63,12 +67,15 @@
 
 ### 目標記入
 
-1. <a href="https://github.com/haw/aws-education-materials/blob/main/day1/5min-impact-lab/materials/index.html" target="_blank" rel="noopener noreferrer">index.html</a>と<a href="https://github.com/haw/aws-education-materials/blob/main/day1/5min-impact-lab/materials/JumpingBallRunner-SingleFile.html" target="_blank" rel="noopener noreferrer">JumpingBallRunner-SingleFile.html</a>をダウンロードする
+1. 「<a href="https://github.com/haw/aws-education-materials/blob/main/day1/5min-impact-lab/materials/index.html" target="_blank" rel="noopener noreferrer">index.html</a>」ファイルと「<a href="https://github.com/haw/aws-education-materials/blob/main/day1/5min-impact-lab/materials/JumpingBallRunner-SingleFile.html" target="_blank" rel="noopener noreferrer">JumpingBallRunner-SingleFile.html</a>」の2つの.htmlファイルをダウンロードする
 
     ![](images/github-download.png)
 
-2. 手元の`index.html`をテキストエディタで開く
-3. `[ここに各自の目標を記入してください]` をあなたの目標に書き換え (※ 1分考えて、どうしても思い浮かばなければ、次の「ファイルアップロード」へ進む)
+2. ダウンロードした`index.html`をテキストエディタ(Visual Studio Code等)で開く
+3. `[ここに各自の目標を記入してください]`（201行目） をあなたの目標に書き換え (※ 1分考えて、どうしても思い浮かばなければ、次の「ファイルアップロード」へ進む)
+
+    💡 **例**: `5年後にはフルスタックエンジニアとして世界で活躍したい！`
+
 4. 保存する
 
 ### ファイルアップロード
@@ -80,7 +87,9 @@
    - JumpingBallRunner-SingleFile.html （ゲーム）
 4. 「アップロード」ボタンをクリック
 
-💡 **例**: `5年後にはフルスタックエンジニアとして世界で活躍したい！`
+**アップロード完了後は「閉じる」で、閉じてよい。**  
+
+![](images/S3-files-uploaded.png)
 
 ## 🚀 Step 4: バケットポリシー設定（5分） ← 最重要！
 
@@ -88,6 +97,12 @@
 2. 「バケットポリシー」→「編集」
 3. 用意された <a href="https://github.com/haw/aws-education-materials/blob/main/day1/5min-impact-lab/materials/bucket-policy.json" target="_blank" rel="noopener noreferrer">bucket-policy.json</a>  の内容をコピーして貼り付け
 4. **YOUR-BUCKET-NAME**を実際のバケット名に変更 （例: arn:aws:s3:::awesome-cloud-challenge-[random-number]）
+
+    ![](images/S3-bucket-policy-edit.png)
+
+    arn = Amazon Resource Name: AWSリソースを一意に識別するための命名規則
+
+5. 「変更の保存」(画面下方)
 
 ⚠️ **重要**: バケット名の変更を忘れずに！
 
@@ -100,6 +115,24 @@
 5. **あなたの目標が表示されていることを確認**
 6. **URLをチャットで共有** → 講師が画面で紹介します！
 7. 🎉 あなたの挑戦宣言が世界に公開されました！
+
+
+**📚コラム: JumpingBallRunner-SingleFile.html**
+
+```
+このゲームはChatGPT-5が制作しました。驚きなのは、数行だけの指示でできあがります。
+
+Prompt: Create a single-page app in a single HTML file with the following requirements:
+- Name: Jumping Ball Runner
+- Goal: Jump over obstacles to survive as long as possible.
+- Features: Increasing speed, high score tracking, retry button, and funny sounds for actions and events.
+- The UI should be colorful, with parallax scrolling backgrounds.
+- The characters should look cartoonish and be fun to watch.
+- The game should be enjoyable for everyone.
+
+このプロンプトは、OpenAIの公式ページで紹介されています。
+https://openai.com/index/introducing-gpt-5/
+```
 
 ---
 
