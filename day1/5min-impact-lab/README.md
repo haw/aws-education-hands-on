@@ -132,6 +132,9 @@ Prompt: Create a single-page app in a single HTML file with the following requir
 
 このプロンプトは、OpenAIの公式ページで紹介されています。
 https://openai.com/index/introducing-gpt-5/
+
+実行の都度、作られるゲームは少しつづ異なるものができます。
+あなたの指示でできあがるゲームはどんなものですか。
 ```
 
 ---
