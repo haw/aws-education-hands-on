@@ -68,6 +68,9 @@
 
 #### 高度な詳細
 - **IAMインスタンスプロファイル**: `LabInstanceProfile`
+  
+  > **AWS Academy環境ではない方は**: セッションマネージャーを使用するため、`AmazonSSMManagedInstanceCore`ポリシーがアタッチされたIAMロールを作成し、インスタンスプロファイルとして設定してください。
+
 - **ユーザーデータ**: <a href="https://github.com/haw/aws-education-materials/blob/main/day2/ec2-vpc-lab/materials/user-data-apache.txt" target="_blank" rel="noopener noreferrer">user-data-apache.txt</a> の内容をコピー
 
 `user-data-apache.txt`: Apacheの自動セットアップとカスタムWebページ作成を行うスクリプト  
@@ -149,6 +152,9 @@
 
 #### 高度な詳細
 - **IAMインスタンスプロファイル**: `LabInstanceProfile`
+  
+  > **AWS Academy環境ではない方は**: セッションマネージャーを使用するため、`AmazonSSMManagedInstanceCore`ポリシーがアタッチされたIAMロールを作成し、インスタンスプロファイルとして設定してください。
+
 - **ユーザーデータ**: <a href="https://github.com/haw/aws-education-materials/blob/main/day2/ec2-vpc-lab/materials/user-data-apache.txt" target="_blank" rel="noopener noreferrer">user-data-apache.txt</a>  の内容をコピー
 
 ### Step 3: 動作確認と比較（5分）

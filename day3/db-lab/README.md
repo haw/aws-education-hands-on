@@ -180,6 +180,9 @@
 
 #### 高度な詳細
 - **IAMインスタンスプロファイル**: `LabInstanceProfile`
+  
+  > **AWS Academy環境ではない方は**: セッションマネージャーを使用するため、`AmazonSSMManagedInstanceCore`ポリシーがアタッチされたIAMロールを作成し、インスタンスプロファイルとして設定してください。
+
 - **ユーザーデータ**: <a href="https://github.com/haw/aws-education-materials/blob/main/day3/db-lab/materials/user-data-webapp.txt" target="_blank" rel="noopener noreferrer">user-data-webapp.txt</a> の内容をコピー
 
 ### Step 2: データベースセキュリティグループ更新（5分）

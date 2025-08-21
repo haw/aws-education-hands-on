@@ -97,6 +97,9 @@ RDSが「利用可能」状態になるまで、5分〜10分程度時間がか�
 
 #### 高度な詳細
 - **IAMプロファイル**: `LabInstanceProfile`
+  
+  > **AWS Academy環境ではない方は**: セッションマネージャーを使用するため、`AmazonSSMManagedInstanceCore`ポリシーがアタッチされたIAMロールを作成し、インスタンスプロファイルとして設定してください。
+
 - **ユーザーデータ**: Day3の <a href="https://github.com/haw/aws-education-materials/blob/main/day3/db-lab/materials/user-data-webapp.txt" target="_blank" rel="noopener noreferrer">user-data-webapp.txt</a> をコピー（Node.js版）
 
 ### Step 2: 2台目のEC2インスタンス作成（10分）
@@ -122,6 +125,9 @@ RDSが「利用可能」状態になるまで、5分〜10分程度時間がか�
 
 #### 高度な詳細
 - **IAMプロファイル**: `LabInstanceProfile`
+  
+  > **AWS Academy環境ではない方は**: セッションマネージャーを使用するため、`AmazonSSMManagedInstanceCore`ポリシーがアタッチされたIAMロールを作成し、インスタンスプロファイルとして設定してください。
+
 - **ユーザーデータ**: Day3の <a href="https://github.com/haw/aws-education-materials/blob/main/day3/db-lab/materials/user-data-webapp.txt" target="_blank" rel="noopener noreferrer">user-data-webapp.txt</a> をコピー（Node.js版）  
 
 ### Step 3: データベースセキュリティグループ更新（5分）
