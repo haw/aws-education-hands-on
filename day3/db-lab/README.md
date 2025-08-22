@@ -200,7 +200,9 @@
     sudo su - ec2-user
     ```
 3. RDSエンドポイントを設定ファイルに反映
-    💡 **RDSエンドポイント取得方法**: RDSコンソール→データベース→`employee-database`→接続とセキュリティ→エンドポイントの`[RDSエンドポイント]`値で置き換える。  
+
+    💡 **RDSエンドポイント取得方法**: RDSコンソール→データベース→`employee-database`→接続とセキュリティ→エンドポイント
+    以下、`.js`ファイル内の`YOUR_RDS_ENDPOINT_HERE`を`[RDSエンドポイント]`値で置き換える。  
 
     **nano エディタで書き換え**
     ```bash
@@ -209,9 +211,9 @@
     sudo nano init_db.js
     ```
 
-    - `YOUR_RDS_ENDPOINT_HERE`を[RDSエンドポイント]に置換する。
-    - nanoエディタの保存はCtl + o  
-    - nanoエディタの終了はCtl + x  
+    - `YOUR_RDS_ENDPOINT_HERE`を`[RDSエンドポイント]`に置換する。
+    - nanoエディタの保存は「Ctl + o」  
+    - nanoエディタの終了は「Ctl + x」  
 
     もしくは、
 
