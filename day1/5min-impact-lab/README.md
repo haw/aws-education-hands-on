@@ -99,7 +99,7 @@
 3. 用意された <a href="https://github.com/haw/aws-education-materials/blob/main/day1/5min-impact-lab/materials/bucket-policy.json" target="_blank" rel="noopener noreferrer">bucket-policy.json</a>  の内容をコピーして貼り付け
 4. **YOUR-BUCKET-NAME**を実際のバケット名に変更
 
-    例: "Resource": "arn:aws:s3:::awesome-cloud-challenge-123/*"  
+    例: `"Resource": "arn:aws:s3:::awesome-cloud-challenge-123/*"`  
 
     ![](images/S3-bucket-policy-edit.png)
 
