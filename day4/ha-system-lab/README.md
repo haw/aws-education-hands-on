@@ -151,13 +151,29 @@ RDSが「利用可能」状態になるまで、5分〜10分程度時間がか�
    cd /var/www/html
    ```
 3. **RDSエンドポイント更新**:
-   ```bash
-   sudo sed -i 's/YOUR_RDS_ENDPOINT_HERE/[実際のエンドポイント]/' server.js
-   sudo sed -i 's/YOUR_RDS_ENDPOINT_HERE/[実際のエンドポイント]/' init_db.js
-   ```
 
-   💡 **RDSエンドポイント取得方法**: RDSコンソール→データベース→`employee-database`→接続とセキュリティ→エンドポイント  
-   `[RDSエンドポイント]`を置き換えて、コマンドを実行すること。  
+    💡 **RDSエンドポイント取得方法**: RDSコンソール→データベース→`employee-database`→接続とセキュリティ→エンドポイント  
+    以下、`.js`ファイル内の`YOUR_RDS_ENDPOINT_HERE`を`[RDSエンドポイント]`値で置き換える。  
+
+    **nano エディタで書き換え**
+    ```bash
+    cd /var/www/html
+    sudo nano server.js
+    sudo nano init_db.js
+    ```
+
+    - `YOUR_RDS_ENDPOINT_HERE`を`[RDSエンドポイント]`に置換する。
+    - nanoエディタの保存は「Ctl + o」  
+    - nanoエディタの終了は「Ctl + x」  
+
+    もしくは、
+
+    **sedコマンドで書き換え**
+    ```bash
+    cd /var/www/html
+    sudo sed -i 's/YOUR_RDS_ENDPOINT_HERE/[RDSエンドポイント]/' server.js
+    sudo sed -i 's/YOUR_RDS_ENDPOINT_HERE/[RDSエンドポイント]/' init_db.js
+    ```
 
 4. **データベース初期化**:
    ```bash
@@ -182,13 +198,29 @@ RDSが「利用可能」状態になるまで、5分〜10分程度時間がか�
    cd /var/www/html
    ```
 3. **RDSエンドポイント更新**のみ:
-   ```bash
-   sudo sed -i 's/YOUR_RDS_ENDPOINT_HERE/[実際のエンドポイント]/' server.js
-   sudo sed -i 's/YOUR_RDS_ENDPOINT_HERE/[実際のエンドポイント]/' init_db.js
-   ```
 
-   💡 **RDSエンドポイント取得方法**: RDSコンソール→データベース→`employee-database`→接続とセキュリティ→エンドポイント  
-   `[RDSエンドポイント]`を置き換えて、コマンドを実行すること。  
+    💡 **RDSエンドポイント取得方法**: RDSコンソール→データベース→`employee-database`→接続とセキュリティ→エンドポイント  
+    以下、`.js`ファイル内の`YOUR_RDS_ENDPOINT_HERE`を`[RDSエンドポイント]`値で置き換える。  
+
+    **nano エディタで書き換え**
+    ```bash
+    cd /var/www/html
+    sudo nano server.js
+    ```
+
+    - `YOUR_RDS_ENDPOINT_HERE`を`[RDSエンドポイント]`に置換する。
+    - nanoエディタの保存は「Ctl + o」  
+    - nanoエディタの終了は「Ctl + x」  
+
+    もしくは、
+
+    **sedコマンドで書き換え**
+    ```bash
+    cd /var/www/html
+    sudo sed -i 's/YOUR_RDS_ENDPOINT_HERE/[RDSエンドポイント]/' server.js
+    ```
+
+    ⚠️ **重要**: データベース初期化（`node init_db.js`）は1台目でのみ実行してください！ (2台目で実行しても失敗するだけなので心配しないでください。)
 
 4. **Node.jsアプリケーション再起動**:
    ```bash
@@ -200,7 +232,7 @@ RDSが「利用可能」状態になるまで、5分〜10分程度時間がか�
    http://[2台目のパブリックIP]:3000
    ```
 
-⚠️ **重要**: データベース初期化（init_db.js）は1台目でのみ実行してください！
+
 
 ---
 
