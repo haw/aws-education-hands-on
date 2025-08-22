@@ -34,9 +34,10 @@
 ※ 特に指示がないところは、デフォルト値のまま進めてください。  
 
 ### バケット設定
-- **バケット名**: `awesome-cloud-challenge-[random-number]`  
+- **バケット名**: `awesome-cloud-challenge-${random-number}`  
   ※バケット名は、グローバルで一意である必要があります  
-  ※`[random-number]`は好きな数字に置き換えてください  
+  ※`${random-number}`は好きな数字に置き換えてください  
+  ※例: awesome-cloud-challenge-123
 - **リージョン**: デフォルト（us-east-1）
 
 ### パブリックアクセス設定
@@ -96,11 +97,12 @@
 1. 「アクセス許可」タブを選択
 2. 「バケットポリシー」→「編集」
 3. 用意された <a href="https://github.com/haw/aws-education-materials/blob/main/day1/5min-impact-lab/materials/bucket-policy.json" target="_blank" rel="noopener noreferrer">bucket-policy.json</a>  の内容をコピーして貼り付け
-4. **YOUR-BUCKET-NAME**を実際のバケット名に変更 （例: arn:aws:s3:::awesome-cloud-challenge-[random-number]）
+4. **YOUR-BUCKET-NAME**を実際のバケット名に変更 （例: arn:aws:s3:::awesome-cloud-challenge-${random-number}）
 
     ![](images/S3-bucket-policy-edit.png)
 
-    arn = Amazon Resource Name: AWSリソースを一意に識別するための命名規則
+    arn = Amazon Resource Name: AWSリソースを一意に識別するための命名規則  
+    例: "Resource": "arn:aws:s3:::awesome-cloud-challenge-123/*"  
 
 5. 「変更の保存」(画面下方)
 
