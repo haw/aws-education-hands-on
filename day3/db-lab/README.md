@@ -196,18 +196,32 @@
 
 1. **EC2インスタンス**にSession Managerで接続
 2. ユーザの切り替え
-   ```bash
-   sudo su - ec2-user
-   ```
+    ```bash
+    sudo su - ec2-user
+    ```
 3. RDSエンドポイントを設定ファイルに反映
-   ```bash
-   cd /var/www/html
-   sudo sed -i 's/YOUR_RDS_ENDPOINT_HERE/[RDSエンドポイント]/' server.js
-   sudo sed -i 's/YOUR_RDS_ENDPOINT_HERE/[RDSエンドポイント]/' init_db.js
-   ```
-   
    💡 **RDSエンドポイント取得方法**: RDSコンソール→データベース→`employee-database`→接続とセキュリティ→エンドポイント  
-   `[RDSエンドポイント]`を置き換えて、コマンドを実行すること。  
+   `[RDSエンドポイント]`値で置き換える。  
+
+    **nano エディタで書き換え**
+    ```bash
+    cd /var/www/html
+    sudo nano server.js
+    sudo nano init_db.js
+    ```
+
+    - `YOUR_RDS_ENDPOINT_HERE`を[RDSエンドポイント]に置換する。
+    - nanoエディタの保存はCtl + o  
+    - nanoエディタの終了はCtl + x  
+
+    もしくは、
+
+    **sedコマンドで書き換え**
+    ```bash
+    cd /var/www/html
+    sudo sed -i 's/YOUR_RDS_ENDPOINT_HERE/[RDSエンドポイント]/' server.js
+    sudo sed -i 's/YOUR_RDS_ENDPOINT_HERE/[RDSエンドポイント]/' init_db.js
+    ```
 
 4. データベース初期化スクリプト実行
 
