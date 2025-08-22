@@ -152,8 +152,8 @@ RDSが「利用可能」状態になるまで、5分〜10分程度時間がか�
    ```
 3. **RDSエンドポイント更新**:
 
-    💡 **RDSエンドポイント取得方法**: RDSコンソール→データベース→`employee-database`→接続とセキュリティ→エンドポイント  
-    以下、`.js`ファイル内の`YOUR_RDS_ENDPOINT_HERE`を`[RDSエンドポイント]`値で置き換える。  
+    💡 **RDSエンドポイント取得方法**: RDSコンソール→データベース→`employee-database`→接続とセキュリティ→エンドポイント の値をコピーする。  
+    以下、`.js`ファイル内の`YOUR_RDS_ENDPOINT_HERE`を置き換える。  
 
     **nano エディタで書き換え**
     ```bash
@@ -162,8 +162,8 @@ RDSが「利用可能」状態になるまで、5分〜10分程度時間がか�
     sudo nano init_db.js
     ```
 
-    - `YOUR_RDS_ENDPOINT_HERE`を`[RDSエンドポイント]`に置換する。
-    - nanoエディタの保存は「Ctl + o」  
+    - `YOUR_RDS_ENDPOINT_HERE`を置換する。
+    - nanoエディタの保存は「Ctl + o」 + 「Enter」
     - nanoエディタの終了は「Ctl + x」  
 
     もしくは、
@@ -174,6 +174,8 @@ RDSが「利用可能」状態になるまで、5分〜10分程度時間がか�
     sudo sed -i 's/YOUR_RDS_ENDPOINT_HERE/[RDSエンドポイント]/' server.js
     sudo sed -i 's/YOUR_RDS_ENDPOINT_HERE/[RDSエンドポイント]/' init_db.js
     ```
+
+    ※ `[RDSエンドポイント]` = RDSコンソール→データベース→`employee-database`→接続とセキュリティ→エンドポイントの値
 
 4. **データベース初期化**:
    ```bash
@@ -199,8 +201,8 @@ RDSが「利用可能」状態になるまで、5分〜10分程度時間がか�
    ```
 3. **RDSエンドポイント更新**のみ:
 
-    💡 **RDSエンドポイント取得方法**: RDSコンソール→データベース→`employee-database`→接続とセキュリティ→エンドポイント  
-    以下、`.js`ファイル内の`YOUR_RDS_ENDPOINT_HERE`を`[RDSエンドポイント]`値で置き換える。  
+    💡 **RDSエンドポイント取得方法**: RDSコンソール→データベース→`employee-database`→接続とセキュリティ→エンドポイント の値をコピーする。  
+    以下、`.js`ファイル内の`YOUR_RDS_ENDPOINT_HERE`を置き換える。  
 
     **nano エディタで書き換え**
     ```bash
@@ -208,8 +210,8 @@ RDSが「利用可能」状態になるまで、5分〜10分程度時間がか�
     sudo nano server.js
     ```
 
-    - `YOUR_RDS_ENDPOINT_HERE`を`[RDSエンドポイント]`に置換する。
-    - nanoエディタの保存は「Ctl + o」  
+    - `YOUR_RDS_ENDPOINT_HERE`を置換する。
+    - nanoエディタの保存は「Ctl + o」 + 「Enter」
     - nanoエディタの終了は「Ctl + x」  
 
     もしくは、
@@ -219,6 +221,8 @@ RDSが「利用可能」状態になるまで、5分〜10分程度時間がか�
     cd /var/www/html
     sudo sed -i 's/YOUR_RDS_ENDPOINT_HERE/[RDSエンドポイント]/' server.js
     ```
+
+    ※ `[RDSエンドポイント]` = RDSコンソール→データベース→`employee-database`→接続とセキュリティ→エンドポイントの値
 
     ⚠️ **重要**: データベース初期化（`node init_db.js`）は1台目でのみ実行してください！ (2台目で実行しても失敗するだけなので心配しないでください。)
 
