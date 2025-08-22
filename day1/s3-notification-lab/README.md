@@ -81,6 +81,8 @@
 2. Lambda関数のコードで `YOUR_TOPIC_ARN_HERE` を実際のARNに置換 (例: arn:aws:sns:us-east-1:975xxxxxxxx:file-upload-notifications)
 3. 「Deploy」をクリック
 
+    ![](images/Lambda-deploy.png)
+
 ### Step 6: S3イベント設定（5分）
 
 1. S3コンソールで作成したバケットを選択
