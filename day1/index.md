@@ -7,7 +7,7 @@ title: Day 1
 
 ## ハンズオン資料
 
-- [5分インパクト実習](5min-impact-lab/)
+- [Amazon S3 を使用して静的ウェブサイトをホスティングする](5min-impact-lab/)
 - [S3通知システム](s3-notification-lab/)
 
 [← ホームに戻る](../)
