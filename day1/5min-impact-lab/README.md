@@ -52,7 +52,7 @@
 
 1. 作成したバケット名(下線リンク)をクリック
 
-    ![](./images/S3-buckets-list.png)
+    ![](images/s3-buckets-list.png)
 
 2. 「プロパティ」タブを選択
 
