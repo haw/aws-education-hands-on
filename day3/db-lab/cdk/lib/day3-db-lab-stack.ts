@@ -10,6 +10,9 @@ export class Day3DbLabStack extends cdk.Stack {
   constructor(scope: Construct, id: string, props?: cdk.StackProps) {
     super(scope, id, props);
 
+    // AWS Academy環境対応: BootstrapVersionチェックを無効化
+    this.templateOptions.description = 'Day3 Database Lab - Employee Management System (AWS Academy Compatible)';
+
     // 🌐 VPC作成 - employee-app-vpc
     const vpc = new ec2.Vpc(this, 'EmployeeAppVpc', {
       vpcName: 'employee-app-vpc',

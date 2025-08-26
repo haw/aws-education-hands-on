@@ -13,7 +13,9 @@
     "synth": "cdk synth",
     "diff": "cdk diff",
     "quick-deploy": "./scripts/deploy.sh",
-    "quick-destroy": "./scripts/destroy.sh"
+    "quick-destroy": "./scripts/destroy.sh",
+    "academy-deploy": "./scripts/deploy-cloudformation.sh",
+    "generate-template": "cdk synth > day3-db-lab-template.yaml && echo 'CloudFormation template generated: day3-db-lab-template.yaml'"
   },
   "devDependencies": {
     "@types/jest": "^30.0.0",

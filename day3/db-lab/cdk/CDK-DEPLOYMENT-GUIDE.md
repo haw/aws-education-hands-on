@@ -184,7 +184,76 @@ ping registry.npmjs.org
 nslookup registry.npmjs.org
 ```
 
-## 🔗 CDKデプロイ実行手順
+## 🔥 AWS Academy環境での確実な解決策
+
+### **CloudFormationテンプレート生成方式（推奨）**
+
+AWS Academy環境ではCDK Bootstrapが不可能なため、CDKでCloudFormationテンプレートを生成し、手動でデプロイする方式を採用します。
+
+#### **Step 1: CloudFormationテンプレート生成**
+
+```bash
+# 依存関係インストール
+npm install
+
+# TypeScriptコンパイル
+npm run build
+
+# CloudFormationテンプレート生成（Bootstrapなし）
+cdk synth > day3-db-lab-template.yaml
+
+# 生成されたテンプレートを確認
+ls -la *.yaml
+cat day3-db-lab-template.yaml | head -20
+```
+
+#### **Step 2: AWS CLIでCloudFormationデプロイ**
+
+```bash
+# CloudFormationスタック作成（BootstrapVersionパラメータ不要）
+aws cloudformation create-stack \
+  --stack-name Day3DbLabStack \
+  --template-body file://day3-db-lab-template.yaml \
+  --capabilities CAPABILITY_IAM
+
+# デプロイ進行状況確認
+aws cloudformation describe-stack-events --stack-name Day3DbLabStack
+
+# 完了まで待機
+aws cloudformation wait stack-create-complete --stack-name Day3DbLabStack
+
+# スタック出力確認
+aws cloudformation describe-stacks --stack-name Day3DbLabStack --query 'Stacks[0].Outputs'
+```
+
+#### **Step 3: 自動化スクリプト（AWS Academy専用）**
+
+```bash
+# 完全自動化スクリプト実行
+./scripts/deploy-cloudformation.sh
+```
+
+### **CloudFormation手動デプロイ（GUIオプション）**
+
+#### **AWSコンソールでの手動デプロイ**
+
+1. **CloudFormationテンプレート生成**
+   ```bash
+   cdk synth > day3-db-lab-template.yaml
+   ```
+
+2. **AWSコンソールでデプロイ**
+   - CloudFormationコンソールを開く
+   - 「スタックの作成」→「新しいリソースを使用（標準）」
+   - 「テンプレートファイルのアップロード」を選択
+   - `day3-db-lab-template.yaml`をアップロード
+   - スタック名: `Day3DbLabStack`
+   - パラメータ: デフォルト値を使用
+   - 「スタックの作成」を実行
+
+3. **デプロイ完了確認**
+   - スタック作成完了まで約15分待機
+   - 「出力」タブでアプリケーションURL確認
 
 ### **Step 1: Session Manager接続**
 

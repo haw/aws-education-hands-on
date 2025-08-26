@@ -29,6 +29,33 @@ Day3のデータベース実習をAWS CDKで自動化したバージョンです
 
 ## 🚀 デプロイ手順
 
+### **🎓 AWS Academy環境（推奨）**
+```bash
+# CloudFormationテンプレート生成＋デプロイ（Bootstrap不要）
+npm run academy-deploy
+```
+
+### **🏢 通常のAWS環境**
+```bash
+# CDK直接デプロイ
+npm run quick-deploy
+```
+
+### **📋 CloudFormationテンプレートのみ生成**
+```bash
+# テンプレート生成のみ
+npm run generate-template
+```
+
+### **🧹 リソース削除**
+```bash
+# AWS Academy環境
+aws cloudformation delete-stack --stack-name Day3DbLabStack
+
+# 通常環境
+npm run quick-destroy
+```
+
 ### **前提条件**
 - AWS CLI設定済み
 - Node.js 18以上
