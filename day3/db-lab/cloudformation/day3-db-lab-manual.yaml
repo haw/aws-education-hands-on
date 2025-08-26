@@ -11,7 +11,7 @@ Resources:
       EnableDnsSupport: true
       Tags:
         - Key: Name
-          Value: employee-app-vpc
+          Value: employee-app-vpc-cf
 
   # Internet Gateway
   EmployeeAppIGW:
@@ -19,7 +19,7 @@ Resources:
     Properties:
       Tags:
         - Key: Name
-          Value: employee-app-igw
+          Value: employee-app-igw-cf
 
   # Attach IGW to VPC
   AttachGateway:
@@ -38,7 +38,7 @@ Resources:
       MapPublicIpOnLaunch: true
       Tags:
         - Key: Name
-          Value: public-subnet-1
+          Value: public-subnet-1-cf
 
   # Public Subnet 2
   PublicSubnet2:
@@ -50,7 +50,7 @@ Resources:
       MapPublicIpOnLaunch: true
       Tags:
         - Key: Name
-          Value: public-subnet-2
+          Value: public-subnet-2-cf
 
   # Private Subnet 1
   PrivateSubnet1:
@@ -61,7 +61,7 @@ Resources:
       AvailabilityZone: !Select [0, !GetAZs '']
       Tags:
         - Key: Name
-          Value: private-subnet-1
+          Value: private-subnet-1-cf
 
   # Private Subnet 2
   PrivateSubnet2:
@@ -72,7 +72,7 @@ Resources:
       AvailabilityZone: !Select [1, !GetAZs '']
       Tags:
         - Key: Name
-          Value: private-subnet-2
+          Value: private-subnet-2-cf
 
   # Public Route Table
   PublicRouteTable:
@@ -81,7 +81,7 @@ Resources:
       VpcId: !Ref EmployeeAppVpc
       Tags:
         - Key: Name
-          Value: public-route-table
+          Value: public-route-table-cf
 
   # Public Route
   PublicRoute:
@@ -115,7 +115,7 @@ Resources:
         - !Ref PrivateSubnet2
       Tags:
         - Key: Name
-          Value: employee-db-subnet-group
+          Value: employee-db-subnet-group-cf
 
   # Web Server Security Group
   WebServerSecurityGroup:
@@ -136,7 +136,7 @@ Resources:
           Description: Allow SSH access (for troubleshooting)
       Tags:
         - Key: Name
-          Value: employee-web-server-sg
+          Value: employee-web-server-sg-cf
 
   # Database Security Group
   DatabaseSecurityGroup:
@@ -152,13 +152,13 @@ Resources:
           Description: Allow MySQL access from Web Server
       Tags:
         - Key: Name
-          Value: employee-database-sg
+          Value: employee-database-sg-cf
 
   # RDS Database Instance
   EmployeeDatabase:
     Type: AWS::RDS::DBInstance
     Properties:
-      DBInstanceIdentifier: employee-database
+      DBInstanceIdentifier: employee-database-cf
       DBInstanceClass: db.t3.micro
       Engine: mysql
       EngineVersion: '8.4.3'
@@ -175,7 +175,7 @@ Resources:
       StorageEncrypted: false
       Tags:
         - Key: Name
-          Value: employee-database
+          Value: employee-database-cf
 
   # EC2 Instance
   EmployeeWebServer:
@@ -190,7 +190,7 @@ Resources:
       IamInstanceProfile: LabInstanceProfile
       Tags:
         - Key: Name
-          Value: employee-web-server
+          Value: employee-web-server-cf
       UserData:
         Fn::Base64: !Sub |
           #!/bin/bash
@@ -200,7 +200,7 @@ Resources:
           dnf -y update
           
           # Install Node.js and dependencies
-          dnf -y install nodejs npm git mysql
+          dnf -y install nodejs npm git mariadb105
           
           # Create application
           mkdir -p /var/www/html
