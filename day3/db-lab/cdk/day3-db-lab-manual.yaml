@@ -1,0 +1,447 @@
+AWSTemplateFormatVersion: '2010-09-09'
+Description: 'Day3 Database Lab - Employee Management System (AWS Academy Compatible - No Assets)'
+
+Resources:
+  # VPC
+  EmployeeAppVpc:
+    Type: AWS::EC2::VPC
+    Properties:
+      CidrBlock: 10.0.0.0/16
+      EnableDnsHostnames: true
+      EnableDnsSupport: true
+      Tags:
+        - Key: Name
+          Value: employee-app-vpc
+
+  # Internet Gateway
+  EmployeeAppIGW:
+    Type: AWS::EC2::InternetGateway
+    Properties:
+      Tags:
+        - Key: Name
+          Value: employee-app-igw
+
+  # Attach IGW to VPC
+  AttachGateway:
+    Type: AWS::EC2::VPCGatewayAttachment
+    Properties:
+      VpcId: !Ref EmployeeAppVpc
+      InternetGatewayId: !Ref EmployeeAppIGW
+
+  # Public Subnet 1
+  PublicSubnet1:
+    Type: AWS::EC2::Subnet
+    Properties:
+      VpcId: !Ref EmployeeAppVpc
+      CidrBlock: 10.0.0.0/24
+      AvailabilityZone: !Select [0, !GetAZs '']
+      MapPublicIpOnLaunch: true
+      Tags:
+        - Key: Name
+          Value: public-subnet-1
+
+  # Public Subnet 2
+  PublicSubnet2:
+    Type: AWS::EC2::Subnet
+    Properties:
+      VpcId: !Ref EmployeeAppVpc
+      CidrBlock: 10.0.1.0/24
+      AvailabilityZone: !Select [1, !GetAZs '']
+      MapPublicIpOnLaunch: true
+      Tags:
+        - Key: Name
+          Value: public-subnet-2
+
+  # Private Subnet 1
+  PrivateSubnet1:
+    Type: AWS::EC2::Subnet
+    Properties:
+      VpcId: !Ref EmployeeAppVpc
+      CidrBlock: 10.0.2.0/24
+      AvailabilityZone: !Select [0, !GetAZs '']
+      Tags:
+        - Key: Name
+          Value: private-subnet-1
+
+  # Private Subnet 2
+  PrivateSubnet2:
+    Type: AWS::EC2::Subnet
+    Properties:
+      VpcId: !Ref EmployeeAppVpc
+      CidrBlock: 10.0.3.0/24
+      AvailabilityZone: !Select [1, !GetAZs '']
+      Tags:
+        - Key: Name
+          Value: private-subnet-2
+
+  # Public Route Table
+  PublicRouteTable:
+    Type: AWS::EC2::RouteTable
+    Properties:
+      VpcId: !Ref EmployeeAppVpc
+      Tags:
+        - Key: Name
+          Value: public-route-table
+
+  # Public Route
+  PublicRoute:
+    Type: AWS::EC2::Route
+    DependsOn: AttachGateway
+    Properties:
+      RouteTableId: !Ref PublicRouteTable
+      DestinationCidrBlock: 0.0.0.0/0
+      GatewayId: !Ref EmployeeAppIGW
+
+  # Associate Public Subnets with Route Table
+  PublicSubnet1RouteTableAssociation:
+    Type: AWS::EC2::SubnetRouteTableAssociation
+    Properties:
+      SubnetId: !Ref PublicSubnet1
+      RouteTableId: !Ref PublicRouteTable
+
+  PublicSubnet2RouteTableAssociation:
+    Type: AWS::EC2::SubnetRouteTableAssociation
+    Properties:
+      SubnetId: !Ref PublicSubnet2
+      RouteTableId: !Ref PublicRouteTable
+
+  # Database Subnet Group
+  DatabaseSubnetGroup:
+    Type: AWS::RDS::DBSubnetGroup
+    Properties:
+      DBSubnetGroupDescription: Subnet group for Employee Database
+      SubnetIds:
+        - !Ref PrivateSubnet1
+        - !Ref PrivateSubnet2
+      Tags:
+        - Key: Name
+          Value: employee-db-subnet-group
+
+  # Web Server Security Group
+  WebServerSecurityGroup:
+    Type: AWS::EC2::SecurityGroup
+    Properties:
+      GroupDescription: Security group for Employee Web Server
+      VpcId: !Ref EmployeeAppVpc
+      SecurityGroupIngress:
+        - IpProtocol: tcp
+          FromPort: 3000
+          ToPort: 3000
+          CidrIp: 0.0.0.0/0
+          Description: Allow HTTP access to Employee Management System
+        - IpProtocol: tcp
+          FromPort: 22
+          ToPort: 22
+          CidrIp: 0.0.0.0/0
+          Description: Allow SSH access (for troubleshooting)
+      Tags:
+        - Key: Name
+          Value: employee-web-server-sg
+
+  # Database Security Group
+  DatabaseSecurityGroup:
+    Type: AWS::EC2::SecurityGroup
+    Properties:
+      GroupDescription: Security group for Employee Database
+      VpcId: !Ref EmployeeAppVpc
+      SecurityGroupIngress:
+        - IpProtocol: tcp
+          FromPort: 3306
+          ToPort: 3306
+          SourceSecurityGroupId: !Ref WebServerSecurityGroup
+          Description: Allow MySQL access from Web Server
+      Tags:
+        - Key: Name
+          Value: employee-database-sg
+
+  # RDS Database Instance
+  EmployeeDatabase:
+    Type: AWS::RDS::DBInstance
+    Properties:
+      DBInstanceIdentifier: employee-database
+      DBInstanceClass: db.t3.micro
+      Engine: mysql
+      EngineVersion: '8.4.3'
+      MasterUsername: admin
+      MasterUserPassword: password123
+      AllocatedStorage: 20
+      StorageType: gp2
+      VPCSecurityGroups:
+        - !Ref DatabaseSecurityGroup
+      DBSubnetGroupName: !Ref DatabaseSubnetGroup
+      BackupRetentionPeriod: 0
+      MultiAZ: false
+      PubliclyAccessible: false
+      StorageEncrypted: false
+      Tags:
+        - Key: Name
+          Value: employee-database
+
+  # EC2 Instance
+  EmployeeWebServer:
+    Type: AWS::EC2::Instance
+    DependsOn: EmployeeDatabase
+    Properties:
+      InstanceType: t3.micro
+      ImageId: ami-0c02fb55956c7d316  # Amazon Linux 2023 (us-east-1)
+      SubnetId: !Ref PublicSubnet1
+      SecurityGroupIds:
+        - !Ref WebServerSecurityGroup
+      IamInstanceProfile: LabInstanceProfile
+      Tags:
+        - Key: Name
+          Value: employee-web-server
+      UserData:
+        Fn::Base64: !Sub |
+          #!/bin/bash
+          set -euxo pipefail
+          
+          # System update
+          dnf -y update
+          
+          # Install Node.js and dependencies
+          dnf -y install nodejs npm git mysql
+          
+          # Create application
+          mkdir -p /var/www/html
+          cd /var/www/html
+          
+          # Create package.json
+          cat > package.json << 'PACKAGE_EOF'
+          {
+            "name": "employee-management-system",
+            "version": "1.0.0",
+            "main": "server.js",
+            "dependencies": {
+              "express": "^4.18.2",
+              "mysql2": "^3.6.0",
+              "body-parser": "^1.20.2"
+            }
+          }
+          PACKAGE_EOF
+          
+          npm install
+          
+          # Create server application
+          cat > server.js << 'SERVER_EOF'
+          const express = require('express');
+          const mysql = require('mysql2');
+          const bodyParser = require('body-parser');
+          const path = require('path');
+          
+          const app = express();
+          const port = 3000;
+          
+          app.use(bodyParser.urlencoded({ extended: true }));
+          app.use(bodyParser.json());
+          app.use(express.static('public'));
+          
+          const dbConfig = {
+            host: '${EmployeeDatabase.Endpoint.Address}',
+            user: 'admin',
+            password: 'password123',
+            database: 'employee_db'
+          };
+          
+          const connection = mysql.createConnection(dbConfig);
+          
+          connection.connect((err) => {
+            if (err) {
+              console.error('Error connecting to MySQL:', err);
+              return;
+            }
+            console.log('Connected to MySQL database');
+          });
+          
+          app.get('/', (req, res) => {
+            res.sendFile(path.join(__dirname, 'public', 'index.html'));
+          });
+          
+          app.get('/api/employees', (req, res) => {
+            connection.query('SELECT * FROM employees ORDER BY id DESC', (err, results) => {
+              if (err) {
+                res.status(500).json({ error: 'Database error' });
+                return;
+              }
+              res.json(results);
+            });
+          });
+          
+          app.post('/api/employees', (req, res) => {
+            const { name, email, department } = req.body;
+            if (!name || !email || !department) {
+              res.status(400).json({ error: 'All fields are required' });
+              return;
+            }
+            const query = 'INSERT INTO employees (name, email, department) VALUES (?, ?, ?)';
+            connection.query(query, [name, email, department], (err, result) => {
+              if (err) {
+                res.status(500).json({ error: 'Database error' });
+                return;
+              }
+              res.json({ id: result.insertId, name, email, department });
+            });
+          });
+          
+          app.listen(port, '0.0.0.0', () => {
+            console.log('Employee Management System running at http://0.0.0.0:' + port);
+          });
+          SERVER_EOF
+          
+          # Create HTML frontend (simplified)
+          mkdir -p public
+          cat > public/index.html << 'HTML_EOF'
+          <!DOCTYPE html>
+          <html>
+          <head>
+            <title>Employee Management System</title>
+            <style>
+              body { font-family: Arial, sans-serif; margin: 40px; }
+              .container { max-width: 800px; margin: 0 auto; }
+              .form-group { margin: 10px 0; }
+              input, select { padding: 8px; margin: 5px; width: 200px; }
+              button { padding: 10px 20px; background: #007bff; color: white; border: none; cursor: pointer; }
+              .employee { border: 1px solid #ddd; padding: 10px; margin: 10px 0; }
+            </style>
+          </head>
+          <body>
+            <div class="container">
+              <h1>Employee Management System</h1>
+              <div class="form-group">
+                <input type="text" id="name" placeholder="Name">
+                <input type="email" id="email" placeholder="Email">
+                <select id="department">
+                  <option value="">Select Department</option>
+                  <option value="開発部">開発部</option>
+                  <option value="営業部">営業部</option>
+                  <option value="人事部">人事部</option>
+                </select>
+                <button onclick="addEmployee()">Add Employee</button>
+              </div>
+              <div id="employees"></div>
+            </div>
+            <script>
+              async function loadEmployees() {
+                const response = await fetch('/api/employees');
+                const employees = await response.json();
+                const container = document.getElementById('employees');
+                container.innerHTML = employees.map(emp => 
+                  '<div class="employee"><strong>' + emp.name + '</strong> - ' + emp.email + ' (' + emp.department + ')</div>'
+                ).join('');
+              }
+              
+              async function addEmployee() {
+                const name = document.getElementById('name').value;
+                const email = document.getElementById('email').value;
+                const department = document.getElementById('department').value;
+                
+                if (!name || !email || !department) {
+                  alert('All fields are required');
+                  return;
+                }
+                
+                await fetch('/api/employees', {
+                  method: 'POST',
+                  headers: { 'Content-Type': 'application/json' },
+                  body: JSON.stringify({ name, email, department })
+                });
+                
+                document.getElementById('name').value = '';
+                document.getElementById('email').value = '';
+                document.getElementById('department').value = '';
+                loadEmployees();
+              }
+              
+              loadEmployees();
+            </script>
+          </body>
+          </html>
+          HTML_EOF
+          
+          # Database initialization
+          cat > init_db.js << 'INIT_EOF'
+          const mysql = require('mysql2');
+          const connection = mysql.createConnection({
+            host: '${EmployeeDatabase.Endpoint.Address}',
+            user: 'admin',
+            password: 'password123'
+          });
+          
+          connection.connect((err) => {
+            if (err) {
+              console.error('Error:', err);
+              process.exit(1);
+            }
+            
+            connection.query('CREATE DATABASE IF NOT EXISTS employee_db', (err) => {
+              if (err) throw err;
+              connection.query('USE employee_db', (err) => {
+                if (err) throw err;
+                const createTable = 'CREATE TABLE IF NOT EXISTS employees (id INT AUTO_INCREMENT PRIMARY KEY, name VARCHAR(100), email VARCHAR(100), department VARCHAR(100))';
+                connection.query(createTable, (err) => {
+                  if (err) throw err;
+                  const insertData = "INSERT IGNORE INTO employees (name, email, department) VALUES ('山田太郎', 'yamada@example.com', '開発部')";
+                  connection.query(insertData, () => {
+                    connection.end();
+                    console.log('Database initialized');
+                  });
+                });
+              });
+            });
+          });
+          INIT_EOF
+          
+          # Set permissions
+          chown -R ec2-user:ec2-user /var/www/html
+          
+          # Create systemd service
+          cat > /etc/systemd/system/employee-app.service << 'SERVICE_EOF'
+          [Unit]
+          Description=Employee Management System
+          After=network.target
+          
+          [Service]
+          Type=simple
+          User=ec2-user
+          WorkingDirectory=/var/www/html
+          ExecStart=/usr/bin/node server.js
+          Restart=always
+          
+          [Install]
+          WantedBy=multi-user.target
+          SERVICE_EOF
+          
+          systemctl daemon-reload
+          systemctl enable employee-app
+          
+          # Wait for RDS and initialize
+          cd /var/www/html
+          RETRY_COUNT=0
+          while ! mysqladmin ping -h ${EmployeeDatabase.Endpoint.Address} -u admin -ppassword123 --silent; do
+            RETRY_COUNT=$((RETRY_COUNT + 1))
+            if [ $RETRY_COUNT -ge 60 ]; then
+              echo "RDS connection timeout"
+              exit 1
+            fi
+            echo "Waiting for RDS... ($RETRY_COUNT/60)"
+            sleep 30
+          done
+          
+          node init_db.js
+          systemctl start employee-app
+          
+          echo "Employee Management System setup complete!"
+          echo "Access at: http://$(curl -s http://169.254.169.254/latest/meta-data/public-ipv4):3000"
+
+Outputs:
+  VpcId:
+    Description: VPC ID
+    Value: !Ref EmployeeAppVpc
+    
+  ApplicationUrl:
+    Description: Employee Management System URL
+    Value: !Sub 'http://${EmployeeWebServer.PublicIp}:3000'
+    
+  DatabaseEndpoint:
+    Description: RDS Database Endpoint
+    Value: !GetAtt EmployeeDatabase.Endpoint.Address
