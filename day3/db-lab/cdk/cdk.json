@@ -60,7 +60,6 @@
     "@aws-cdk/core:stackRelativeExports": true,
     "@aws-cdk/core:bootstrapQualifier": false,
     "@aws-cdk/core:newStyleStackSynthesis": false,
-    "@aws-cdk/aws-s3-assets:disableSourceHashing": true,
-    "@aws-cdk/core:enableStackNameDuplicates": true
+    "@aws-cdk/aws-s3-assets:disableSourceHashing": true
   }
 }
