@@ -218,15 +218,47 @@ cdk --version
 
 ### **Step 3: CDKデプロイ実行**
 
+#### **⚠️ AWS Academy環境での重要な注意事項**
+
+AWS Academy Sandbox環境ではECR権限が制限されているため、通常の`cdk bootstrap`は失敗します。以下の手順で対応してください。
+
+##### **ECRなしBootstrap（AWS Academy専用）**
 ```bash
 # 依存関係インストール
 npm install
 
-# CDK Bootstrap（初回のみ）
-cdk bootstrap
+# AWS Academy環境用Bootstrap（ECRリポジトリを作成しない）
+cdk bootstrap --no-bootstrap-customer-key --cloudformation-execution-policies arn:aws:iam::aws:policy/PowerUserAccess
 
+# 上記でも失敗する場合は、ECRを完全に無効化
+cdk bootstrap --toolkit-stack-name CDKToolkit-NoECR --no-bootstrap-customer-key --cloudformation-execution-policies arn:aws:iam::aws:policy/PowerUserAccess --template-url https://raw.githubusercontent.com/aws/aws-cdk/main/packages/aws-cdk/lib/api/bootstrap/bootstrap-template.yaml
+```
+
+##### **Bootstrap失敗時の対処法**
+```bash
+# 1. 既存の失敗したスタックを削除
+aws cloudformation delete-stack --stack-name CDKToolkit
+
+# 2. 削除完了を待機
+aws cloudformation wait stack-delete-complete --stack-name CDKToolkit
+
+# 3. 簡易Bootstrap（最小構成）
+cdk bootstrap --toolkit-stack-name CDKToolkit-Simple --no-bootstrap-customer-key
+```
+
+##### **最終手段: Bootstrap完全スキップ**
+```bash
+# Bootstrapをスキップして直接デプロイ（小規模プロジェクト用）
+cdk deploy --require-approval never
+```
+
+#### **通常のデプロイ手順**
+```bash
 # デプロイ実行（完全自動）
 npm run quick-deploy
+
+# または手動デプロイ
+cdk deploy --require-approval never
 ```
 
 ### **Step 4: デプロイ結果確認**
@@ -279,10 +311,45 @@ aws sts get-caller-identity
 ### **CDK Bootstrap確認**
 ```bash
 # Bootstrap状態確認
-cdk bootstrap --show-template
+aws cloudformation describe-stacks --stack-name CDKToolkit
 
-# 必要に応じて再実行
-cdk bootstrap
+# Bootstrap済みかどうか確認
+aws s3 ls | grep cdk-
+
+# 必要に応じて再実行（AWS Academy環境用）
+cdk bootstrap --no-bootstrap-customer-key --cloudformation-execution-policies arn:aws:iam::aws:policy/PowerUserAccess
+```
+
+### **AWS Academy環境特有の問題**
+
+#### **ECR権限エラー**
+```bash
+# エラー例
+ecr:CreateRepository action (Service: Ecr, Status Code: 400)
+
+# 解決方法1: ECRなしBootstrap
+cdk bootstrap --no-bootstrap-customer-key
+
+# 解決方法2: 完全スキップ
+cdk deploy --require-approval never
+
+# 解決方法3: 失敗スタック削除後再実行
+aws cloudformation delete-stack --stack-name CDKToolkit
+aws cloudformation wait stack-delete-complete --stack-name CDKToolkit
+cdk bootstrap --toolkit-stack-name CDKToolkit-Simple --no-bootstrap-customer-key
+```
+
+#### **権限不足エラー**
+```bash
+# エラー例
+User is not authorized to perform: iam:CreateRole
+
+# 確認方法
+aws sts get-caller-identity
+aws iam list-attached-role-policies --role-name LabRole
+
+# 対処方法: より制限的なポリシーを使用
+cdk bootstrap --cloudformation-execution-policies arn:aws:iam::aws:policy/PowerUserAccess
 ```
 
 ### **デプロイエラー時**
