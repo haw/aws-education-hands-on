@@ -49,7 +49,7 @@ dnf -y update
 dnf -y install nodejs npm git
 
 # ---- Install AWS CDK CLI ----
-npm install -g aws-cdk@2.87.0
+npm install -g aws-cdk@2.1026.0
 
 # ---- Verify installations ----
 echo "✅ Node.js version: $(node --version)"
@@ -143,10 +143,10 @@ Day3DbLabStack.WebServerPublicIp = [EC2-IP]
 # バージョン確認
 node --version    # v18以上
 npm --version     # 9以上
-cdk --version     # 2.87.0
+cdk --version     # 2.1026.0
 
 # 再インストール（必要時）
-sudo npm install -g aws-cdk@2.87.0
+sudo npm install -g aws-cdk@2.1026.0
 ```
 
 ### **AWS認証情報確認**

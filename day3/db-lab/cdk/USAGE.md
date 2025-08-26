@@ -43,7 +43,7 @@ npm run quick-destroy
 - **AWS Academy Sandbox環境** (LabRole/LabInstanceProfile必須)
 - AWS CLI設定済み
 - Node.js 18以上
-- AWS CDK CLI (`npm install -g aws-cdk`)
+- AWS CDK CLI (`npm install -g aws-cdk@2.1026.0`)
 
 ### **詳細制御が必要な場合**
 

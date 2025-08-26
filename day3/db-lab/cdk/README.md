@@ -32,7 +32,7 @@ Day3のデータベース実習をAWS CDKで自動化したバージョンです
 ### **前提条件**
 - AWS CLI設定済み
 - Node.js 18以上
-- AWS CDK CLI (`npm install -g aws-cdk`)
+- AWS CDK CLI (`npm install -g aws-cdk@2.1026.0`)
 
 ### **1. 依存関係インストール**
 ```bash
