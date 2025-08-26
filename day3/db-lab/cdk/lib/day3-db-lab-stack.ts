@@ -73,7 +73,7 @@ export class Day3DbLabStack extends cdk.Stack {
     // 🗄️ RDSインスタンス作成
     const database = new rds.DatabaseInstance(this, 'EmployeeDatabase', {
       engine: rds.DatabaseInstanceEngine.mysql({
-        version: rds.MysqlEngineVersion.VER_8_4_6,
+        version: rds.MysqlEngineVersion.VER_8_4_3,
       }),
       instanceType: ec2.InstanceType.of(ec2.InstanceClass.T3, ec2.InstanceSize.MICRO),
       instanceIdentifier: 'employee-database',

@@ -77,17 +77,17 @@ echo "📝 次の手順: Session Managerで接続し、リポジトリをクロ�
 
 #### **Session Managerで接続後**
 ```bash
-# ユーザーデータ実行ログを確認
-sudo tail -f /var/log/cloud-init-output.log
+# ec2-userに切り替え
+sudo su - ec2-user
 
 # 実行完了後の全ログ確認
 sudo cat /var/log/cloud-init-output.log
 
-# エラーログ確認
+# エラーログ確認 (エラー発生時のみ)
 sudo cat /var/log/cloud-init.log
 ```
 
-#### **期待されるログ出力例**
+#### **期待されるログ出力例** (`/var/log/cloud-init-output.log`)
 ```
 Cloud-init v. 23.4.4 running 'modules:final' at Fri, 26 Aug 2025 13:20:00 +0000
 + dnf -y update
