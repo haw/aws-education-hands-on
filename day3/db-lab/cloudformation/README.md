@@ -33,7 +33,7 @@ Day3のデータベース実習をCloudFormationで自動化したバージョ�
 
 1. **CloudFormationコンソール**にアクセス
 2. 「スタックの作成」→「新しいリソースを使用（標準）」
-3. **テンプレートファイル**: `day3-db-lab-manual.yaml` をアップロード
+3. **テンプレートファイル**: <a href="https://github.com/haw/aws-education-materials/blob/main/day3/db-lab/cloudformation/day3-db-lab-manual.yaml" target="_blank" rel="noopener noreferrer">day3-db-lab-manual.yaml</a> をアップロード
 4. **スタック名**: `Day3DbLabStack`
 5. 「送信」をクリック
 
