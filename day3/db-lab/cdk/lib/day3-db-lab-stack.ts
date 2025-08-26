@@ -91,19 +91,14 @@ export class Day3DbLabStack extends cdk.Stack {
       removalPolicy: cdk.RemovalPolicy.DESTROY, // 学習環境のため削除可能
     });
 
-    // 🔑 EC2用IAMロール（Session Manager用）
-    const ec2Role = new iam.Role(this, 'EC2Role', {
-      assumedBy: new iam.ServicePrincipal('ec2.amazonaws.com'),
-      managedPolicies: [
-        iam.ManagedPolicy.fromAwsManagedPolicyName('AmazonSSMManagedInstanceCore'),
-      ],
-      roleName: 'EmployeeAppEC2Role',
-    });
-
-    const instanceProfile = new iam.InstanceProfile(this, 'EC2InstanceProfile', {
-      role: ec2Role,
-      instanceProfileName: 'EmployeeAppInstanceProfile',
-    });
+    // 🔑 AWS Academy既存IAMリソース参照（Session Manager用）
+    // AWS Academy環境では既存のLabRole/LabInstanceProfileを使用
+    const existingLabRole = iam.Role.fromRoleName(this, 'ExistingLabRole', 'LabRole');
+    
+    // LabInstanceProfileを参照（AWS Academy環境で事前作成済み）
+    const existingInstanceProfile = iam.InstanceProfile.fromInstanceProfileName(
+      this, 'ExistingLabInstanceProfile', 'LabInstanceProfile'
+    );
 
     // 📄 ユーザーデータスクリプトの読み込みと動的置換
     const userDataTemplate = readFileSync(
@@ -112,10 +107,64 @@ export class Day3DbLabStack extends cdk.Stack {
     );
 
     // RDSエンドポイントを動的に置換
-    const userData = userDataTemplate.replace(
+    const userDataWithEndpoint = userDataTemplate.replace(
       /YOUR_RDS_ENDPOINT_HERE/g,
       database.instanceEndpoint.hostname
     );
+
+    // 完全自動化スクリプトを追加
+    const automationScript = `
+
+# ---- Database initialization (automatic) ----
+echo "🔄 RDS接続待機とデータベース初期化を開始..."
+cd /var/www/html
+
+# RDS接続待機ループ（最大30分待機）
+RETRY_COUNT=0
+MAX_RETRIES=60  # 30秒 × 60回 = 30分
+
+while ! mysqladmin ping -h ${database.instanceEndpoint.hostname} -u admin -ppassword123 --silent; do
+    RETRY_COUNT=$((RETRY_COUNT + 1))
+    if [ $RETRY_COUNT -ge $MAX_RETRIES ]; then
+        echo "❌ RDS接続タイムアウト（30分経過）。手動で確認してください。"
+        exit 1
+    fi
+    echo "⏳ RDSが利用可能になるまで待機中... (\${RETRY_COUNT}/\${MAX_RETRIES}) - 30秒後に再試行"
+    sleep 30
+done
+
+echo "✅ RDS接続確認完了！データベース初期化開始..."
+
+# データベース初期化実行
+if node init_db.js; then
+    echo "🎉 データベース初期化完了！"
+else
+    echo "❌ データベース初期化に失敗しました。ログを確認してください。"
+    exit 1
+fi
+
+echo "🔄 アプリケーション再起動中..."
+# アプリケーション再起動（設定反映のため）
+systemctl restart employee-app
+
+# 起動確認
+if systemctl is-active --quiet employee-app; then
+    echo "🚀 Employee Management System 完全自動セットアップ完了！"
+    echo "🌐 アプリケーションURL: http://$(curl -s http://169.254.169.254/latest/meta-data/public-ipv4):3000"
+else
+    echo "❌ アプリケーション起動に失敗しました。ログを確認してください。"
+    echo "🔍 ログ確認: journalctl -u employee-app.service -f"
+    exit 1
+fi
+
+echo "✅ CDK完全自動化セットアップ完了 - 手動作業は一切不要です！"
+echo "🎯 機能: Create(追加) / Read(表示) / Update(編集) / Delete(削除) + クラウドコンソール風UI (Node.js版)"
+echo "🔍 サービス状態確認: systemctl status employee-app"
+echo "📊 ログ監視: journalctl -u employee-app.service -f"
+`;
+
+    // 最終的なユーザーデータ（元のスクリプト + 自動化スクリプト）
+    const userData = userDataWithEndpoint + automationScript;
 
     // 💻 EC2インスタンス作成
     const webServer = new ec2.Instance(this, 'EmployeeWebServer', {
@@ -126,7 +175,7 @@ export class Day3DbLabStack extends cdk.Stack {
       vpcSubnets: {
         subnetType: ec2.SubnetType.PUBLIC,
       },
-      role: ec2Role,
+      role: existingLabRole, // AWS Academy既存ロールを使用
       userData: ec2.UserData.custom(userData),
       userDataCausesReplacement: true,
     });

@@ -39,6 +39,12 @@ npm run quick-destroy
 
 ## 🔧 手動デプロイ手順
 
+### **前提条件**
+- **AWS Academy Sandbox環境** (LabRole/LabInstanceProfile必須)
+- AWS CLI設定済み
+- Node.js 18以上
+- AWS CDK CLI (`npm install -g aws-cdk`)
+
 ### **詳細制御が必要な場合**
 
 ```bash
@@ -77,8 +83,10 @@ npm run destroy
 | 項目 | 手動作業 | CDK |
 |:---|:---|:---|
 | RDSエンドポイント設定 | 手動コピー&ペースト | 自動取得・埋め込み |
+| データベース初期化 | 手動で`node init_db.js`実行 | 自動実行（RDS接続待機付き） |
+| アプリケーション再起動 | 手動で`systemctl restart` | 自動実行 |
 | セキュリティグループ | 手動設定・依存関係管理 | 自動設定・依存関係解決 |
-| 構築時間 | 50分（手動操作含む） | 15分（待機時間のみ） |
+| 構築時間 | 50分（手動操作含む） | 15分（完全自動・待機時間のみ） |
 | ヒューマンエラー | 発生リスク有り | ゼロ |
 | 再現性 | 困難 | 完璧 |
 
@@ -139,9 +147,11 @@ sudo tail -f /var/log/cloud-init-output.log
 - [ ] CloudFormationスタックが`CREATE_COMPLETE`状態
 - [ ] EC2インスタンスが`running`状態
 - [ ] RDSインスタンスが`available`状態
+- [ ] ユーザーデータログで自動化完了を確認: `/var/log/cloud-init-output.log`
 - [ ] アプリケーションURL（ポート3000）にアクセス可能
 - [ ] Employee Management Systemが正常動作
 - [ ] CRUD操作（追加・表示・編集・削除）が動作
+- [ ] サンプルデータ（山田太郎、佐藤花子、田中次郎）が表示
 
 ### **🎯 学習成果**
 

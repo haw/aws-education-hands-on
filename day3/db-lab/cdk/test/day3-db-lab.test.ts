@@ -43,6 +43,16 @@ describe('Day3DbLabStack', () => {
     });
   });
 
+  test('IAM Resources Referenced', () => {
+    const app = new cdk.App();
+    const stack = new Day3DbLab.Day3DbLabStack(app, 'MyTestStack');
+    const template = Template.fromStack(stack);
+
+    // IAMロールやインスタンスプロファイルは作成されない（既存リソース参照のため）
+    template.resourceCountIs('AWS::IAM::Role', 0);
+    template.resourceCountIs('AWS::IAM::InstanceProfile', 0);
+  });
+
   test('Security Groups Created', () => {
     const app = new cdk.App();
     const stack = new Day3DbLab.Day3DbLabStack(app, 'MyTestStack');
