@@ -49,7 +49,8 @@ dnf -y update
 dnf -y install nodejs npm git
 
 # ---- Install AWS CDK CLI ----
-npm install -g aws-cdk@2.1026.0
+# npmのグローバルインストールを確実に実行
+npm install -g aws-cdk@2.1026.0 --yes --no-audit --no-fund
 
 # ---- Verify installations ----
 echo "✅ Node.js version: $(node --version)"
@@ -69,6 +70,119 @@ echo "📝 次の手順: Session Managerで接続し、リポジトリをクロ�
 
 1. インスタンスが「実行中」状態になるまで待機
 2. ステータスチェックが「2/2のチェックに合格しました」になるまで待機
+
+### **Step 3: ユーザーデータ実行ログ確認**
+
+ユーザーデータスクリプトの実行状況を確認する方法：
+
+#### **Session Managerで接続後**
+```bash
+# ユーザーデータ実行ログを確認
+sudo tail -f /var/log/cloud-init-output.log
+
+# 実行完了後の全ログ確認
+sudo cat /var/log/cloud-init-output.log
+
+# エラーログ確認
+sudo cat /var/log/cloud-init.log
+```
+
+#### **期待されるログ出力例**
+```
+Cloud-init v. 23.4.4 running 'modules:final' at Fri, 26 Aug 2025 13:20:00 +0000
++ dnf -y update
+Complete!
++ dnf -y install nodejs npm git
+Complete!
++ npm install -g aws-cdk@2.1026.0 --yes --no-audit --no-fund
+added 1 package in 15s
+✅ Node.js version: v18.20.4
+✅ npm version: 10.7.0
+✅ CDK version: 2.1026.0
+✅ Git version: 2.40.1
++ mkdir -p /home/ec2-user/workspace
++ chown ec2-user:ec2-user /home/ec2-user/workspace
+🚀 CDK実行環境セットアップ完了！
+📝 次の手順: Session Managerで接続し、リポジトリをクローンしてください
+Cloud-init v. 23.4.4 finished at Fri, 26 Aug 2025 13:22:30 +0000. Datasource DataSourceEc2Local.  Up 150.45 seconds
+```
+
+#### **ユーザーデータ実行状況の確認方法**
+
+##### **1. 実行中の確認**
+```bash
+# cloud-initの実行状況確認
+sudo cloud-init status
+
+# 期待される出力
+# status: running (実行中)
+# status: done (完了)
+# status: error (エラー)
+```
+
+##### **2. 詳細ステータス確認**
+```bash
+# 詳細な実行状況
+sudo cloud-init status --long
+
+# 実行時間と結果の詳細表示
+```
+
+##### **3. リアルタイム監視**
+```bash
+# ユーザーデータ実行をリアルタイム監視
+sudo tail -f /var/log/cloud-init-output.log
+
+# Ctrl+C で監視終了
+```
+
+#### **トラブルシューティング用ログ**
+
+##### **エラー発生時の確認手順**
+```bash
+# 1. メインログ確認
+sudo cat /var/log/cloud-init-output.log | grep -i error
+
+# 2. cloud-init内部ログ確認
+sudo cat /var/log/cloud-init.log | grep -i error
+
+# 3. システムログ確認
+sudo journalctl -u cloud-init-local.service
+sudo journalctl -u cloud-init.service
+
+# 4. ユーザーデータスクリプト確認
+sudo cat /var/lib/cloud/instance/user-data.txt
+```
+
+##### **よくあるエラーパターン**
+
+###### **npm インストールエラー**
+```bash
+# エラー例
+npm ERR! network request failed
+
+# 解決方法
+sudo npm install -g aws-cdk@2.1026.0 --yes --no-audit --no-fund --registry https://registry.npmjs.org/
+```
+
+###### **権限エラー**
+```bash
+# エラー例
+EACCES: permission denied
+
+# 解決方法（手動実行時）
+sudo npm install -g aws-cdk@2.1026.0 --yes --no-audit --no-fund
+```
+
+###### **ネットワークエラー**
+```bash
+# エラー例
+getaddrinfo ENOTFOUND registry.npmjs.org
+
+# 確認方法
+ping registry.npmjs.org
+nslookup registry.npmjs.org
+```
 
 ## 🔗 CDKデプロイ実行手順
 
@@ -146,7 +260,7 @@ npm --version     # 9以上
 cdk --version     # 2.1026.0
 
 # 再インストール（必要時）
-sudo npm install -g aws-cdk@2.1026.0
+sudo npm install -g aws-cdk@2.1026.0 --yes --no-audit --no-fund
 ```
 
 ### **AWS認証情報確認**
