@@ -11,7 +11,7 @@ Resources:
       EnableDnsSupport: true
       Tags:
         - Key: Name
-          Value: employee-app-vpc-cf
+          Value: employee-app-vpc-cf-day4
 
   # Internet Gateway
   EmployeeAppIGW:
@@ -19,7 +19,7 @@ Resources:
     Properties:
       Tags:
         - Key: Name
-          Value: employee-app-igw-cf
+          Value: employee-app-igw-cf-day4
 
   # Attach IGW to VPC
   AttachGateway:
@@ -38,7 +38,7 @@ Resources:
       MapPublicIpOnLaunch: true
       Tags:
         - Key: Name
-          Value: public-subnet-1-cf
+          Value: public-subnet-1-cf-day4
 
   # Public Subnet 2
   PublicSubnet2:
@@ -50,7 +50,7 @@ Resources:
       MapPublicIpOnLaunch: true
       Tags:
         - Key: Name
-          Value: public-subnet-2-cf
+          Value: public-subnet-2-cf-day4
 
   # Private Subnet 1
   PrivateSubnet1:
@@ -61,7 +61,7 @@ Resources:
       AvailabilityZone: !Select [0, !GetAZs '']
       Tags:
         - Key: Name
-          Value: private-subnet-1-cf
+          Value: private-subnet-1-cf-day4
 
   # Private Subnet 2
   PrivateSubnet2:
@@ -72,7 +72,7 @@ Resources:
       AvailabilityZone: !Select [1, !GetAZs '']
       Tags:
         - Key: Name
-          Value: private-subnet-2-cf
+          Value: private-subnet-2-cf-day4
 
   # Public Route Table
   PublicRouteTable:
@@ -81,7 +81,7 @@ Resources:
       VpcId: !Ref EmployeeAppVpc
       Tags:
         - Key: Name
-          Value: public-route-table-cf
+          Value: public-route-table-cf-day4
 
   # Public Route
   PublicRoute:
@@ -115,7 +115,7 @@ Resources:
         - !Ref PrivateSubnet2
       Tags:
         - Key: Name
-          Value: employee-db-subnet-group-cf
+          Value: employee-db-subnet-group-cf-day4
 
   # ALB Security Group
   ALBSecurityGroup:
@@ -131,7 +131,7 @@ Resources:
           Description: Allow HTTP access from internet
       Tags:
         - Key: Name
-          Value: ha-alb-sg
+          Value: ha-alb-sg-cf-day4
 
   # Web Server Security Group
   WebServerSecurityGroup:
@@ -147,7 +147,7 @@ Resources:
           Description: Allow HTTP access from ALB only
       Tags:
         - Key: Name
-          Value: employee-web-server-sg-cf
+          Value: employee-web-server-sg-cf-day4
 
   # Database Security Group
   DatabaseSecurityGroup:
@@ -163,13 +163,13 @@ Resources:
           Description: Allow MySQL access from Web Server
       Tags:
         - Key: Name
-          Value: employee-database-sg-cf
+          Value: employee-database-sg-cf-day4
 
   # RDS Database Instance
   EmployeeDatabase:
     Type: AWS::RDS::DBInstance
     Properties:
-      DBInstanceIdentifier: employee-database-cf
+      DBInstanceIdentifier: employee-database-cf-day4
       DBName: employeedb
       DBInstanceClass: db.t3.micro
       Engine: mysql
@@ -187,7 +187,7 @@ Resources:
       StorageEncrypted: false
       Tags:
         - Key: Name
-          Value: employee-database-cf
+          Value: employee-database-cf-day4
 
   # EC2 Instance 1 (Public Subnet 1)
   EmployeeWebServer1:
@@ -202,7 +202,7 @@ Resources:
       IamInstanceProfile: LabInstanceProfile
       Tags:
         - Key: Name
-          Value: employee-web-server-cf
+          Value: employee-web-server-cf-day4
       UserData:
         Fn::Base64: !Sub |
           #!/bin/bash
@@ -671,7 +671,7 @@ Resources:
       IamInstanceProfile: LabInstanceProfile
       Tags:
         - Key: Name
-          Value: ha-web-server-2
+          Value: ha-web-server-2-cf-day4
       UserData:
         Fn::Base64: !Sub |
           #!/bin/bash
@@ -1074,7 +1074,7 @@ Resources:
   HAWebTargetGroup:
     Type: AWS::ElasticLoadBalancingV2::TargetGroup
     Properties:
-      Name: ha-web-targets
+      Name: ha-web-targets-cf-day4
       Protocol: HTTP
       Port: 3000
       VpcId: !Ref EmployeeAppVpc
@@ -1089,13 +1089,13 @@ Resources:
         - Id: !Ref EmployeeWebServer2
       Tags:
         - Key: Name
-          Value: ha-web-targets
+          Value: ha-web-targets-cf-day4
 
   # Application Load Balancer
   HASystemALB:
     Type: AWS::ElasticLoadBalancingV2::LoadBalancer
     Properties:
-      Name: ha-system-alb
+      Name: ha-system-alb-cf-day4
       Scheme: internet-facing
       Type: application
       SecurityGroups:
@@ -1105,7 +1105,7 @@ Resources:
         - !Ref PublicSubnet2
       Tags:
         - Key: Name
-          Value: ha-system-alb
+          Value: ha-system-alb-cf-day4
 
   # ALB Listener
   HASystemALBListener:
