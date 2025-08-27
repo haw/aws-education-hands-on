@@ -129,11 +129,6 @@ Resources:
           ToPort: 3000
           CidrIp: 0.0.0.0/0
           Description: Allow HTTP access to Employee Management System
-        - IpProtocol: tcp
-          FromPort: 22
-          ToPort: 22
-          CidrIp: 0.0.0.0/0
-          Description: Allow SSH access (for troubleshooting)
       Tags:
         - Key: Name
           Value: employee-web-server-sg-cf
