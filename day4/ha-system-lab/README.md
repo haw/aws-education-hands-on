@@ -100,7 +100,11 @@ RDSが「利用可能」状態になるまで、5分〜10分程度時間がか�
   
   > **AWS Academy環境ではない方は**: セッションマネージャーを使用するため、`AmazonSSMManagedInstanceCore`ポリシーがアタッチされたIAMロールを作成し、インスタンスプロファイルとして設定してください。
 
-- **ユーザーデータ**: Day3の <a href="https://github.com/haw/aws-education-materials/blob/main/day3/db-lab/materials/user-data-webapp.txt" target="_blank" rel="noopener noreferrer">user-data-webapp.txt</a> をコピー（Node.js版）
+- **ユーザーデータ**: <a href="https://github.com/haw/aws-education-materials/blob/main/day3/db-lab/materials/user-data-webapp.txt" target="_blank" rel="noopener noreferrer">user-data-webapp.txt</a> の内容をコピー & ペースト  
+    - 2箇所の`YOUR_RDS_ENDPOINT_HERE`を`[RDSエンドポイント]`(※次参照)で書き換える
+    - `[RDSエンドポイント]` = RDSコンソール→データベース→`employee-database`→接続とセキュリティ→エンドポイントの値 (RDSのコンソールに戻っても表示されない場合は待つ。「待つ」のも仕事のうち!)
+
+    ![](../../day3/db-lab/images/rds-endpoint.png)  
 
 ### Step 2: 2台目のEC2インスタンス作成（10分）
 
@@ -128,7 +132,12 @@ RDSが「利用可能」状態になるまで、5分〜10分程度時間がか�
   
   > **AWS Academy環境ではない方は**: セッションマネージャーを使用するため、`AmazonSSMManagedInstanceCore`ポリシーがアタッチされたIAMロールを作成し、インスタンスプロファイルとして設定してください。
 
-- **ユーザーデータ**: Day3の <a href="https://github.com/haw/aws-education-materials/blob/main/day3/db-lab/materials/user-data-webapp.txt" target="_blank" rel="noopener noreferrer">user-data-webapp.txt</a> をコピー（Node.js版）  
+- **ユーザーデータ**: <a href="https://github.com/haw/aws-education-materials/blob/main/day3/db-lab/materials/user-data-webapp.txt" target="_blank" rel="noopener noreferrer">user-data-webapp.txt</a> の内容をコピー & ペースト  
+    - 2箇所の`YOUR_RDS_ENDPOINT_HERE`を`[RDSエンドポイント]`(※次参照)で書き換える
+    - `[RDSエンドポイント]` = RDSコンソール→データベース→`employee-database`→接続とセキュリティ→エンドポイントの値 (RDSのコンソールに戻っても表示されない場合は待つ。「待つ」のも仕事のうち!)
+
+
+    ![](../../day3/db-lab/images/rds-endpoint.png)  
 
 ### Step 3: データベースセキュリティグループ更新（5分）
 
@@ -142,99 +151,45 @@ RDSが「利用可能」状態になるまで、5分〜10分程度時間がか�
 **RDSコンソールにて、作成したデータベースの状態が「利用可能」となっていることを確認する。**  
 「利用可能」となるまで待つ。  
 
-#### 1台目でデータベースエンドポイントの変更（ha-web-server-1）
+#### 1台目でデータの初期化（ha-web-server-1）
 
 1. **Session Manager**で`ha-web-server-1`に接続
 2. **ユーザ切り替え**:
-   ```bash
-   sudo su - ec2-user
-   cd /var/www/html
-   ```
-3. **RDSエンドポイント更新**:
-
-    💡 **RDSエンドポイント取得方法**: RDSコンソール→データベース→`employee-database`→接続とセキュリティ→エンドポイント の値をコピーする。  
-    以下、`.js`ファイル内の`YOUR_RDS_ENDPOINT_HERE`を置き換える。  
-
-    **nano エディタで書き換え**
     ```bash
+    sudo su - ec2-user
     cd /var/www/html
-    sudo nano server.js
-    sudo nano init_db.js
     ```
 
-    - `YOUR_RDS_ENDPOINT_HERE`を置換する。
-    - nanoエディタの保存は「Ctl + o」 + 「Enter」
-    - nanoエディタの終了は「Ctl + x」  
-
-    もしくは、
-
-    **sedコマンドで書き換え**
+3. **データベース初期化**:
     ```bash
-    cd /var/www/html
-    sudo sed -i 's/YOUR_RDS_ENDPOINT_HERE/[RDSエンドポイント]/' server.js
-    sudo sed -i 's/YOUR_RDS_ENDPOINT_HERE/[RDSエンドポイント]/' init_db.js
+    node init_db.js
     ```
 
-    ※ `[RDSエンドポイント]` = RDSコンソール→データベース→`employee-database`→接続とセキュリティ→エンドポイントの値
-
-4. **データベース初期化**:
-   ```bash
-   node init_db.js
-   ```
-5. **Node.jsアプリケーション再起動**:
-   ```bash
-   sudo systemctl restart employee-app
-   ```
-6. **動作確認**:
-   ```bash
-   # 1台目のパブリックIPでアクセステスト（ブラウザでアクセスする）
-   http://[1台目のパブリックIP]:3000
-   ```
-
-#### 2台目でデータベースエンドポイントの変更（ha-web-server-2）
-
-1. **Session Manager**で`ha-web-server-2`に接続
-2. **ユーザ切り替え**:
-   ```bash
-   sudo su - ec2-user
-   cd /var/www/html
-   ```
-3. **RDSエンドポイント更新**のみ:
-
-    💡 **RDSエンドポイント取得方法**: RDSコンソール→データベース→`employee-database`→接続とセキュリティ→エンドポイント の値をコピーする。  
-    以下、`.js`ファイル内の`YOUR_RDS_ENDPOINT_HERE`を置き換える。  
-
-    **nano エディタで書き換え**
-    ```bash
-    cd /var/www/html
-    sudo nano server.js
-    ```
-
-    - `YOUR_RDS_ENDPOINT_HERE`を置換する。
-    - nanoエディタの保存は「Ctl + o」 + 「Enter」
-    - nanoエディタの終了は「Ctl + x」  
-
-    もしくは、
-
-    **sedコマンドで書き換え**
-    ```bash
-    cd /var/www/html
-    sudo sed -i 's/YOUR_RDS_ENDPOINT_HERE/[RDSエンドポイント]/' server.js
-    ```
-
-    ※ `[RDSエンドポイント]` = RDSコンソール→データベース→`employee-database`→接続とセキュリティ→エンドポイントの値
-
-    ⚠️ **重要**: データベース初期化（`node init_db.js`）は1台目でのみ実行してください！ (2台目で実行しても失敗するだけなので心配しないでください。)
+    もし、`node init_db.js`が、失敗する場合は `YOUR_RDS_ENDPOINT_HERE` の書き換えができていないことが考えられる。  
+    `nano` コマンドで、 `init_db.js` と `server.js` ファイルの2つを書き換える。  
+    `nano` コマンドの使い方は次の通りである。  
+    - `nano <filename>` ※ `<filename>`は、`init_db.js` もしくは、`server.js` が入る(2回実行)
+    - カーソルの移動は矢印キー
+    - 保存は、Ctl + o ののち、エンター
+    - 終了は、Ctl + x
 
 4. **Node.jsアプリケーション再起動**:
-   ```bash
-   sudo systemctl restart employee-app
-   ```
+    ```bash
+    sudo systemctl restart employee-app
+    ```
 5. **動作確認**:
-   ```bash
-   # 2台目のパブリックIPでアクセステスト（ブラウザでアクセスする）
-   http://[2台目のパブリックIP]:3000
-   ```
+    ```bash
+    # 1台目のパブリックIPでアクセステスト（ブラウザでアクセスする）
+    http://[1台目のパブリックIP]:3000
+    ```
+
+#### 2台目で動作確認（ha-web-server-2）
+
+1. **動作確認**:
+    ```bash
+    # 2台目のパブリックIPでアクセステスト（ブラウザでアクセスする）
+    http://[2台目のパブリックIP]:3000
+    ```
 
 
 
@@ -252,17 +207,21 @@ RDSが「利用可能」状態になるまで、5分〜10分程度時間がか�
 - **プロトコル**: HTTP、**ポート**: 3000
 - **VPC**: `employee-app-vpc`
 
+![](images/target-group-setting.png)
+
 #### ヘルスチェック
 - **ヘルスチェックパス**: `/`
 - **ヘルスチェックの詳細設定**
-  - **正常しきい値**: 2 （デフォルト値 `5` から変更）
+  - **正常しきい値**: 2 （デフォルト値 `5` から変更） ※ 通常は`5`のままでよい。演習のため正常しきい値を下げる。  
   - **間隔**: 30秒
 
-「次へ」  
+「**次へ**」  
 
 #### ターゲット登録
 - `ha-web-server-1`と`ha-web-server-2`を選択し、「保留中として以下を含める」
-- ターゲットグループの作成
+- **ターゲットグループの作成**
+
+![](images/target-group.png)
 
 ### Step 2: Application Load Balancer作成（5分）
 
@@ -275,7 +234,9 @@ RDSが「利用可能」状態になるまで、5分〜10分程度時間がか�
 
 #### ネットワークマッピング
 - **VPC**: `employee-app-vpc`
-- **サブネット**: 両方のパブリックサブネットを選択
+- **サブネット**: 両AZの**パブリック**サブネットを選択
+
+![](images/az-and-subnet.png)
 
 #### セキュリティグループ
 - **新規作成**: `ha-alb-sg` (「名前」と「説明」を入力する)
@@ -285,10 +246,11 @@ RDSが「利用可能」状態になるまで、5分〜10分程度時間がか�
 
 ※「新しいセキュリティグループを作成↗」リンクから作成可能です。作成後、「更新🌀」ボタンを押下して選択してください。  
 
+![](images/alb-sg-setting.png)
+
 #### リスナーとルーティング
-- **プロトコル**: HTTP、**ポート**: 80
+- **プロトコル**: HTTP、**ポート**: 80 (※ クライアント -- (80) --> ALB -- (3000) --> EC2)
 - **デフォルトアクション**: `ha-web-targets`に転送
-- **ポートマッピング**: 80 → 3000（ALBが自動変換）
 
 その他は、デフォルトのまま、「ロードバランサーの作成」  
 
@@ -326,6 +288,8 @@ RDSが「利用可能」状態になるまで、5分〜10分程度時間がか�
 2. 「インスタンスの状態」→「インスタンスを停止」
 3. **ブラウザを更新**してシステムが継続動作することを確認 （ページが表示されない場合やcssが効かず装飾がつかない場合がありますが、1分程度待つと正常に表示されます）
 4. **ターゲットグループ**でヘルスチェック状況を確認 (「更新」をする必要がある場合があります。 `ha-web-server-2` のみHealthy状態のはずです)
+
+![](images/alb-dns-name.png)
 
 ### Step 3: 復旧テスト（2分）
 
