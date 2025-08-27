@@ -220,11 +220,11 @@ _パッチ適用などで送信(アウトバウンド)が必要な場合は、Pu
   > **AWS Academy環境ではない方は**: セッションマネージャーを使用するため、`AmazonSSMManagedInstanceCore`ポリシーがアタッチされたIAMロールを作成し、インスタンスプロファイルとして設定してください。
 
 - **ユーザーデータ**: <a href="https://github.com/haw/aws-education-materials/blob/main/day3/db-lab/materials/user-data-webapp.txt" target="_blank" rel="noopener noreferrer">user-data-webapp.txt</a> の内容をコピー & ペースト  
-- 2箇所の`YOUR_RDS_ENDPOINT_HERE`を`[RDSエンドポイント]`で書き換える
-- `[RDSエンドポイント]` = RDSコンソール→データベース→`employee-database`→接続とセキュリティ→エンドポイントの値 (RDSのコンソールに戻っても表示されない場合は待つ。「待つ」のも仕事のうち!)
+    - 2箇所の`YOUR_RDS_ENDPOINT_HERE`を`[RDSエンドポイント]`で書き換える
+    - `[RDSエンドポイント]` = RDSコンソール→データベース→`employee-database`→接続とセキュリティ→エンドポイントの値 (RDSのコンソールに戻っても表示されない場合は待つ。「待つ」のも仕事のうち!)
 
 
-![](images/rds-endpoint.png)
+    ![](images/rds-endpoint.png)  
 
 
 ### Step 2: データベースセキュリティグループ更新（5分）
@@ -232,7 +232,7 @@ _パッチ適用などで送信(アウトバウンド)が必要な場合は、Pu
 1. **EC2コンソール**→「セキュリティグループ」
 2. `database-sg` を選択
 3. 「インバウンドルール」→「インバウンドルールを編集」
-4. ルールを追加 > タイプ「MySQL/Auroraルール」にソースを「`web-server-sg` のセキュリティグループID」(※🔍️に「`web-server-sg`」を入力して選択する)とするルールを追加
+4. ルールを追加 > タイプ「MySQL/Auroraルール」にソースを「`web-server-sg` のセキュリティグループIDとするルールを追加」(※🔍️に「`web-server-sg`」を入力して選択)
 
 ### Step 3: アプリケーション設定（10分）
 
