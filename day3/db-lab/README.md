@@ -17,6 +17,12 @@
 
 **動作**: Node.js製の社員管理システムで、社員情報をデータベースに保存・表示・編集・削除（完全CRUD対応）
 
+**Webアプリの概要**
+
+<a href="https://github.com/haw/aws-education-hands-on/blob/main/day3/db-lab/materials/nodejs-app-overview.md" target="_blank" rel="noopener noreferrer">Node.js社員管理システム - アプリケーション概要</a>  
+
+__クリックすると、別タブで開きます__
+
 ## ⏰ 所要時間
 
 約50分
@@ -44,7 +50,7 @@
 - **IPv4 CIDR**: `10.0.0.0/16`
 
 #### サブネット設定
-- **アベイラビリティーゾーン数**: 2
+- **アベイラビリティーゾーン数**: 2 (AZのカスタマイズで、`us-east-1a`と`us-east-1b`を確認)
 - **パブリックサブネット数**: 2
 - **プライベートサブネット数**: 2
 
@@ -74,6 +80,34 @@
 
 💡 **確認ポイント**: プライベートサブネットにはルートテーブルでインターネットゲートウェイへのルートがあるのに対して、プライベートサブネットにはルートテーブルでインターネットゲートウェイへのルートがないことを確認
 
+**VPCを表示**
+
+_注目すべきは「リソースマップ」タブ_
+
+![](images/show-vpc.png)
+
+---
+---
+
+**Publicサブネットにマウスをあわせる**
+
+_注目すべきはIGW(インターネットゲートウェイ)へのルートがあること_  
+_これにより、インターネットとの送受信(インバウンド、アウトバウンド)が可能_  
+
+![](images/show-vpc-01-public-subnet.png)
+
+---
+---
+
+**Privateサブネットにマウスをあわせる**
+
+_注目すべきはIGW(インターネットゲートウェイ)へのルートがないこと_  
+_これにより、インターネットとの送受信(インバウンド、アウトバウンド)は不可能_  
+_パッチ適用などで送信(アウトバウンド)が必要な場合は、PublicサブネットにNATゲートウェイを配置し、ルートテーブルにNATゲートウェイへのルートを追加する_  
+
+![](images/show-vpc-02-private-subnet.png)
+
+
 ---
 
 ## 🚀 Phase 2: RDSデータベース作成（20分）
@@ -89,10 +123,10 @@
 - **VPC**: `employee-app-vpc`を選択
 
 #### サブネット設定
-- **アベイラビリティーゾーン**: 2つ以上選択
+- **アベイラビリティーゾーン**: 2つ以上選択(`1a`と`1b`)
 - **サブネット**: 各AZの**プライベートサブネット**を選択
-  - `employee-app-vpc-subnet-private1-[AZ]`
-  - `employee-app-vpc-subnet-private2-[AZ]`
+  - `employee-app-vpc-subnet-private1-us-east-1a`
+  - `employee-app-vpc-subnet-private2-us-east-1b`
 
 ### Step 2: セキュリティグループ作成（5分）
 
@@ -123,7 +157,7 @@
 - **DBインスタンス識別子**: `employee-database`
 - **マスターユーザー名**: `admin`
 - **認証情報管理**: `セルフマネージド`
-- **マスターパスワード**: `password123`（本番では強力なパスワードを使用すべき）
+- **マスターパスワード**: `password123`（本番では強力なパスワードを使用すべき。今回は演習であり、アプリケーションもこの値をハードコーディングしているので、この値を使ってください。）
 
 #### インスタンス設定
 - **DBインスタンスクラス**: db.t3.micro
@@ -142,6 +176,7 @@
 
 💡 **重要**: 初期データベース名を設定しないと、後でアプリケーションが接続できません！
 
+`employee-database の推奨アドオン` というポップアップが表示されたら、「閉じる」でかまいません。  
 
 ※ データベースの作成が完了し、ステータスが「利用可能」となるまで、5分〜10分程度かかります。  
 ここで待つ必要はないので次へ進んでかまいません。操作していたブラウザタブを閉じたり、別のページへ移動したりしても、裏で作成は続けてくれるので問題ありません。  
@@ -174,6 +209,7 @@
 #### セキュリティグループ
 - **（新しい）セキュリティグループを作成**
 - **セキュリティグループ名**: `web-server-sg`
+- **説明**: `web-server-sg`
 - **インバウンドルール**:
   - ssh (ポート22): 削除
   - カスタムTCP (ポート3000): ソース 任意の場所（0.0.0.0/0） を追加
@@ -183,14 +219,20 @@
   
   > **AWS Academy環境ではない方は**: セッションマネージャーを使用するため、`AmazonSSMManagedInstanceCore`ポリシーがアタッチされたIAMロールを作成し、インスタンスプロファイルとして設定してください。
 
-- **ユーザーデータ**: <a href="https://github.com/haw/aws-education-materials/blob/main/day3/db-lab/materials/user-data-webapp.txt" target="_blank" rel="noopener noreferrer">user-data-webapp.txt</a> の内容をコピー
+- **ユーザーデータ**: <a href="https://github.com/haw/aws-education-materials/blob/main/day3/db-lab/materials/user-data-webapp.txt" target="_blank" rel="noopener noreferrer">user-data-webapp.txt</a> の内容をコピー & ペースト  
+- 2箇所の`YOUR_RDS_ENDPOINT_HERE`を`[RDSエンドポイント]`で書き換える
+- `[RDSエンドポイント]` = RDSコンソール→データベース→`employee-database`→接続とセキュリティ→エンドポイントの値 (RDSのコンソールに戻っても表示されない場合は待つ。「待つ」のも仕事のうち!)
+
+
+![](images/rds-endpoint.png)
+
 
 ### Step 2: データベースセキュリティグループ更新（5分）
 
 1. **EC2コンソール**→「セキュリティグループ」
 2. `database-sg` を選択
 3. 「インバウンドルール」→「インバウンドルールを編集」
-4. タイプ「MySQL/Auroraルール」にソースを「`web-server-sg` のセキュリティグループID」とするルールを追加
+4. ルールを追加 > タイプ「MySQL/Auroraルール」にソースを「`web-server-sg` のセキュリティグループID」(※🔍️に「`web-server-sg`」を入力して選択する)とするルールを追加
 
 ### Step 3: アプリケーション設定（10分）
 
@@ -199,48 +241,23 @@
     ```bash
     sudo su - ec2-user
     ```
-3. RDSエンドポイントを設定ファイルに反映
 
-    💡 **RDSエンドポイント取得方法**: RDSコンソール→データベース→`employee-database`→接続とセキュリティ→エンドポイント の値をコピーする。  
-    以下、`.js`ファイル内の`YOUR_RDS_ENDPOINT_HERE`を置き換える。  
-
-    **nano エディタで書き換え**
-    ```bash
-    cd /var/www/html
-    sudo nano server.js
-    sudo nano init_db.js
-    ```
-
-    - `YOUR_RDS_ENDPOINT_HERE`を置換する。
-    - nanoエディタの保存は「Ctl + o」 + 「Enter」
-    - nanoエディタの終了は「Ctl + x」  
-
-    もしくは、
-
-    **sedコマンドで書き換え**
-    ```bash
-    cd /var/www/html
-    sudo sed -i 's/YOUR_RDS_ENDPOINT_HERE/[RDSエンドポイント]/' server.js
-    sudo sed -i 's/YOUR_RDS_ENDPOINT_HERE/[RDSエンドポイント]/' init_db.js
-    ```
-
-    ※ `[RDSエンドポイント]` = RDSコンソール→データベース→`employee-database`→接続とセキュリティ→エンドポイントの値
-
-4. データベース初期化スクリプト実行
+3. データベース初期化スクリプト実行
 
     **RDSコンソールにて、作成したデータベースの状態が「利用可能」となっていることを確認する。**  
    「利用可能」となるまで待つ。  
 
    ```bash
+   cd /var/www/html
    node init_db.js
    ```
 
-5. Node.jsアプリケーション再起動（設定反映のため）
+4. Node.jsアプリケーション再起動（設定反映のため）
    ```bash
    sudo systemctl restart employee-app
    ```
 
-6. 起動確認
+5. 起動確認
    ```bash
    sudo systemctl status employee-app
    ```
@@ -252,7 +269,7 @@
 ### Step 1: Webアプリケーションアクセス
 
 1. EC2インスタンスのパブリックIPをコピー
-2. ブラウザで `http://[パブリックIP]:3000` にアクセス
+2. ブラウザで `http://[パブリックIP]:3000` にアクセス (⚠️`http`です)
 3. Node.js製社員管理システムが表示されることを確認
 
 ### Step 2: データベース機能テスト
