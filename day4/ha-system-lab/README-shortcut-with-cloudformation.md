@@ -234,6 +234,7 @@ _状態(ステータス)が **アクティブ** であること_
 <a href="https://github.com/haw/aws-education-hands-on/blob/main/day4/ha-system-lab/cloudformation/day4-ha-employee-app.yaml" target="_blank" rel="noopener noreferrer">day4-ha-employee-app.yaml</a>  
 
 Day 4完了時点の完成形を作れるCloudFormationテンプレートをプレゼント🎁します。  
+スタック名は、たとえば「Day4CompleteStack」とでもつけてください。  
 
 ---
 
