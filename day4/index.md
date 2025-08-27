@@ -8,5 +8,6 @@ title: Day 4
 ## ハンズオン資料
 
 - [高可用性システム実習](ha-system-lab/)
+- [データベース実習 - CloudFormation版](ha-system-lab/README-shortcut-with-cloudformation.md)
 
 [← ホームに戻る](../)
