@@ -24,7 +24,7 @@
 
 ## ⏰ 所要時間
 
-約60分（発表準備時間含む）
+約120分（発表準備時間含む）
 
 ## 📋 前提条件
 
@@ -35,78 +35,14 @@
 
 ## 🚀 Phase 1: 基盤構築（Day3の復習）（20分）
 
-### Step 1: VPC・RDS構築（15分）
+Day 3演習内容(VPC + DB Subnet Group + SG + RDS + EC2)と同じものをCloudFormationで構築する。  
 
-Day 3と同じ手順でVPCとRDSを構築します。  
-参考: <a href="../../day3/db-lab/" target="_blank" rel="noopener noreferrer">Day 3の手順</a>  
+「[Day3 Database Lab - CloudFormation版](../../day3/db-lab/cloudformation/README.md)」を参照のこと。  
 
-以下、Day 3のポイントのみ示します。  
-
-#### VPC作成
-1. **VPCコンソール**→「VPCを作成」
-2. **設定**:
-   - **名前**: `employee-app-vpc` （`プロジェクト` => `employee-app` に変更で `-vpc` はサフィックスされる)
-   - **IPv4 CIDR**: `10.0.0.0/16`
-   - **AZ数**: 2、**パブリック**: 2、**プライベート**: 2
-   - **NATゲートウェイ**: なし
-
-#### RDS作成
-1. **サブネットグループ作成**: `employee-db-subnet-group`
-2. **セキュリティグループ作成**: `database-sg`
-3. **RDS作成**:
-   - **識別子**: `employee-database`
-   - **エンジン**: MySQL 8.4.6
-   - **🚨初期データベース名**: `employeedb`
-   - **VPC**: `employee-app-vpc`
-
-### Step 2: 状態確認（5分〜10分）
-
-RDSが「利用可能」状態になるまで、5分〜10分程度時間がかかります。  
-ここで待つ必要はありませんので、次へ進みましょう。  
-
----
 
 ## 🚀 Phase 2: 高可用性Webサーバ構築（25分）
 
-### Step 1: 1台目のEC2インスタンス作成（10分）
-
-1. **EC2コンソール**→「インスタンスを起動」
-
-#### 基本設定
-- **名前**: `ha-web-server-1`
-- **AMI**: Amazon Linux 2023 AMI
-- **インスタンスタイプ**: t3.micro
-
-#### キーペア（ログイン）
-
-- キーベアなしで続行（推奨されません）
-
-#### ネットワーク設定
-
-「編集」ボタンを押す  
-
-- **VPC**: `employee-app-vpc`
-- **サブネット**: パブリックサブネット1
-- **パブリックIP**: 有効
-
-#### セキュリティグループ
-- **新規作成**: `ha-web-server-sg`
-- **インバウンドルール**:
-  - カスタムTCP (3000): 0.0.0.0/0 （任意の場所）
-  - SSH (22): 削除
-
-#### 高度な詳細
-- **IAMプロファイル**: `LabInstanceProfile`
-  
-  > **AWS Academy環境ではない方は**: セッションマネージャーを使用するため、`AmazonSSMManagedInstanceCore`ポリシーがアタッチされたIAMロールを作成し、インスタンスプロファイルとして設定してください。
-
-- **ユーザーデータ**: <a href="https://github.com/haw/aws-education-materials/blob/main/day3/db-lab/materials/user-data-webapp.txt" target="_blank" rel="noopener noreferrer">user-data-webapp.txt</a> の内容をコピー & ペースト  
-    - 2箇所の`YOUR_RDS_ENDPOINT_HERE`を`[RDSエンドポイント]`(※次参照)で書き換える
-    - `[RDSエンドポイント]` = RDSコンソール→データベース→`employee-database`→接続とセキュリティ→エンドポイントの値 (RDSのコンソールに戻っても表示されない場合は待つ。「待つ」のも仕事のうち!)
-
-    ![](../../day3/db-lab/images/rds-endpoint.png)  
-
-### Step 2: 2台目のEC2インスタンス作成（10分）
+### Step 1: 2台目のEC2インスタンス作成（10分）
 
 1. **EC2コンソール**→「インスタンスを起動」
 
@@ -120,12 +56,12 @@ RDSが「利用可能」状態になるまで、5分〜10分程度時間がか�
 - キーベアなしで続行（推奨されません）
 
 #### ネットワーク設定
-- **VPC**: `employee-app-vpc`
+- **VPC**: `employee-app-vpc-cf`
 - **サブネット**: パブリックサブネット2（異なるAZ）
 - **パブリックIP**: 有効
 
 #### セキュリティグループ
-- **既存選択**: `ha-web-server-sg`
+- **既存選択**: `Day3DbLabStack-WebServerSecurityGroup-xxxx` (`xxxx`実行環境ごとに異なる。**WebServerSecurityGroup**を選ぶこと!!!)
 
 #### 高度な詳細
 - **IAMプロファイル**: `LabInstanceProfile`
@@ -139,51 +75,21 @@ RDSが「利用可能」状態になるまで、5分〜10分程度時間がか�
 
     ![](../../day3/db-lab/images/rds-endpoint.png)  
 
-### Step 3: データベースセキュリティグループ更新（5分）
 
-1. **EC2コンソール**→「セキュリティグループ」
-2. `database-sg` を選択
-3. 「インバウンドルール」→「インバウンドルールを編集」
-4. タイプ「MySQL/Auroraルール」にソースを「`ha-web-server-sg` のセキュリティグループID」とするルールを追加
 
-### Step 4: データベース接続設定（5分）
 
-**RDSコンソールにて、作成したデータベースの状態が「利用可能」となっていることを確認する。**  
-「利用可能」となるまで待つ。  
 
-#### 1台目でデータの初期化（ha-web-server-1）
+#### 1台目で動作確認（employee-web-server-cf）
 
-1. **Session Manager**で`ha-web-server-1`に接続
-2. **ユーザ切り替え**:
-    ```bash
-    sudo su - ec2-user
-    cd /var/www/html
-    ```
-
-3. **データベース初期化**:
-    ```bash
-    node init_db.js
-    ```
-
-    もし、`node init_db.js`が、失敗する場合は `YOUR_RDS_ENDPOINT_HERE` の書き換えができていないことが考えられる。  
-    `nano` コマンドで、 `init_db.js` と `server.js` ファイルの2つを書き換える。  
-    `nano` コマンドの使い方は次の通りである。  
-    - `nano <filename>` ※ `<filename>`は、`init_db.js` もしくは、`server.js` が入る(2回実行)
-    - カーソルの移動は矢印キー
-    - 保存は、Ctl + o ののち、エンター
-    - 終了は、Ctl + x
-
-4. **Node.jsアプリケーション再起動**:
-    ```bash
-    sudo systemctl restart employee-app
-    ```
-5. **動作確認**:
+1. **動作確認**:
     ```bash
     # 1台目のパブリックIPでアクセステスト（ブラウザでアクセスする）
     http://[1台目のパブリックIP]:3000
     ```
 
 #### 2台目で動作確認（ha-web-server-2）
+
+_「ステータスチェック」に合格していること。_
 
 1. **動作確認**:
     ```bash
@@ -204,8 +110,8 @@ RDSが「利用可能」状態になるまで、5分〜10分程度時間がか�
 #### 基本設定
 - **ターゲットタイプ**: インスタンス
 - **ターゲットグループ名**: `ha-web-targets`
-- **プロトコル**: HTTP、**ポート**: **3000**
-- **VPC**: `employee-app-vpc`
+- **プロトコル**: HTTP、**ポート**: **3000** (※ デフォルト値を選択してから上書きするように編集すると編集しやすい)
+- **VPC**: `employee-app-vpc-cf`
 
 ![](images/target-group-setting.png)
 
@@ -218,7 +124,7 @@ RDSが「利用可能」状態になるまで、5分〜10分程度時間がか�
 「**次へ**」  
 
 #### ターゲット登録
-- `ha-web-server-1`と`ha-web-server-2`を選択し、「保留中として以下を含める」
+- `employee-web-server-cf`と`ha-web-server-2`を選択し、「保留中として以下を含める」
 - **ターゲットグループの作成**
 
 ![](images/target-group.png)
@@ -233,7 +139,7 @@ RDSが「利用可能」状態になるまで、5分〜10分程度時間がか�
 - **スキーム**: インターネット向け
 
 #### ネットワークマッピング
-- **VPC**: `employee-app-vpc`
+- **VPC**: `employee-app-vpc-cf`
 - **サブネット**: 両AZの**パブリック**サブネットを選択
 
 ![](images/az-and-subnet.png)
@@ -261,7 +167,7 @@ RDSが「利用可能」状態になるまで、5分〜10分程度時間がか�
 ### Step 1: Webサーバセキュリティグループ更新
 
 1. **EC2コンソール**→「セキュリティグループ」
-2. `ha-web-server-sg`を選択
+2. `employee-web-server-sg-cf`を選択
 3. 「インバウンドルール」→「インバウンドルールを編集」
 4. **既存ルール削除**: カスタムTCP (3000): 0.0.0.0/0
 5. **新規ルール追加**: 
@@ -277,6 +183,8 @@ RDSが「利用可能」状態になるまで、5分〜10分程度時間がか�
 
 ### Step 1: 正常動作確認（3分）
 
+_状態(ステータス)が **アクティブ** であること_
+
 1. **ALBのDNS名**をコピー
 2. ブラウザで`http://[ALB-DNS名]`にアクセス
 3. 社員管理システムが表示されることを確認
@@ -284,7 +192,7 @@ RDSが「利用可能」状態になるまで、5分〜10分程度時間がか�
 
 ### Step 2: 可用性テスト（5分）
 
-1. **EC2コンソール**で`ha-web-server-1`を選択
+1. **EC2コンソール**で`employee-web-server-cf`を選択
 2. 「インスタンスの状態」→「インスタンスを停止」
 3. **ブラウザを更新**してシステムが継続動作することを確認 （ページが表示されない場合やcssが効かず装飾がつかない場合がありますが、1分程度待つと正常に表示されます）
 4. **ターゲットグループ**でヘルスチェック状況を確認 (「更新」をする必要がある場合があります。 `ha-web-server-2` のみHealthy状態のはずです)
