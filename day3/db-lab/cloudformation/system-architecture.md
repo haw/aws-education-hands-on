@@ -37,7 +37,7 @@ graph TB
                 end
                 
                 %% Private Subnet 2
-                subgraph PrivSub2["🔒 Pri Sub 2 (10.0.3.0/24)"]
+                subgraph PrivSub2["🔒 Priv Sub 2 (10.0.3.0/24)"]
                     Empty_Priv[📦 Future expansion]
                 end
             end
