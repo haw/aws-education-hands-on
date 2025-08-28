@@ -39,8 +39,11 @@ Day 3演習内容(VPC + DB Subnet Group + SG + RDS + EC2)と同じものをCloud
 
 「[Day3 Database Lab - CloudFormation版](../../day3/db-lab/cloudformation/README.md)」を参照のこと。  
 
+![](images/day3-worked.png)
 
 ## 🚀 Phase 2: 高可用性Webサーバ構築（25分）
+
+![](images/day4-worked.png)
 
 ### Step 1: 2台目のEC2インスタンス作成（10分）
 
