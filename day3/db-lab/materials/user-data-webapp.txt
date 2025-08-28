@@ -1,13 +1,8 @@
 #!/bin/bash
 set -euxo pipefail
 
-# ---- System update ----
 dnf -y update
-
-# ---- Install Node.js and MySQL client ----
 dnf -y install nodejs npm mariadb105
-
-# ---- Create app directory ----
 mkdir -p /var/www/html
 cd /var/www/html
 
@@ -30,13 +25,9 @@ cat > package.json <<'JSON'
 }
 JSON
 
-# ---- Install dependencies ----
 npm install
-
-# ---- Create public directory ----
 mkdir -p public
 
-# ---- Create CSS file ----
 cat > public/style.css <<'CSS'
 *{margin:0;padding:0;box-sizing:border-box}
 body{font-family:Arial,sans-serif;background:linear-gradient(135deg,#667eea 0%,#764ba2 100%);min-height:100vh;color:#232f3e}
@@ -87,7 +78,6 @@ input[type="text"]:focus,input[type="email"]:focus{outline:none;border-color:#6a
 }
 CSS
 
-# ---- Create views directory ----
 mkdir -p views
 
 # ---- Create main server file ----
@@ -100,9 +90,12 @@ const path = require('path');
 const app = express();
 const port = 3000;
 
+// ⚠️
+const RDS_ENDPOINT = 'YOUR_RDS_ENDPOINT_HERE';
+
 // Database configuration
 const dbConfig = {
-  host: 'YOUR_RDS_ENDPOINT_HERE',
+  host: RDS_ENDPOINT,
   user: 'admin',
   password: 'password123',
   database: 'employeedb',
@@ -357,20 +350,48 @@ EJS
 cat > init_db.js <<'JS'
 const mysql = require('mysql2');
 
+// ⚠️
+const RDS_ENDPOINT = 'YOUR_RDS_ENDPOINT_HERE';
+
+// First connection without database to create it
+const rootConfig = {
+  host: RDS_ENDPOINT,
+  user: 'admin',
+  password: 'password123',
+  charset: 'utf8mb4'
+};
+
+// Second connection with database
 const dbConfig = {
-  host: 'YOUR_RDS_ENDPOINT_HERE',
+  host: RDS_ENDPOINT,
   user: 'admin',
   password: 'password123',
   database: 'employeedb',
   charset: 'utf8mb4'
 };
 
-const db = mysql.createConnection(dbConfig);
-
 async function initDatabase() {
+  let rootConnection;
+  let dbConnection;
+  
   try {
+    // Connect without database to create it
+    rootConnection = mysql.createConnection(rootConfig);
+    
+    console.log('🔗 RDSに接続中...');
+    
+    // Create database if not exists
+    await rootConnection.promise().execute('CREATE DATABASE IF NOT EXISTS employeedb');
+    console.log('✅ データベース employeedb を作成/確認しました');
+    
+    // Close root connection
+    await rootConnection.end();
+    
+    // Connect to the specific database
+    dbConnection = mysql.createConnection(dbConfig);
+    
     // Create table
-    await db.promise().execute(`
+    await dbConnection.promise().execute(`
       CREATE TABLE IF NOT EXISTS employees (
         id INT AUTO_INCREMENT PRIMARY KEY,
         name VARCHAR(100) NOT NULL,
@@ -379,6 +400,7 @@ async function initDatabase() {
         created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
       ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4
     `);
+    console.log('✅ テーブル employees を作成/確認しました');
     
     // Insert sample data
     const sampleData = [
@@ -389,7 +411,7 @@ async function initDatabase() {
     
     for (const [name, email, department] of sampleData) {
       try {
-        await db.promise().execute(
+        await dbConnection.promise().execute(
           'INSERT IGNORE INTO employees (name, email, department) VALUES (?, ?, ?)',
           [name, email, department]
         );
@@ -397,12 +419,21 @@ async function initDatabase() {
         // Ignore duplicate entries
       }
     }
+    console.log('✅ サンプルデータを挿入しました');
     
     console.log('🎉 データベース初期化完了');
     process.exit(0);
   } catch (error) {
-    console.error('初期化エラー:', error);
+    console.error('❌ 初期化エラー:', error);
     process.exit(1);
+  } finally {
+    // Clean up connections
+    if (rootConnection) {
+      try { await rootConnection.end(); } catch (e) {}
+    }
+    if (dbConnection) {
+      try { await dbConnection.end(); } catch (e) {}
+    }
   }
 }
 
@@ -413,7 +444,6 @@ JS
 chown -R ec2-user:ec2-user /var/www/html
 chmod 755 /var/www/html
 
-# ---- Create systemd service ----
 cat > /etc/systemd/system/employee-app.service <<'SERVICE'
 [Unit]
 Description=Employee Management Node.js App
@@ -432,12 +462,6 @@ Environment=NODE_ENV=production
 WantedBy=multi-user.target
 SERVICE
 
-# ---- Enable and start service ----
 systemctl daemon-reload
 systemctl enable employee-app
 systemctl start employee-app
-
-echo "✅ Node.js クラウドコンソール風 完全CRUD対応Webアプリケーションセットアップ完了"
-echo "📝 RDS作成後に server.js と init_db.js のエンドポイントを更新し、node init_db.js を実行してください。"
-echo "🎯 機能: Create(追加) / Read(表示) / Update(編集) / Delete(削除) + クラウドコンソール風UI (Node.js版)"
-echo "🚀 サービス状態確認: systemctl status employee-app"
