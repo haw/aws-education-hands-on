@@ -175,7 +175,11 @@ RDSが「利用可能」状態になるまで、5分〜10分程度時間がか�
 
 4. **Node.jsアプリケーション再起動**:
     ```bash
+    sudo systemctl status employee-app  # エラーがでているはず
+
     sudo systemctl restart employee-app
+
+    sudo systemctl status employee-app
     ```
 5. **動作確認**:
     ```bash
@@ -185,7 +189,8 @@ RDSが「利用可能」状態になるまで、5分〜10分程度時間がか�
 
 #### 2台目で動作確認（ha-web-server-2）
 
-1. **動作確認**:
+1. 1台目と同じようにセッションマネージャーで接続をし、 `sudo systemctl status employee-app` でエラーがでていれば、 `sudo systemctl restart employee-app` する
+2. **動作確認**:
     ```bash
     # 2台目のパブリックIPでアクセステスト（ブラウザでアクセスする）
     http://[2台目のパブリックIP]:3000
