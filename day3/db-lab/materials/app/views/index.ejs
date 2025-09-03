@@ -1,0 +1,127 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>社員管理システム</title>
+  <link rel="stylesheet" href="/style.css">
+  </head>
+<body>
+<div class="header">
+  <div class="header-content">
+    <div class="cloud-logo">☁️ Cloud</div>
+    <div class="service-name">社員管理システム</div>
+  </div>
+  </div>
+<div class="container">
+  <div class="main-card">
+    <div class="card-header">
+      <h1 class="card-title">🏢 Employee Management Console</h1>
+      <div class="card-subtitle">クラウドハンズオン - 完全CRUD対応システム (Node.js版)</div>
+    </div>
+    <div class="card-body">
+
+<% if (message) { %>
+  <div class="alert alert-<%= messageType %>"><%= message %></div>
+<% } %>
+
+<% if (editData) { %>
+<div class="section">
+  <h3 class="section-title">✏️ 社員情報編集</h3>
+  <form method="POST">
+    <input type="hidden" name="action" value="update">
+    <input type="hidden" name="id" value="<%= editData.id %>">
+    <div class="form-group">
+      <label for="edit_name">氏名:</label>
+      <input type="text" id="edit_name" name="name" value="<%= editData.name %>" required>
+    </div>
+    <div class="form-group">
+      <label for="edit_email">メールアドレス:</label>
+      <input type="email" id="edit_email" name="email" value="<%= editData.email %>" required>
+    </div>
+    <div class="form-group">
+      <label for="edit_department">部署:</label>
+      <input type="text" id="edit_department" name="department" value="<%= editData.department %>" placeholder="例: 開発部">
+    </div>
+    <button type="submit" class="btn btn-primary">更新</button>
+    <a href="/" class="btn btn-secondary">キャンセル</a>
+  </form>
+  </div>
+<% } else { %>
+<div class="section">
+  <h3 class="section-title">➕ 新規社員追加</h3>
+  <form method="POST">
+    <input type="hidden" name="action" value="add">
+    <div class="form-group">
+      <label for="name">氏名:</label>
+      <input type="text" id="name" name="name" required>
+    </div>
+    <div class="form-group">
+      <label for="email">メールアドレス:</label>
+      <input type="email" id="email" name="email" required>
+    </div>
+    <div class="form-group">
+      <label for="department">部署:</label>
+      <input type="text" id="department" name="department" placeholder="例: 開発部">
+    </div>
+    <button type="submit" class="btn btn-primary">社員を追加</button>
+  </form>
+  </div>
+<% } %>
+
+<div class="section">
+  <h3 class="section-title">📋 社員一覧</h3>
+
+  <div class="stats-grid">
+    <div class="stat-card">
+      <div class="stat-number"><%= totalEmployees %></div>
+      <div class="stat-label">登録社員数</div>
+    </div>
+    <div class="stat-card">
+      <div class="stat-number"><%= currentYear %></div>
+      <div class="stat-label">現在年度</div>
+    </div>
+  </div>
+
+  <% if (employees.length > 0) { %>
+    <table class="data-table">
+      <tr><th>ID</th><th>氏名</th><th>メールアドレス</th><th>部署</th><th>登録日時</th><th>操作</th></tr>
+      <% employees.forEach(function(row) { %>
+        <tr>
+          <td><strong><%= row.id %></strong></td>
+          <td><%= row.name %></td>
+          <td><%= row.email %></td>
+          <td><span style="background: #e3f2fd; padding: 4px 8px; border-radius: 4px; font-size: 12px;"><%= row.department %></span></td>
+          <td><%= new Date(row.created_at).toLocaleString('ja-JP') %></td>
+          <td>
+            <a href="/?edit=<%= row.id %>" class="btn btn-warning">編集</a>
+            <form method="POST" style="display:inline;" onsubmit="return confirmDelete('<%= row.name %>')">
+              <input type="hidden" name="action" value="delete">
+              <input type="hidden" name="id" value="<%= row.id %>">
+              <button type="submit" class="btn btn-danger">削除</button>
+            </form>
+          </td>
+        </tr>
+      <% }); %>
+    </table>
+  <% } else { %>
+    <div class="empty-state">
+      <div class="empty-state-icon">📄</div>
+      <h3>社員データがありません</h3>
+      <p>上のフォームから新しい社員を追加してください。</p>
+    </div>
+  <% } %>
+  </div>
+
+    </div>
+  </div>
+</div>
+
+<script>
+function confirmDelete(name) {
+  return confirm('⚠️ 削除確認\n\n本当に「' + name + '」さんの情報を削除しますか？\n\n⚠️ この操作は元に戻せません。');
+}
+</script>
+</body>
+</html>
+
