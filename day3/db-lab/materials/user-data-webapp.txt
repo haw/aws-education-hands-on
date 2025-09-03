@@ -1,7 +1,7 @@
 #!/bin/bash
 set -euxo pipefail
 
-# ⚠️ 学生が手動で書き換える必要があります
+# ⚠️ 手動で書き換える必要があります
 RDS_ENDPOINT="YOUR_RDS_ENDPOINT_HERE"
 
 # Update base packages and install prerequisites
