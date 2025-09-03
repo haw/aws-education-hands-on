@@ -196,7 +196,7 @@ _パッチ適用などで送信(アウトバウンド)が必要な場合は、Pu
 
 #### キーペア（ログイン）
 
-- キーベアなしで続行（推奨されません）
+- キーペアなしで続行（推奨されません）
 
 #### ネットワーク設定
 
@@ -220,7 +220,7 @@ _パッチ適用などで送信(アウトバウンド)が必要な場合は、Pu
   > **AWS Academy環境ではない方は**: セッションマネージャーを使用するため、`AmazonSSMManagedInstanceCore`ポリシーがアタッチされたIAMロールを作成し、インスタンスプロファイルとして設定してください。
 
 - **ユーザーデータ**: <a href="https://github.com/haw/aws-education-materials/blob/main/day3/db-lab/materials/user-data-webapp.txt" target="_blank" rel="noopener noreferrer">user-data-webapp.txt</a> の内容をコピー & ペースト  
-    - 2箇所の`YOUR_RDS_ENDPOINT_HERE`を`[RDSエンドポイント]`(※次参照)で書き換える
+    - `YOUR_RDS_ENDPOINT_HERE`を`[RDSエンドポイント]`(※次参照)で書き換える（先頭の方に1箇所）
     - `[RDSエンドポイント]` = RDSコンソール→データベース→`employee-database`→接続とセキュリティ→エンドポイントの値 (RDSのコンソールに戻っても表示されない場合は待つ。「待つ」のも仕事のうち!)
 
 
@@ -242,6 +242,34 @@ _パッチ適用などで送信(アウトバウンド)が必要な場合は、Pu
     sudo su - ec2-user
     ```
 
+3. アプリケーションの状態を確認
+    ```bash
+    sudo systemctl status employee-app
+    ```
+
+    **以下のようなログがでていれば成功**  
+
+    ```
+    ● employee-app.service - Employee Management Node.js App
+         Loaded: loaded (/etc/systemd/system/employee-app.service; enabled; preset: disabled)
+         Active: active (running) since Wed 2025-09-03 07:31:47 UTC; 5min ago
+       Main PID: 26973 (node)
+          Tasks: 11 (limit: 4564)
+         Memory: 23.8M
+            CPU: 492ms
+         CGroup: /system.slice/employee-app.service
+                 └─26973 /usr/bin/node server.js
+
+    Sep 03 07:31:47 ip-10-0-0-219.ec2.internal systemd[1]: Started employee-app.service - Employee Management Node.js App.
+    Sep 03 07:31:48 ip-10-0-0-219.ec2.internal node[26973]: サーバーがポート3000で起動しました
+    Sep 03 07:31:48 ip-10-0-0-219.ec2.internal node[26973]: データベースに接続しました
+    ```
+
+    **失敗している場合は、たいてい以下のどちらかに問題がある**  
+
+    - セキュリティグループ（`database-sg`）の設定誤り → Phase3のStep 2 を参考に設定しなおす  
+    - ユーザーデータ内のRDSエンドポイント（`YOUR_RDS_ENDPOINT_HERE`） を書き換えなかったかもしくは、正しく設定をしなかった → 以降の手順3〜5を行い、応急処置をする  
+
 3. データベース初期化スクリプト実行
 
     **RDSコンソールにて、作成したデータベースの状態が「利用可能」となっていることを確認する。**  
@@ -257,18 +285,28 @@ _パッチ適用などで送信(アウトバウンド)が必要な場合は、Pu
     `nano` コマンドの使い方は次の通りである。  
     - `nano <filename>` ※ `<filename>`は、`init_db.js` もしくは、`server.js` が入る(2回実行)
     - カーソルの移動は矢印キー
-    - 保存は、Ctl + o ののち、エンター
-    - 終了は、Ctl + x
+    - 保存は、Ctl + O ののち、エンター
+    - 終了は、Ctl + X
 
 4. Node.jsアプリケーション再起動（設定反映のため）
-   ```bash
-   sudo systemctl restart employee-app
-   ```
+    ```bash
+    sudo systemctl restart employee-app
+    ```
 
 5. 起動確認
-   ```bash
-   sudo systemctl status employee-app
-   ```
+    ```bash
+    sudo systemctl status employee-app
+    ```
+
+上記でも解決しない場合は、以下のコマンドでエラー原因をつきとめて修正する必要がある。EC2インスタンスを終了し、もう一度EC2インスタンスを作り直すほうが早いかもしれない。  
+
+```
+sudo cloud-init status
+sudo cat /var/log/cloud-init-output.log
+sudo tail -f /var/log/cloud-init-output.log
+sudo cat /var/log/cloud-init.log
+sudo systemctl status employee-app
+```
 
 ---
 
@@ -277,7 +315,7 @@ _パッチ適用などで送信(アウトバウンド)が必要な場合は、Pu
 ### Step 1: Webアプリケーションアクセス
 
 1. EC2インスタンスのパブリックIPをコピー
-2. ブラウザで `http://[パブリックIP]:3000` にアクセス (⚠️`http`です)
+2. ブラウザで `http://[パブリックIP]:3000` にアクセス (⚠️`http`です。`3000`番ポートです。)
 3. Node.js製社員管理システムが表示されることを確認
 
 ### Step 2: データベース機能テスト
