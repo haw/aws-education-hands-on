@@ -233,6 +233,9 @@ Resources:
           cp -r day3/db-lab/materials/app/* /var/www/html/
           cd /var/www/html
           npm install
+          # Set ownership and basic permissions
+          chown -R ec2-user:ec2-user /var/www/html
+          chmod 755 /var/www/html
 
           # Inject RDS endpoint into app sources
           sed -i "s/YOUR_RDS_ENDPOINT_HERE/${EmployeeDatabase.Endpoint.Address}/g" server.js init_db.js
@@ -319,6 +322,9 @@ Resources:
           cp -r day3/db-lab/materials/app/* /var/www/html/
           cd /var/www/html
           npm install
+          # Set ownership and basic permissions
+          chown -R ec2-user:ec2-user /var/www/html
+          chmod 755 /var/www/html
 
           # Inject RDS endpoint into app sources
           sed -i "s/YOUR_RDS_ENDPOINT_HERE/${EmployeeDatabase.Endpoint.Address}/g" server.js init_db.js
