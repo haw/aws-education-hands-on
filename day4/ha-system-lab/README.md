@@ -79,7 +79,7 @@ RDSが「利用可能」状態になるまで、5分〜10分程度時間がか�
 
 #### キーペア（ログイン）
 
-- キーベアなしで続行（推奨されません）
+- キーペアなしで続行（推奨されません）
 
 #### ネットワーク設定
 
@@ -101,7 +101,7 @@ RDSが「利用可能」状態になるまで、5分〜10分程度時間がか�
   > **AWS Academy環境ではない方は**: セッションマネージャーを使用するため、`AmazonSSMManagedInstanceCore`ポリシーがアタッチされたIAMロールを作成し、インスタンスプロファイルとして設定してください。
 
 - **ユーザーデータ**: <a href="https://github.com/haw/aws-education-materials/blob/main/day3/db-lab/materials/user-data-webapp.txt" target="_blank" rel="noopener noreferrer">user-data-webapp.txt</a> の内容をコピー & ペースト  
-    - 2箇所の`YOUR_RDS_ENDPOINT_HERE`を`[RDSエンドポイント]`(※次参照)で書き換える
+    - `YOUR_RDS_ENDPOINT_HERE`を`[RDSエンドポイント]`(※次参照)で書き換える（先頭の方に1箇所）
     - `[RDSエンドポイント]` = RDSコンソール→データベース→`employee-database`→接続とセキュリティ→エンドポイントの値 (RDSのコンソールに戻っても表示されない場合は待つ。「待つ」のも仕事のうち!)
 
     ![](../../day3/db-lab/images/rds-endpoint.png)  
@@ -117,7 +117,7 @@ RDSが「利用可能」状態になるまで、5分〜10分程度時間がか�
 
 #### キーペア（ログイン）
 
-- キーベアなしで続行（推奨されません）
+- キーペアなしで続行（推奨されません）
 
 #### ネットワーク設定
 - **VPC**: `employee-app-vpc`
@@ -133,7 +133,7 @@ RDSが「利用可能」状態になるまで、5分〜10分程度時間がか�
   > **AWS Academy環境ではない方は**: セッションマネージャーを使用するため、`AmazonSSMManagedInstanceCore`ポリシーがアタッチされたIAMロールを作成し、インスタンスプロファイルとして設定してください。
 
 - **ユーザーデータ**: <a href="https://github.com/haw/aws-education-materials/blob/main/day3/db-lab/materials/user-data-webapp.txt" target="_blank" rel="noopener noreferrer">user-data-webapp.txt</a> の内容をコピー & ペースト  
-    - 2箇所の`YOUR_RDS_ENDPOINT_HERE`を`[RDSエンドポイント]`(※次参照)で書き換える
+    - `YOUR_RDS_ENDPOINT_HERE`を`[RDSエンドポイント]`(※次参照)で書き換える（先頭の方に1箇所）
     - `[RDSエンドポイント]` = RDSコンソール→データベース→`employee-database`→接続とセキュリティ→エンドポイントの値 (RDSのコンソールに戻っても表示されない場合は待つ。「待つ」のも仕事のうち!)
 
 
@@ -157,11 +157,43 @@ RDSが「利用可能」状態になるまで、5分〜10分程度時間がか�
 2. **ユーザ切り替え**:
     ```bash
     sudo su - ec2-user
-    cd /var/www/html
     ```
 
-3. **データベース初期化**:
+3. アプリケーションの状態を確認
     ```bash
+    sudo systemctl status employee-app
+    ```
+
+    **以下のようなログがでていれば成功**  =>  手順7(**動作確認**)へ進む(手順4〜6はスキップ)
+
+    ```
+    ● employee-app.service - Employee Management Node.js App
+         Loaded: loaded (/etc/systemd/system/employee-app.service; enabled; preset: disabled)
+         Active: active (running) since Wed 2025-09-03 07:31:47 UTC; 5min ago
+       Main PID: 26973 (node)
+          Tasks: 11 (limit: 4564)
+         Memory: 23.8M
+            CPU: 492ms
+         CGroup: /system.slice/employee-app.service
+                 └─26973 /usr/bin/node server.js
+
+    Sep 03 07:31:47 ip-10-0-0-219.ec2.internal systemd[1]: Started employee-app.service - Employee Management Node.js App.
+    Sep 03 07:31:48 ip-10-0-0-219.ec2.internal node[26973]: サーバーがポート3000で起動しました
+    Sep 03 07:31:48 ip-10-0-0-219.ec2.internal node[26973]: データベースに接続しました
+    ```
+
+    **失敗している場合は、たいてい以下のどちらかに問題がある**  
+
+    - セキュリティグループ（`database-sg`）の設定誤り → Phase3のStep 2 を参考に設定しなおす  
+    - ユーザーデータ内のRDSエンドポイント（`YOUR_RDS_ENDPOINT_HERE`） を書き換えなかったかもしくは、正しく設定をしなかった → 以降の手順3〜5を行い、応急処置をする  
+
+4. データベース初期化スクリプト実行
+
+    **RDSコンソールにて、作成したデータベースの状態が「利用可能」となっていることを確認する。**  
+    「利用可能」となるまで待つ。  
+
+    ```bash
+    cd /var/www/html
     node init_db.js
     ```
 
@@ -170,29 +202,41 @@ RDSが「利用可能」状態になるまで、5分〜10分程度時間がか�
     `nano` コマンドの使い方は次の通りである。  
     - `nano <filename>` ※ `<filename>`は、`init_db.js` もしくは、`server.js` が入る(2回実行)
     - カーソルの移動は矢印キー
-    - 保存は、Ctl + o ののち、エンター
-    - 終了は、Ctl + x
+    - 保存は、Ctl + O ののち、エンター
+    - 終了は、Ctl + X
 
-4. **Node.jsアプリケーション再起動**:
+5. Node.jsアプリケーション再起動（設定反映のため）
     ```bash
-    sudo systemctl status employee-app  # エラーがでているはず
-
     sudo systemctl restart employee-app
+    ```
 
+6. 起動確認
+    ```bash
     sudo systemctl status employee-app
     ```
-5. **動作確認**:
+
+    上記でも解決しない場合は、以下のコマンドでエラー原因をつきとめて修正する必要がある。EC2インスタンスを終了し、もう一度EC2インスタンスを作り直すほうが早いかもしれない。  
+
+    ```
+    sudo cloud-init status
+    sudo cat /var/log/cloud-init-output.log
+    sudo tail -f /var/log/cloud-init-output.log
+    sudo cat /var/log/cloud-init.log
+    sudo systemctl status employee-app
+    ```
+
+7. **動作確認**:
     ```bash
-    # 1台目のパブリックIPでアクセステスト（ブラウザでアクセスする）
+    # 1台目のパブリックIPでアクセステスト（ブラウザでアクセスする。⚠️`http`です。`3000`番ポートです。)
     http://[1台目のパブリックIP]:3000
     ```
 
 #### 2台目で動作確認（ha-web-server-2）
 
-1. 1台目と同じようにセッションマネージャーで接続をし、 `sudo systemctl status employee-app` でエラーがでていれば、 `sudo systemctl restart employee-app` する
+1. 1台目と同じようにセッションマネージャーで接続をし、 `sudo systemctl status employee-app` でエラーがでていれば、 1台目の手順3〜6を参考に解決する
 2. **動作確認**:
     ```bash
-    # 2台目のパブリックIPでアクセステスト（ブラウザでアクセスする）
+    # 2台目のパブリックIPでアクセステスト（ブラウザでアクセスする。⚠️`http`です。`3000`番ポートです。)
     http://[2台目のパブリックIP]:3000
     ```
 
@@ -219,6 +263,7 @@ RDSが「利用可能」状態になるまで、5分〜10分程度時間がか�
 - **ヘルスチェックの詳細設定**
   - **正常しきい値**: 2 （デフォルト値 `5` から変更） ※ 通常は`5`のままでよい。演習のため正常しきい値を下げる。  
   - **間隔**: 30秒
+  - ヘルスチェック間隔30秒×しきい値2=最低60秒
 
 「**次へ**」  
 

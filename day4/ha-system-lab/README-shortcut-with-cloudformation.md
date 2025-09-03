@@ -36,6 +36,7 @@
 ## 🚀 Phase 1: 基盤構築（Day3の復習）（20分）
 
 Day 3演習内容(VPC + DB Subnet Group + SG + RDS + EC2)と同じものをCloudFormationで構築する。  
+手動でもう一度構築することで定着を図れるが、本日はELB(ALB)を利用した高可用性システムの構築に焦点をあてるため、Day 3の内容はCloudFormationを使ってショートカットする。  
 
 「[Day3 Database Lab - CloudFormation版](../../day3/db-lab/cloudformation/README.md)」を参照のこと。  
 
@@ -56,7 +57,7 @@ Day 3演習内容(VPC + DB Subnet Group + SG + RDS + EC2)と同じものをCloud
 
 #### キーペア（ログイン）
 
-- キーベアなしで続行（推奨されません）
+- キーペアなしで続行（推奨されません）
 
 #### ネットワーク設定
 - **VPC**: `employee-app-vpc-cf`
@@ -72,7 +73,7 @@ Day 3演習内容(VPC + DB Subnet Group + SG + RDS + EC2)と同じものをCloud
   > **AWS Academy環境ではない方は**: セッションマネージャーを使用するため、`AmazonSSMManagedInstanceCore`ポリシーがアタッチされたIAMロールを作成し、インスタンスプロファイルとして設定してください。
 
 - **ユーザーデータ**: <a href="https://github.com/haw/aws-education-materials/blob/main/day3/db-lab/materials/user-data-webapp.txt" target="_blank" rel="noopener noreferrer">user-data-webapp.txt</a> の内容をコピー & ペースト  
-    - 2箇所の`YOUR_RDS_ENDPOINT_HERE`を`[RDSエンドポイント]`(※次参照)で書き換える
+    - `YOUR_RDS_ENDPOINT_HERE`を`[RDSエンドポイント]`(※次参照)で書き換える（先頭の方に1箇所）
     - `[RDSエンドポイント]` = RDSコンソール→データベース→`employee-database`→接続とセキュリティ→エンドポイントの値 (RDSのコンソールに戻っても表示されない場合は待つ。「待つ」のも仕事のうち!)
 
 
@@ -90,16 +91,87 @@ Day 3演習内容(VPC + DB Subnet Group + SG + RDS + EC2)と同じものをCloud
     http://[1台目のパブリックIP]:3000
     ```
 
+     1台目は、CloudFormationで立ち上げているので、確実に動作する。  
+     動作しない場合は、ある意味、当たりを引いた!?  ハズレかも...  
+
 #### 2台目で動作確認（ha-web-server-2）
 
 _「ステータスチェック」に合格していること。_
 
-1. **動作確認**:
+1. **Session Manager**で`ha-web-server-2`に接続
+2. **ユーザ切り替え**:
     ```bash
-    # 2台目のパブリックIPでアクセステスト（ブラウザでアクセスする）
-    http://[2台目のパブリックIP]:3000
+    sudo su - ec2-user
     ```
 
+3. アプリケーションの状態を確認
+    ```bash
+    sudo systemctl status employee-app
+    ```
+
+    **以下のようなログがでていれば成功**  =>  手順7(**動作確認**)へ進む(手順4〜6はスキップ)
+
+    ```
+    ● employee-app.service - Employee Management Node.js App
+         Loaded: loaded (/etc/systemd/system/employee-app.service; enabled; preset: disabled)
+         Active: active (running) since Wed 2025-09-03 07:31:47 UTC; 5min ago
+       Main PID: 26973 (node)
+          Tasks: 11 (limit: 4564)
+         Memory: 23.8M
+            CPU: 492ms
+         CGroup: /system.slice/employee-app.service
+                 └─26973 /usr/bin/node server.js
+
+    Sep 03 07:31:47 ip-10-0-0-219.ec2.internal systemd[1]: Started employee-app.service - Employee Management Node.js App.
+    Sep 03 07:31:48 ip-10-0-0-219.ec2.internal node[26973]: サーバーがポート3000で起動しました
+    Sep 03 07:31:48 ip-10-0-0-219.ec2.internal node[26973]: データベースに接続しました
+    ```
+
+    **失敗している場合は、2台目のサーバのRDSエンドポイントの設定に問題がある**  
+
+    - ユーザーデータ内のRDSエンドポイント（`YOUR_RDS_ENDPOINT_HERE`） を書き換えなかったかもしくは、正しく設定をしなかった → 以降の手順3〜5を行い、応急処置をする  
+
+4. データベースエンドポイント設定を変更
+
+    **RDSコンソールにて、作成したデータベースの状態が「利用可能」となっていることを確認する。**  
+    「利用可能」となるまで待つ。  
+
+    ```bash
+    cd /var/www/html
+    nano server.js
+    ```
+
+    `nano` コマンドで、 `server.js` ファイルを書き換える。  
+    `nano` コマンドの使い方は次の通りである。  
+    - カーソルの移動は矢印キー
+    - 保存は、Ctl + O ののち、エンター
+    - 終了は、Ctl + X
+
+5. Node.jsアプリケーション再起動（設定反映のため）
+    ```bash
+    sudo systemctl restart employee-app
+    ```
+
+6. 起動確認
+    ```bash
+    sudo systemctl status employee-app
+    ```
+
+    上記でも解決しない場合は、以下のコマンドでエラー原因をつきとめて修正する必要がある。EC2インスタンスを終了し、もう一度EC2インスタンスを作り直すほうが早いかもしれない。  
+
+    ```
+    sudo cloud-init status
+    sudo cat /var/log/cloud-init-output.log
+    sudo tail -f /var/log/cloud-init-output.log
+    sudo cat /var/log/cloud-init.log
+    sudo systemctl status employee-app
+    ```
+
+7. **動作確認**:
+    ```bash
+    # 2台目のパブリックIPでアクセステスト（ブラウザでアクセスする。⚠️`http`です。`3000`番ポートです。)
+    http://[2台目のパブリックIP]:3000
+    ```
 
 
 ---
@@ -123,6 +195,7 @@ _「ステータスチェック」に合格していること。_
 - **ヘルスチェックの詳細設定**
   - **正常しきい値**: 2 （デフォルト値 `5` から変更） ※ 通常は`5`のままでよい。演習のため正常しきい値を下げる。  
   - **間隔**: 30秒
+  - ヘルスチェック間隔30秒×しきい値2=最低60秒
 
 「**次へ**」  
 
@@ -149,7 +222,7 @@ _「ステータスチェック」に合格していること。_
 
 #### セキュリティグループ
 - **新規作成**: `ha-alb-sg` (「名前」と「説明」を入力する)
-- **VPC**: `employee-app-vpc`
+- **VPC**: `employee-app-vpc-cf`
 - **インバウンドルール**: HTTP (80): 0.0.0.0/0 (Anywhere-IPv4)
 - **アウトバウンドルール**: ⚠️変更しないこと
 

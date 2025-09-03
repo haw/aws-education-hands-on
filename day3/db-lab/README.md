@@ -247,7 +247,7 @@ _パッチ適用などで送信(アウトバウンド)が必要な場合は、Pu
     sudo systemctl status employee-app
     ```
 
-    **以下のようなログがでていれば成功**  
+    **以下のようなログがでていれば成功**  =>  Phase 4へ進む
 
     ```
     ● employee-app.service - Employee Management Node.js App
@@ -270,7 +270,7 @@ _パッチ適用などで送信(アウトバウンド)が必要な場合は、Pu
     - セキュリティグループ（`database-sg`）の設定誤り → Phase3のStep 2 を参考に設定しなおす  
     - ユーザーデータ内のRDSエンドポイント（`YOUR_RDS_ENDPOINT_HERE`） を書き換えなかったかもしくは、正しく設定をしなかった → 以降の手順3〜5を行い、応急処置をする  
 
-3. データベース初期化スクリプト実行
+4. データベース初期化スクリプト実行
 
     **RDSコンソールにて、作成したデータベースの状態が「利用可能」となっていることを確認する。**  
     「利用可能」となるまで待つ。  
@@ -288,12 +288,12 @@ _パッチ適用などで送信(アウトバウンド)が必要な場合は、Pu
     - 保存は、Ctl + O ののち、エンター
     - 終了は、Ctl + X
 
-4. Node.jsアプリケーション再起動（設定反映のため）
+5. Node.jsアプリケーション再起動（設定反映のため）
     ```bash
     sudo systemctl restart employee-app
     ```
 
-5. 起動確認
+6. 起動確認
     ```bash
     sudo systemctl status employee-app
     ```
