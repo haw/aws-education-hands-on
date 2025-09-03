@@ -12,7 +12,7 @@ Day3のデータベース実習をCloudFormationで自動化したバージョ�
 - **プライベートサブネット**: 2つのAZ (10.0.2.0/24, 10.0.3.0/24)
 
 ### **データベース**
-- **RDS MySQL 8.4.3**: `employee-database`
+- **RDS MySQL 8.4.3**: `employee-database-cf`
 - **インスタンスクラス**: db.t3.micro
 - **ストレージ**: 20GB GP2
 - **配置**: プライベートサブネット
@@ -33,11 +33,14 @@ Day3のデータベース実習をCloudFormationで自動化したバージョ�
 
 1. **CloudFormationコンソール**にアクセス
 2. 「スタックの作成」→「新しいリソースを使用（標準）」
-3. **テンプレートファイル**: <a href="https://github.com/haw/aws-education-materials/blob/main/day3/db-lab/cloudformation/day3-db-lab-manual.yaml" target="_blank" rel="noopener noreferrer">day3-db-lab-manual.yaml</a> をアップロード
-4. **スタック名**: `Day3DbLabStack`
+3. **テンプレートファイル**: <a href="https://github.com/haw/aws-education-materials/blob/main/day3/db-lab/cloudformation/day3-db-lab-manual.yaml" target="_blank" rel="noopener noreferrer">day3-db-lab-manual.yaml</a> をアップロードし、「次へ」
+4. **スタック名**: `Day3DbLabStack`を入力し、「次へ」
+4. **スタックオプションの設定**: デフォルト値のまま「次へ」
 5. 「送信」をクリック
 
 ### **AWS CLIからのデプロイ**
+
+_CloudFormationコンソールからのデプロイした場合は実施不要_
 
 ```bash
 # スタック作成
@@ -115,7 +118,7 @@ aws cloudformation delete-stack \
 ### **データベース接続エラー**
 1. **RDS状態確認**
    ```bash
-   aws rds describe-db-instances --db-instance-identifier employee-database
+   aws rds describe-db-instances --db-instance-identifier employee-database-cf
    ```
 
 2. **セキュリティグループ設定確認**
