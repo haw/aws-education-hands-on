@@ -1,6 +1,9 @@
 #!/bin/bash
 set -euxo pipefail
 
+# ⚠️ 学生が手動で書き換える必要があります
+RDS_ENDPOINT="YOUR_RDS_ENDPOINT_HERE"
+
 # Update base packages and install prerequisites
 dnf -y update
 dnf -y install git nodejs npm mariadb105
@@ -27,6 +30,11 @@ git checkout -b main origin/main
 # Deploy app sources
 cp -r day3/db-lab/materials/app/* /var/www/html/
 cd /var/www/html
+
+# Replace RDS endpoint placeholder in app files
+sed -i "s/YOUR_RDS_ENDPOINT_HERE/$RDS_ENDPOINT/g" init_db.js
+sed -i "s/YOUR_RDS_ENDPOINT_HERE/$RDS_ENDPOINT/g" server.js
+
 npm install
 
 # Set permissions for application files
@@ -54,9 +62,9 @@ SERVICE
 systemctl daemon-reload
 systemctl enable employee-app
 
-# Wait for RDS endpoint to respond, then initialize DB (placeholder must be replaced)
+# Wait for RDS endpoint to respond, then initialize DB
 RETRY_COUNT=0
-while ! mysqladmin ping -h YOUR_RDS_ENDPOINT_HERE -u admin -ppassword123 --silent; do
+while ! mysqladmin ping -h $RDS_ENDPOINT -u admin -ppassword123 --silent; do
   RETRY_COUNT=$((RETRY_COUNT + 1))
   if [ $RETRY_COUNT -ge 60 ]; then
     echo "RDS connection timeout"
