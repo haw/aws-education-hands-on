@@ -99,7 +99,7 @@ Day 3演習内容(VPC + DB Subnet Group + SG + RDS + EC2)と同じものをCloud
 _「ステータスチェック」に合格していること。_
 
 1. **Session Manager**で`ha-web-server-2`に接続
-2. **ユーザ切り替え**:
+2. **ユーザー切り替え**:
     ```bash
     sudo su - ec2-user
     ```
