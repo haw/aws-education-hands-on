@@ -56,7 +56,8 @@ async function initDatabase() {
     const sampleData = [
       ['山田太郎', 'yamada@example.com', '開発部'],
       ['佐藤花子', 'sato@example.com', '営業部'],
-      ['田中次郎', 'tanaka@example.com', '総務部']
+      ['田中次郎', 'tanaka@example.com', '総務部'],
+      ['Awesome YAMAUCHI', 'awesome@example.com', '闘魂部']
     ];
 
     for (const [name, email, department] of sampleData) {
