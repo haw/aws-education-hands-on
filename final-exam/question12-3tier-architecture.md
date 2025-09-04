@@ -7,7 +7,7 @@
 
 ## 🔧 参考手順
 
-<a href="https://haw.github.io/aws-education-hands-on/day4/ha-system-lab/" target="_blank" rel="noopener noreferrer">Day 4: 高可用性システム ハンズオン</a> (※別タブで開きます)  
+<a href="https://haw.github.io/aws-education-hands-on/day4/ha-system-lab/" target="_blank" rel="noopener noreferrer">Day 4: 高可用性システム ハンズオン</a> (※リンクを右クリックして、別タブで開いてください)  
 
 ※ **この問題は、「参考手順」をそのまま進めることで、「要件」を満たせます。**  
 

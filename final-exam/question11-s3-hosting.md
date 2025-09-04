@@ -6,7 +6,7 @@ S3を使用して静的ウェブサイトをホスティングし、インター
 
 ## 🔧 参考手順
 
-<a href="https://haw.github.io/aws-education-hands-on/day1/5min-impact-lab/" target="_blank" rel="noopener noreferrer">Day 1: Amazon S3 を使用して静的ウェブサイトをホスティングする</a> (※別タブで開きます)  
+<a href="https://haw.github.io/aws-education-hands-on/day1/5min-impact-lab/" target="_blank" rel="noopener noreferrer">Day 1: Amazon S3 を使用して静的ウェブサイトをホスティングする</a> (※リンクを右クリックして、別タブで開いてください)  
 
 ※ 参考手順を参照しつつ、後述する「要件」に従って「S3を使用した静的ウェブサイトホスティング」を実施してください。
 
@@ -28,7 +28,7 @@ S3を使用して静的ウェブサイトをホスティングし、インター
 - <a href="https://github.com/haw/aws-education-hands-on/blob/main/final-exam/materials/error.html" target="_blank" rel="noopener noreferrer">**error.html**</a>（エラーページ）
 - <a href="https://github.com/haw/aws-education-hands-on/blob/main/final-exam/materials/style.css" target="_blank" rel="noopener noreferrer">**style.css**</a>（スタイルシート）
 
-※ リンククリックすると、別タブで開きます。  
+※リンクを右クリックして、別タブで開いてください。  
 
 ### 3. 静的ウェブサイトホスティング設定
 
