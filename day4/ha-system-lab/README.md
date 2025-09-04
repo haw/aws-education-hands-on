@@ -130,6 +130,8 @@ RDSが「利用可能」状態になるまで、5分〜10分程度時間がか�
 
 #### インスタンスを起動
 
+![](../../day2/ec2-vpc-lab/images/ec2-launch-button.png)
+
 ### Step 4: 2台目のEC2インスタンス作成（10分）
 
 1. **EC2コンソール**→「インスタンスを起動」
@@ -164,6 +166,8 @@ RDSが「利用可能」状態になるまで、5分〜10分程度時間がか�
     ![](../../day3/db-lab/images/rds-endpoint.png)  
 
 #### インスタンスを起動
+
+![](../../day2/ec2-vpc-lab/images/ec2-launch-button.png)
 
 ### Step 5: アプリケーション設定（5分）
 
@@ -218,7 +222,7 @@ _「ステータスチェック」に合格していること。_
     もし、`node init_db.js`が、失敗する場合は `YOUR_RDS_ENDPOINT_HERE` の書き換えができていないことが考えられる。  
     `nano` コマンドで、 `init_db.js` と `server.js` ファイルの2つを書き換える。  
     `nano` コマンドの使い方は次の通りである。  
-    - `nano <filename>` ※ `<filename>`は、`init_db.js` もしくは、`server.js` が入る(2回実行)
+    - `nano <filename>` ※ `<filename>`は、`init_db.js` もしくは、`server.js` が該当する(2つのファイルを編集)
     - カーソルの移動は矢印キー
     - 保存は、Ctl + O ののち、エンター
     - 終了は、Ctl + X
