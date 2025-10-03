@@ -78,7 +78,10 @@
 ### Step 5: SNSトピックARNの設定（2分）
 
 1. SNSコンソールでトピックのARNをコピー
-2. Lambda関数のコードで `YOUR_TOPIC_ARN_HERE` を実際のARNに置換 (例: arn:aws:sns:us-east-1:975xxxxxxxx:file-upload-notifications)
+2. Lambda関数のコードで `YOUR_TOPIC_ARN_HERE` を実際のSNSトピックARNに置換 (例: arn:aws:sns:us-east-1:975xxxxxxxx:file-upload-notifications)
+
+    ![](images/sns-topic-arn.png)
+
 3. 「Deploy」をクリック
 
     ![](images/Lambda-deploy.png)
