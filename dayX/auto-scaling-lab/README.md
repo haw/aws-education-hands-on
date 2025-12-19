@@ -5,6 +5,8 @@
 高可用性・スケーラブルなWebアプリケーションを構築する。
 Day 3/4で構築した社員管理システムをAuto Scaling対応にする。
 
+> ⚠️カスタムAMIを作る手順があるため、「Cloud Foundations」コースのサンドボックスでは実施できません。「Cloud Web Application Builder」コース or 「Learner Lab」コース等のカスタムAMIを作ることができるコースで実施してください。
+
 ## 最終構成
 
 - VPC (Public Subnet x 2, Private Subnet x 2)
