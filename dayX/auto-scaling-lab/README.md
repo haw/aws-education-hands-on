@@ -211,8 +211,8 @@ git checkout -b main origin/main
 cp -r day3/db-lab/materials/app/* /var/www/html/
 cd /var/www/html
 
-sed -i "s/YOUR_RDS_ENDPOINT_HERE/$RDS_ENDPOINT/g" init_db.js
-sed -i "s/YOUR_RDS_ENDPOINT_HERE/$RDS_ENDPOINT/g" server.js
+# config.jsのRDSエンドポイントを置換
+sed -i "s/YOUR_RDS_ENDPOINT_HERE/$RDS_ENDPOINT/g" config.js
 
 # seedデータ挿入部分を削除（Auto Scaling時に毎回挿入されるのを防ぐ）
 sed -i '/\/\/ Insert sample data/,/サンプルデータを挿入しました/d' init_db.js

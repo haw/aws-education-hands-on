@@ -2,21 +2,10 @@ const express = require('express');
 const mysql = require('mysql2');
 const bodyParser = require('body-parser');
 const path = require('path');
+const { config, onConfigReady } = require('./config');
 
 const app = express();
 const port = 3000;
-
-// ⚠️ RDSエンドポイントを差し替えてください
-const RDS_ENDPOINT = 'YOUR_RDS_ENDPOINT_HERE';
-
-// Database configuration
-const dbConfig = {
-  host: RDS_ENDPOINT,
-  user: 'admin',
-  password: 'password123',
-  database: 'employeedb',
-  charset: 'utf8mb4'
-};
 
 // Middleware
 app.use(bodyParser.urlencoded({ extended: true }));
@@ -24,15 +13,33 @@ app.use(express.static('public'));
 app.set('view engine', 'ejs');
 app.set('views', path.join(__dirname, 'views'));
 
-// Database connection
-const db = mysql.createConnection(dbConfig);
+let db;
 
-db.connect((err) => {
-  if (err) {
-    console.error('データベース接続エラー:', err);
-    return;
-  }
-  console.log('データベースに接続しました');
+onConfigReady(() => {
+  // Database configuration
+  const dbConfig = {
+    host: config.APP_DB_HOST,
+    user: config.APP_DB_USER,
+    password: config.APP_DB_PASSWORD,
+    database: config.APP_DB_NAME,
+    charset: 'utf8mb4'
+  };
+
+  // Database connection
+  db = mysql.createConnection(dbConfig);
+
+  db.connect((err) => {
+    if (err) {
+      console.error('データベース接続エラー:', err);
+      return;
+    }
+    console.log('データベースに接続しました');
+  });
+
+  // Start server after config is ready
+  app.listen(port, () => {
+    console.log(`サーバーがポート${port}で起動しました`);
+  });
 });
 
 // Routes
@@ -120,9 +127,5 @@ app.post('/', async (req, res) => {
   }
 
   res.redirect('/?message=' + encodeURIComponent(message) + '&type=' + messageType);
-});
-
-app.listen(port, () => {
-  console.log(`サーバーがポート${port}で起動しました`);
 });
 

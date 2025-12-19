@@ -1,43 +1,39 @@
 const mysql = require('mysql2');
-
-// ⚠️ RDSエンドポイントを差し替えてください
-const RDS_ENDPOINT = 'YOUR_RDS_ENDPOINT_HERE';
-
-// First connection without database to create it
-const rootConfig = {
-  host: RDS_ENDPOINT,
-  user: 'admin',
-  password: 'password123',
-  charset: 'utf8mb4'
-};
-
-// Second connection with database
-const dbConfig = {
-  host: RDS_ENDPOINT,
-  user: 'admin',
-  password: 'password123',
-  database: 'employeedb',
-  charset: 'utf8mb4'
-};
+const { config, onConfigReady } = require('./config');
 
 async function initDatabase() {
   let rootConnection;
   let dbConnection;
 
   try {
-    // Connect without database to create it
+    // First connection without database to create it
+    const rootConfig = {
+      host: config.APP_DB_HOST,
+      user: config.APP_DB_USER,
+      password: config.APP_DB_PASSWORD,
+      charset: 'utf8mb4'
+    };
+
     rootConnection = mysql.createConnection(rootConfig);
 
     console.log('🔗 RDSに接続中...');
 
     // Create database if not exists
-    await rootConnection.promise().execute('CREATE DATABASE IF NOT EXISTS employeedb');
-    console.log('✅ データベース employeedb を作成/確認しました');
+    await rootConnection.promise().execute(`CREATE DATABASE IF NOT EXISTS ${config.APP_DB_NAME}`);
+    console.log(`✅ データベース ${config.APP_DB_NAME} を作成/確認しました`);
 
     // Close root connection
     await rootConnection.end();
 
-    // Connect to the specific database
+    // Second connection with database
+    const dbConfig = {
+      host: config.APP_DB_HOST,
+      user: config.APP_DB_USER,
+      password: config.APP_DB_PASSWORD,
+      database: config.APP_DB_NAME,
+      charset: 'utf8mb4'
+    };
+
     dbConnection = mysql.createConnection(dbConfig);
 
     // Create table
@@ -87,5 +83,7 @@ async function initDatabase() {
   }
 }
 
-initDatabase();
-
+// Wait for config to be ready, then initialize
+onConfigReady(() => {
+  initDatabase();
+});
