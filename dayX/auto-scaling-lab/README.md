@@ -9,6 +9,7 @@ Day 3/4で構築した社員管理システムをAuto Scaling対応にする。
 
 - VPC (Public Subnet x 2, Private Subnet x 2)
 - RDS MySQL (Private Subnet)
+- Secrets Manager (DB接続情報)
 - EC2 + Auto Scaling + ALB (Public Subnet)
 
 ## システム構成図
@@ -19,6 +20,7 @@ flowchart TB
 
     subgraph AWS["AWS Cloud (Region)"]
         IGW[🌐 Internet Gateway]
+        SM[🔐 Secrets Manager]
         
         subgraph VPC["VPC (10.0.0.0/16)"]
             ALB[⚖️ Application Load Balancer]
@@ -50,16 +52,19 @@ flowchart TB
     ALB --> EC2_2
     EC2_1 --> RDS
     EC2_2 --> RDS
+    EC2_1 -.-> SM
+    EC2_2 -.-> SM
     ASG --> EC2_1
     ASG --> EC2_2
 
     linkStyle 0,1,2,3 stroke:#2196F3,stroke-width:2px
     linkStyle 4,5 stroke:#4CAF50,stroke-width:2px
-    linkStyle 6,7 stroke:#F44336,stroke-width:2px
+    linkStyle 6,7 stroke:#FF9800,stroke-width:2px
+    linkStyle 8,9 stroke:#F44336,stroke-width:2px
     style spacer fill:none,stroke:none,color:#999
 ```
 
-**凡例**: 🔵HTTPトラフィック / 🟢DB接続 / 🔴Auto Scaling
+**凡例**: 🔵HTTPトラフィック / 🟢DB接続 / 🟠Secrets Manager / 🔴Auto Scaling
 
 ## 前提条件
 
