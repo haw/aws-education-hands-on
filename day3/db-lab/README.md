@@ -298,9 +298,9 @@ _パッチ適用などで送信(アウトバウンド)が必要な場合は、Pu
     ```
 
     もし、`node init_db.js`が、失敗する場合は `YOUR_RDS_ENDPOINT_HERE` の書き換えができていないことが考えられる。  
-    `nano` コマンドで、 `init_db.js` と `server.js` ファイルの2つを書き換える。  
+    `nano` コマンドで、 `config.js` ファイルを書き換える。  
     `nano` コマンドの使い方は次の通りである。  
-    - `nano <filename>` ※ `<filename>`は、`init_db.js` もしくは、`server.js` が該当する(2つのファイルを編集)
+    - `nano config.js`
     - カーソルの移動は矢印キー
     - 保存は、Ctl + O ののち、エンター
     - 終了は、Ctl + X

@@ -138,10 +138,10 @@ _「ステータスチェック」に合格していること。_
 
     ```bash
     cd /var/www/html
-    nano server.js
+    nano config.js
     ```
 
-    `nano` コマンドで、 `server.js` ファイルを書き換える。  
+    `nano` コマンドで、 `config.js` ファイルを書き換える。  
     `nano` コマンドの使い方は次の通りである。  
     - カーソルの移動は矢印キー
     - 保存は、Ctl + O ののち、エンター
@@ -353,7 +353,7 @@ Day 4完了時点の完成形を作れるCloudFormationテンプレートをプ�
 
 ### **データベース接続エラー**
 1. RDSセキュリティグループでEC2からの接続が許可されているか確認
-2. server.jsとinit_db.jsのエンドポイント設定確認
+2. config.jsのエンドポイント設定確認
 3. 初期データベース名の設定確認
 4. Node.jsアプリケーションログ確認: `sudo journalctl -u employee-app.service -f`
 
