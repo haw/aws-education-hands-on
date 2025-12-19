@@ -237,8 +237,8 @@ Resources:
           chown -R ec2-user:ec2-user /var/www/html
           chmod 755 /var/www/html
 
-          # Inject RDS endpoint into app sources
-          sed -i "s/YOUR_RDS_ENDPOINT_HERE/${EmployeeDatabase.Endpoint.Address}/g" server.js init_db.js
+          # Inject RDS endpoint into app config
+          sed -i "s/YOUR_RDS_ENDPOINT_HERE/${EmployeeDatabase.Endpoint.Address}/g" config.js
 
           # Create systemd service
           cat > /etc/systemd/system/employee-app.service << 'SERVICE_EOF'
@@ -326,8 +326,8 @@ Resources:
           chown -R ec2-user:ec2-user /var/www/html
           chmod 755 /var/www/html
 
-          # Inject RDS endpoint into app sources
-          sed -i "s/YOUR_RDS_ENDPOINT_HERE/${EmployeeDatabase.Endpoint.Address}/g" server.js init_db.js
+          # Inject RDS endpoint into app config
+          sed -i "s/YOUR_RDS_ENDPOINT_HERE/${EmployeeDatabase.Endpoint.Address}/g" config.js
 
           # Create systemd service
           cat > /etc/systemd/system/employee-app.service << 'SERVICE_EOF'

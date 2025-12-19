@@ -219,8 +219,8 @@ Resources:
           cd /var/www/html
           npm install
 
-          # Inject RDS endpoint into app sources
-          sed -i "s/YOUR_RDS_ENDPOINT_HERE/${EmployeeDatabase.Endpoint.Address}/g" server.js init_db.js
+          # Inject RDS endpoint into app config
+          sed -i "s/YOUR_RDS_ENDPOINT_HERE/${EmployeeDatabase.Endpoint.Address}/g" config.js
 
           # Set permissions
           chown -R ec2-user:ec2-user /var/www/html
