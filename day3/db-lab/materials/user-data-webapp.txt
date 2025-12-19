@@ -31,9 +31,8 @@ git checkout -b main origin/main
 cp -r day3/db-lab/materials/app/* /var/www/html/
 cd /var/www/html
 
-# Replace RDS endpoint placeholder in app files
-sed -i "s/YOUR_RDS_ENDPOINT_HERE/$RDS_ENDPOINT/g" init_db.js
-sed -i "s/YOUR_RDS_ENDPOINT_HERE/$RDS_ENDPOINT/g" server.js
+# Replace RDS endpoint placeholder in config file
+sed -i "s/YOUR_RDS_ENDPOINT_HERE/$RDS_ENDPOINT/g" config.js
 
 npm install
 
