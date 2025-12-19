@@ -25,30 +25,30 @@ function notifyConfigReady() {
   configCallbacks = [];
 }
 
-// Try to load from Secrets Manager
-const AWS = require('aws-sdk');
-const client = new AWS.SecretsManager({
+// Try to load from Secrets Manager (AWS SDK v3)
+const { SecretsManagerClient, GetSecretValueCommand } = require("@aws-sdk/client-secrets-manager");
+const client = new SecretsManagerClient({
   region: process.env.AWS_REGION || "us-east-1"
 });
 
 const secretName = "Mydbsecret";
 
-client.getSecretValue({ SecretId: secretName }, function(err, data) {
-  if (err) {
-    console.log('[CONFIG] Secrets Manager not available. Using default values.');
-    notifyConfigReady();
-  } else {
-    if ('SecretString' in data) {
-      const secret = JSON.parse(data.SecretString);
+(async () => {
+  try {
+    const response = await client.send(new GetSecretValueCommand({ SecretId: secretName }));
+    if (response.SecretString) {
+      const secret = JSON.parse(response.SecretString);
       if (secret.host) config.APP_DB_HOST = secret.host;
       if (secret.user) config.APP_DB_USER = secret.user;
       if (secret.password) config.APP_DB_PASSWORD = secret.password;
       if (secret.db) config.APP_DB_NAME = secret.db;
       console.log('[CONFIG] Loaded configuration from Secrets Manager.');
     }
-    notifyConfigReady();
+  } catch (err) {
+    console.log('[CONFIG] Secrets Manager not available. Using default values.');
   }
-});
+  notifyConfigReady();
+})();
 
 // Allow ENV overrides
 Object.keys(config).forEach(key => {
