@@ -233,7 +233,11 @@ set -euxo pipefail
 RDS_ENDPOINT="YOUR_RDS_ENDPOINT_HERE"
 
 dnf -y update
-dnf -y install git nodejs npm mariadb105
+dnf -y install git mariadb105
+
+# Install Node.js 24 via NodeSource
+curl -fsSL https://rpm.nodesource.com/setup_24.x | bash -
+dnf -y install nodejs
 
 mkdir -p /var/www/html
 chmod 755 /var/www/html
@@ -478,7 +482,9 @@ EC2コンソール → **load-test-server** を選択 → **接続** → **セ�
 ### 12-3. loadtestインストール
 
 ```bash
-sudo dnf install -y nodejs npm
+# Install Node.js 24 via NodeSource
+curl -fsSL https://rpm.nodesource.com/setup_24.x | sudo bash -
+sudo dnf install -y nodejs
 sudo npm install -g loadtest
 ```
 

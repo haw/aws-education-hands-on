@@ -194,7 +194,11 @@ Resources:
 
           # Update system and install prerequisites
           dnf -y update
-          dnf -y install git nodejs npm mariadb105
+          dnf -y install git mariadb105
+
+          # Install Node.js 24 via NodeSource
+          curl -fsSL https://rpm.nodesource.com/setup_24.x | bash -
+          dnf -y install nodejs
 
           # Prepare app directory
           mkdir -p /var/www/html

@@ -211,8 +211,10 @@ Resources:
           # ---- System update ----
           dnf -y update
 
-          # ---- Install Node.js and MySQL client ----
-          dnf -y install nodejs npm mariadb105
+          # ---- Install Node.js 24 and MySQL client ----
+          dnf -y install mariadb105
+          curl -fsSL https://rpm.nodesource.com/setup_24.x | bash -
+          dnf -y install nodejs
 
           # ---- Use Git sparse clone to fetch app sources ----
           dnf -y install git
@@ -300,8 +302,10 @@ Resources:
           # ---- System update ----
           dnf -y update
 
-          # ---- Install Node.js and MySQL client ----
-          dnf -y install nodejs npm mariadb105
+          # ---- Install Node.js 24 and MySQL client ----
+          dnf -y install mariadb105
+          curl -fsSL https://rpm.nodesource.com/setup_24.x | bash -
+          dnf -y install nodejs
 
           # ---- Use Git sparse clone to fetch app sources ----
           dnf -y install git
