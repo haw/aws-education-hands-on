@@ -201,9 +201,10 @@ _「ステータスチェック」に合格していること。_
          CGroup: /system.slice/employee-app.service
                  └─26973 /usr/bin/node server.js
 
-    Sep 03 07:31:47 ip-10-0-0-219.ec2.internal systemd[1]: Started employee-app.service - Employee Management Node.js App.
-    Sep 03 07:31:48 ip-10-0-0-219.ec2.internal node[26973]: サーバーがポート3000で起動しました
-    Sep 03 07:31:48 ip-10-0-0-219.ec2.internal node[26973]: データベースに接続しました
+    Dec 19 14:17:20 ip-10-0-1-181.ec2.internal systemd[1]: Started employee-app.service - Employee Management System.
+    Dec 19 14:17:21 ip-10-0-1-181.ec2.internal node[25390]: [CONFIG] Secrets Manager not available. Using default values.
+    Dec 19 14:17:21 ip-10-0-1-181.ec2.internal node[25390]: サーバーがポート3000で起動しました
+    Dec 19 14:17:21 ip-10-0-1-181.ec2.internal node[25390]: データベースに接続しました
     ```
 
     **失敗している場合は、たいてい以下のどちらかに問題がある**  
