@@ -235,6 +235,13 @@ RDS_ENDPOINT="YOUR_RDS_ENDPOINT_HERE"
 dnf -y update
 dnf -y install git mariadb105
 
+# Swap作成（OOM対策）
+dd if=/dev/zero of=/swapfile bs=128M count=8
+chmod 600 /swapfile
+mkswap /swapfile
+swapon /swapfile
+echo "/swapfile swap swap defaults 0 0" >> /etc/fstab
+
 # Install Node.js 24 via NodeSource
 curl -fsSL https://rpm.nodesource.com/setup_24.x | bash -
 dnf -y install nodejs
@@ -431,7 +438,7 @@ EC2コンソール → **Auto Scaling グループ** → **Auto Scalingグルー
 - 自動スケーリング: **ターゲット追跡スケーリングポリシー**
   - スケーリングポリシー名: Target Tracking Policy
   - メトリクスタイプ: 平均CPU使用率
-  - ターゲット値: `50`
+  - ターゲット値: `45`
 - 次へ
 
 ### Step 5: 通知を追加する
@@ -495,12 +502,17 @@ sudo npm install -g loadtest
 `<ALBのDNS名>` を実際の値に置換して実行:
 
 ```bash
-loadtest --rps 2000 -c 1000 -t 300 http://<ALBのDNS名>/stress
+NODE_OPTIONS="--max-old-space-size=2048" loadtest --rps 500 -c 200 -t 300 http://<ALBのDNS名>/stress
 ```
+
+- `NODE_OPTIONS="--max-old-space-size=2048"`: Node.jsヒープサイズを2GBに制限（OOM対策）
+- `--rps 500`: 1秒あたり500リクエスト
+- `-c 200`: 同時接続数200
+- `-t 300`: 5分間（300秒）継続して負荷をかける
 
 > `/stress` エンドポイントはCPU負荷テスト用。フィボナッチ計算でCPU使用率を上げる。
 
-⚠️ スケールアウトが発生するまで数分かかる。
+⚠️ スケールアウトが発生するまで数分かかる。警告は無視してよい。
 
 ### 12-5. スケールアウト確認
 
