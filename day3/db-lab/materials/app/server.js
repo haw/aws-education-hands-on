@@ -42,6 +42,12 @@ onConfigReady(() => {
   });
 });
 
+// 負荷テスト用エンドポイント（Auto Scalingデモ用）
+app.get('/stress', (req, res) => {
+  const fib = n => n <= 1 ? n : fib(n-1) + fib(n-2);
+  res.json({ result: fib(38) });
+});
+
 // Routes
 app.get('/', async (req, res) => {
   let message = '';

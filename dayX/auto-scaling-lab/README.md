@@ -464,7 +464,7 @@ EC2コンソール → **インスタンスを起動**
 
 - 名前: `load-test-server`
 - AMI: **Amazon Linux 2023**
-- インスタンスタイプ: t3.micro
+- インスタンスタイプ: t3.medium
 - キーペア: **vockey**
 - ネットワーク設定:
   - VPC: employee-app-vpc
@@ -482,6 +482,8 @@ EC2コンソール → **load-test-server** を選択 → **接続** → **セ�
 ### 12-3. loadtestインストール
 
 ```bash
+sudo su - ec2-user
+
 # Install Node.js 24 via NodeSource
 curl -fsSL https://rpm.nodesource.com/setup_24.x | sudo bash -
 sudo dnf install -y nodejs
@@ -493,8 +495,10 @@ sudo npm install -g loadtest
 `<ALBのDNS名>` を実際の値に置換して実行:
 
 ```bash
-loadtest --rps 2000 -c 1000 -k -t 300 http://<ALBのDNS名>
+loadtest --rps 2000 -c 1000 -t 300 http://<ALBのDNS名>/stress
 ```
+
+> `/stress` エンドポイントはCPU負荷テスト用。フィボナッチ計算でCPU使用率を上げる。
 
 ⚠️ スケールアウトが発生するまで数分かかる。
 
