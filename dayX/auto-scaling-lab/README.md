@@ -438,7 +438,7 @@ EC2コンソール → **Auto Scaling グループ** → **Auto Scalingグルー
 - 自動スケーリング: **ターゲット追跡スケーリングポリシー**
   - スケーリングポリシー名: Target Tracking Policy
   - メトリクスタイプ: 平均CPU使用率
-  - ターゲット値: `45`
+  - ターゲット値: `40`
 - 次へ
 
 ### Step 5: 通知を追加する
@@ -502,12 +502,12 @@ sudo npm install -g loadtest
 `<ALBのDNS名>` を実際の値に置換して実行:
 
 ```bash
-NODE_OPTIONS="--max-old-space-size=2048" loadtest --rps 500 -c 200 -t 300 http://<ALBのDNS名>/stress
+NODE_OPTIONS="--max-old-space-size=2048" loadtest --rps 2 -c 40 -t 300 http://<ALBのDNS名>/stress
 ```
 
 - `NODE_OPTIONS="--max-old-space-size=2048"`: Node.jsヒープサイズを2GBに制限（OOM対策）
-- `--rps 500`: 1秒あたり500リクエスト
-- `-c 200`: 同時接続数200
+- `--rps 2`: 1秒あたり2リクエスト
+- `-c 40`: 同時接続数40
 - `-t 300`: 5分間（300秒）継続して負荷をかける
 
 > `/stress` エンドポイントはCPU負荷テスト用。フィボナッチ計算でCPU使用率を上げる。
