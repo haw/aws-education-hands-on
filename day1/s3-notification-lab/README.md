@@ -37,19 +37,26 @@
 ### Step 1: SNSトピック作成
 
 1. AWSコンソールで「Simple Notification Service」を検索・選択
-2. 「トピック」→「トピックの作成」
+2. 「トピックの作成」で、トピック名に `file-upload-notifications` を入力し、「次のステップ」
+   ![](images/create-sns-topic.png)
 3. **タイプ**: スタンダード
 4. **名前**: `file-upload-notifications`
-5. 「トピックの作成」をクリック
+5. 「トピックの作成」(下方)をクリック
 
 ### Step 2: メール購読設定
 
-1. 作成したトピックをクリック
+1. 作成したトピック（`file-upload-notifications`）の詳細画面に遷移する
 2. 「サブスクリプション」タブ→「サブスクリプションの作成」
 3. **プロトコル**: Eメール
 4. **エンドポイント**: あなたのメールアドレス
 5. 「サブスクリプションの作成」をクリック
-6. **重要**: メールに届く確認リンクをクリックして購読を確定
+6. **重要**: 4で指定したメールに届く確認リンク(`Confirm subscription`)をクリックして購読を確定
+
+   - **メールのタイトル**: `AWS Notification - Subscription Confirmation`
+
+   - **メールの例**:
+      ![](images/SNSSubscriptionConfirmation.png)
+
 
 ### Step 3: S3バケット作成
 
@@ -65,8 +72,12 @@
 2. 「関数の作成」
 3. **関数名**: `s3-notification-handler`
 4. **ランタイム**: Python 3.14 または Node.js 24.x (お好きな方を選んでください。どちらか迷ったらPythonを選んでください)
-5. **実行ロール**: 「デフォルトの実行ロールの変更」→「既存のロールを使用する」→**LabRole**を選択
-   
+5. カスタム設定 > その他の設定 > **カスタム実行ロール** をONにする
+   ![](images/LambdaExecutionCustom.png)
+6. 「実行ロール」で、 **LabRole** を選択し、「保存」
+   ![](images/select-LabRole.png)
+
+   > [!TIP]
    > **AWS Academy環境ではない方は**: 「基本的な Lambda アクセス権限で新しいロールを作成」を選択し、作成後にSNS Publishの権限を追加してください。
 
 6. 「関数の作成」をクリック
@@ -81,10 +92,11 @@
 
 ### Step 5: SNSトピックARNの設定
 
-1. SNSコンソールでトピックのARNをコピー
-2. Lambda関数のコードで `YOUR_TOPIC_ARN_HERE` を実際のSNSトピックARNに置換 (例: arn:aws:sns:us-east-1:975xxxxxxxx:file-upload-notifications)
+1. 別のタブで、SNSコンソールを立ち上げて `file-upload-notifications` トピックのARNをコピーする
 
     ![](images/sns-topic-arn.png)
+
+2. Lambda関数のコードで `YOUR_TOPIC_ARN_HERE` を実際のSNSトピックARNに置換 (例: arn:aws:sns:us-east-1:975xxxxxxxx:file-upload-notifications)
 
 3. 「Deploy」をクリック
 
@@ -99,7 +111,7 @@
 5. **イベントタイプ**: 「すべてのオブジェクト作成イベント」にチェック
 6. **送信先**: Lambda関数
 7. **Lambda関数**: `s3-notification-handler`を選択
-8. 「変更を保存」
+8. 「変更の保存」
 
 ⚠️ **重要な注意事項**: 
 
@@ -124,6 +136,8 @@ S3の「プロパティ」タブで以下のような赤い警告メッセージ
 1. S3バケットに任意のファイルをアップロード
 2. 数秒後にメールを確認
 3. 🎉 通知メールが届いていれば成功！
+
+   ![](images/receive-mail-sample.png)
 
 ---
 
