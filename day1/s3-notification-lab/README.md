@@ -77,7 +77,6 @@
 6. 「実行ロール」で、 **LabRole** を選択し、「保存」
    ![](images/select-LabRole.png)
 
-   > [!TIP]
    > **AWS Academy環境ではない方は**: 「基本的な Lambda アクセス権限で新しいロールを作成」を選択し、作成後にSNS Publishの権限を追加してください。
 
 6. 「関数の作成」をクリック
