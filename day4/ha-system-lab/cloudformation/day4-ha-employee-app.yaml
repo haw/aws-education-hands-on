@@ -240,7 +240,7 @@ Resources:
           mkdir -p /var/www/html
           cp -r day3/db-lab/materials/app/* /var/www/html/
           cd /var/www/html
-          npm install
+          npm ci
           # Set ownership and basic permissions
           chown -R ec2-user:ec2-user /var/www/html
           chmod 755 /var/www/html
@@ -331,7 +331,7 @@ Resources:
           mkdir -p /var/www/html
           cp -r day3/db-lab/materials/app/* /var/www/html/
           cd /var/www/html
-          npm install
+          npm ci
           # Set ownership and basic permissions
           chown -R ec2-user:ec2-user /var/www/html
           chmod 755 /var/www/html
