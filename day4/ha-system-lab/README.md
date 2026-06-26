@@ -58,7 +58,7 @@ Day 3と同じ手順で**VPCとRDS**を構築します。
 2. **セキュリティグループ作成**: `database-sg`
 3. **RDS作成**:
    - **識別子**: `employee-database`
-   - **エンジン**: MySQL 8.4.6
+   - **エンジン**: MySQL 8.4.9
    - **🚨初期データベース名**: `employeedb`
    - **VPC**: `employee-app-vpc`
 

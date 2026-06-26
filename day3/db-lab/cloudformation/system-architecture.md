@@ -83,7 +83,7 @@ graph TB
 ### 🗄️ Database Resources
 - **RDS MySQL**: `employee-database-cf`
   - **Location**: Private Subnet 1 (AZ-A)
-  - **Engine**: MySQL 8.4.3
+  - **Engine**: MySQL 8.4.9
   - **Instance Class**: db.t3.micro
   - **Database**: employeedb
 

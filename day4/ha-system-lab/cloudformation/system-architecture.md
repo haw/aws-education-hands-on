@@ -95,7 +95,7 @@ graph TB
 
 ### 🗄️ Database Resources
 - **RDS MySQL**: Located in Private Subnet 1 (AZ-A)
-- **Engine**: MySQL 8.4.3
+- **Engine**: MySQL 8.4.9
 - **Instance Class**: db.t3.micro
 - **Database**: employeedb
 - **Multi-AZ Ready**: Private Subnet 2 available for RDS Multi-AZ
