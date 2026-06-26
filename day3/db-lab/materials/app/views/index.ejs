@@ -3,125 +3,300 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>社員管理システム</title>
+  <title>社員管理システム - COSMIC EDITION</title>
   <link rel="stylesheet" href="/style.css">
-  </head>
+</head>
 <body>
-<div class="header">
-  <div class="header-content">
-    <div class="cloud-logo">☁️ Cloud</div>
-    <div class="service-name">社員管理システム</div>
-  </div>
-  </div>
-<div class="container">
-  <div class="main-card">
-    <div class="card-header">
-      <h1 class="card-title">🏢 Employee Management Console</h1>
-      <div class="card-subtitle">クラウドハンズオン - 完全CRUD対応システム (Node.js版)</div>
-    </div>
-    <div class="card-body">
+  <!-- 星空背景 -->
+  <div class="stars-container" id="stars-container"></div>
 
-<% if (message) { %>
-  <div class="alert alert-<%= messageType %>"><%= message %></div>
-<% } %>
-
-<% if (editData) { %>
-<div class="section">
-  <h3 class="section-title">✏️ 社員情報編集</h3>
-  <form method="POST">
-    <input type="hidden" name="action" value="update">
-    <input type="hidden" name="id" value="<%= editData.id %>">
-    <div class="form-group">
-      <label for="edit_name">氏名:</label>
-      <input type="text" id="edit_name" name="name" value="<%= editData.name %>" required>
-    </div>
-    <div class="form-group">
-      <label for="edit_email">メールアドレス:</label>
-      <input type="email" id="edit_email" name="email" value="<%= editData.email %>" required>
-    </div>
-    <div class="form-group">
-      <label for="edit_department">部署:</label>
-      <input type="text" id="edit_department" name="department" value="<%= editData.department %>" placeholder="例: 開発部">
-    </div>
-    <button type="submit" class="btn btn-primary">更新</button>
-    <a href="/" class="btn btn-secondary">キャンセル</a>
-  </form>
+  <!-- ビッグバン・コスモ演出オーバーレイ -->
+  <div id="cosmo-overlay">
+    <div class="warp-stars" id="warp-stars"></div>
+    <div class="nebula-swirl"></div>
+    <div class="cosmo-core"></div>
+    <div class="cosmo-text" id="cosmo-text">Cosmo Charging...</div>
+    <div class="big-bang-flash" id="big-bang-flash"></div>
   </div>
-<% } else { %>
-<div class="section">
-  <h3 class="section-title">➕ 新規社員追加</h3>
-  <form method="POST">
-    <input type="hidden" name="action" value="add">
-    <div class="form-group">
-      <label for="name">氏名:</label>
-      <input type="text" id="name" name="name" required>
-    </div>
-    <div class="form-group">
-      <label for="email">メールアドレス:</label>
-      <input type="email" id="email" name="email" required>
-    </div>
-    <div class="form-group">
-      <label for="department">部署:</label>
-      <input type="text" id="department" name="department" placeholder="例: 開発部">
-    </div>
-    <button type="submit" class="btn btn-primary">社員を追加</button>
-  </form>
-  </div>
-<% } %>
 
-<div class="section">
-  <h3 class="section-title">📋 社員一覧</h3>
-
-  <div class="stats-grid">
-    <div class="stat-card">
-      <div class="stat-number"><%= totalEmployees %></div>
-      <div class="stat-label">登録社員数</div>
-    </div>
-    <div class="stat-card">
-      <div class="stat-number"><%= currentYear %></div>
-      <div class="stat-label">現在年度</div>
+  <div class="header">
+    <div class="header-content">
+      <div class="cloud-logo">☁️ COSMIC CLOUD</div>
+      <div class="service-name">社員管理システム</div>
     </div>
   </div>
 
-  <% if (employees.length > 0) { %>
-    <table class="data-table">
-      <tr><th>ID</th><th>氏名</th><th>メールアドレス</th><th>部署</th><th>登録日時</th><th>操作</th></tr>
-      <% employees.forEach(function(row) { %>
-        <tr>
-          <td><strong><%= row.id %></strong></td>
-          <td><%= row.name %></td>
-          <td><%= row.email %></td>
-          <td><span style="background: #e3f2fd; padding: 4px 8px; border-radius: 4px; font-size: 12px;"><%= row.department %></span></td>
-          <td><%= new Date(row.created_at).toLocaleString('ja-JP') %></td>
-          <td>
-            <a href="/?edit=<%= row.id %>" class="btn btn-warning">編集</a>
-            <form method="POST" style="display:inline;" onsubmit="return confirmDelete('<%= row.name %>')">
-              <input type="hidden" name="action" value="delete">
-              <input type="hidden" name="id" value="<%= row.id %>">
-              <button type="submit" class="btn btn-danger">削除</button>
+  <div class="container">
+    <div class="main-card">
+      <div class="card-header">
+        <h1 class="card-title">🏢 Employee Management Console</h1>
+        <div class="card-subtitle">クラウドハンズオン - 完全CRUD対応システム (Node.js版 - Cosmos Edition)</div>
+      </div>
+      <div class="card-body">
+
+        <% if (message) { %>
+          <div class="alert alert-<%= messageType %>"><%= message %></div>
+        <% } %>
+
+        <% if (editData) { %>
+          <div class="section">
+            <h3 class="section-title">✏️ 社員情報編集</h3>
+            <form method="POST" id="edit-form">
+              <input type="hidden" name="action" value="update">
+              <input type="hidden" name="id" value="<%= editData.id %>">
+              <div class="form-group">
+                <label for="edit_name">氏名:</label>
+                <input type="text" id="edit_name" name="name" value="<%= editData.name %>" required>
+              </div>
+              <div class="form-group">
+                <label for="edit_email">メールアドレス:</label>
+                <input type="email" id="edit_email" name="email" value="<%= editData.email %>" required>
+              </div>
+              <div class="form-group">
+                <label for="edit_department">部署:</label>
+                <input type="text" id="edit_department" name="department" value="<%= editData.department %>" placeholder="例: 開発部">
+              </div>
+              <!-- btn-group で包み段違いを解消 -->
+              <div class="btn-group">
+                <button type="submit" class="btn btn-primary">更新</button>
+                <a href="/" class="btn btn-secondary">キャンセル</a>
+              </div>
             </form>
-          </td>
-        </tr>
-      <% }); %>
-    </table>
-  <% } else { %>
-    <div class="empty-state">
-      <div class="empty-state-icon">📄</div>
-      <h3>社員データがありません</h3>
-      <p>上のフォームから新しい社員を追加してください。</p>
+          </div>
+        <% } else { %>
+          <div class="section">
+            <h3 class="section-title">➕ 新規社員追加</h3>
+            <form method="POST" id="add-form">
+              <input type="hidden" name="action" value="add">
+              <div class="form-group">
+                <label for="name">氏名:</label>
+                <input type="text" id="name" name="name" required>
+              </div>
+              <div class="form-group">
+                <label for="email">メールアドレス:</label>
+                <input type="email" id="email" name="email" required>
+              </div>
+              <div class="form-group">
+                <label for="department">部署:</label>
+                <input type="text" id="department" name="department" placeholder="例: 開発部">
+              </div>
+              <!-- btn-group で包み整列 -->
+              <div class="btn-group">
+                <button type="submit" class="btn btn-primary">社員を追加</button>
+              </div>
+            </form>
+          </div>
+        <% } %>
+
+        <div class="section">
+          <h3 class="section-title">📋 社員一覧</h3>
+
+          <div class="stats-grid">
+            <div class="stat-card">
+              <div class="stat-number"><%= totalEmployees %></div>
+              <div class="stat-label">登録社員数</div>
+            </div>
+            <div class="stat-card">
+              <div class="stat-number"><%= currentYear %></div>
+              <div class="stat-label">現在年度</div>
+            </div>
+          </div>
+
+          <% if (employees.length > 0) { %>
+            <table class="data-table">
+              <thead>
+                <tr>
+                  <th>ID</th>
+                  <th>氏名</th>
+                  <th>メールアドレス</th>
+                  <th>部署</th>
+                  <th>登録日時</th>
+                  <th>操作</th>
+                </tr>
+              </thead>
+              <tbody>
+                <% employees.forEach(function(row) { %>
+                  <tr>
+                    <td><strong><%= row.id %></strong></td>
+                    <td><%= row.name %></td>
+                    <td><%= row.email %></td>
+                    <td>
+                      <span style="background: rgba(0, 210, 255, 0.15); border: 1px solid rgba(0, 210, 255, 0.3); color: #00d2ff; padding: 4px 10px; border-radius: 6px; font-size: 12px; font-weight: 600; text-shadow: 0 0 5px rgba(0, 210, 255, 0.5);">
+                        <%= row.department %>
+                      </span>
+                    </td>
+                    <td><%= new Date(row.created_at).toLocaleString('ja-JP') %></td>
+                    <td>
+                      <!-- btn-group で囲むことで、「編集」と「削除」の高さ・ベースラインを完全に揃えて段違いを防止 -->
+                      <div class="btn-group">
+                        <a href="/?edit=<%= row.id %>" class="btn btn-warning" style="padding: 8px 16px; font-size: 13px;">編集</a>
+                        <form method="POST" style="display:inline;" data-name="<%= row.name %>">
+                          <input type="hidden" name="action" value="delete">
+                          <input type="hidden" name="id" value="<%= row.id %>">
+                          <button type="submit" class="btn btn-danger" style="padding: 8px 16px; font-size: 13px;">削除</button>
+                        </form>
+                      </div>
+                    </td>
+                  </tr>
+                <% }); %>
+              </tbody>
+            </table>
+          <% } else { %>
+            <div class="empty-state">
+              <div class="empty-state-icon">🪐</div>
+              <h3>社員データがありません</h3>
+              <p>上のフォームから新しい社員を追加してください。</p>
+            </div>
+          <% } %>
+        </div>
+
+      </div>
     </div>
-  <% } %>
   </div>
 
-    </div>
-  </div>
-</div>
+  <!-- 宇宙的演出用スクリプト -->
+  <script>
+    document.addEventListener('DOMContentLoaded', () => {
+      // 1. 星空背景の動的生成
+      const starsContainer = document.getElementById('stars-container');
+      const starCount = 65;
 
-<script>
-function confirmDelete(name) {
-  return confirm('⚠️ 削除確認\n\n本当に「' + name + '」さんの情報を削除しますか？\n\n⚠️ この操作は元に戻せません。');
-}
-</script>
+      for (let i = 0; i < starCount; i++) {
+        const star = document.createElement('div');
+        star.classList.add('star');
+        
+        const size = Math.random() * 2.5 + 1; // 1px 〜 3.5px
+        const top = Math.random() * 100;
+        const left = Math.random() * 100;
+        const duration = Math.random() * 4 + 2; // 2s 〜 6s
+        const opacity = Math.random() * 0.7 + 0.3;
+
+        star.style.width = `${size}px`;
+        star.style.height = `${size}px`;
+        star.style.top = `${top}%`;
+        star.style.left = `${left}%`;
+        star.style.setProperty('--duration', `${duration}s`);
+        star.style.setProperty('--opacity', opacity);
+
+        starsContainer.appendChild(star);
+      }
+
+      // 2. 流れ星（Shooting Star）の定期的生成
+      function createShootingStar() {
+        const container = document.getElementById('stars-container');
+        if (!container) return;
+
+        const star = document.createElement('div');
+        star.classList.add('shooting-star');
+
+        // 画面外の上部・右側からスタートさせ、画面全体を対角線上に横断させる
+        const top = Math.random() * 35 - 15; // -15% 〜 20% (画面外から侵入)
+        const left = Math.random() * 40 + 65; // 65% 〜 105% (画面右側から)
+        const size = Math.random() * 100 + 100; // 100px 〜 200px (尾の長さをさらに長くして余韻を強調)
+        const duration = Math.random() * 1.5 + 2.5; // 2.5s 〜 4.0s (スピードを落とし、優雅にすーっと流れる速度に調整)
+
+        star.style.setProperty('--top', `${top}%`);
+        star.style.setProperty('--left', `${left}%`);
+        star.style.setProperty('--size', `${size}px`);
+        star.style.setProperty('--duration', `${duration}s`);
+
+        container.appendChild(star);
+
+        // アニメーション終了後に要素をドムから削除
+        setTimeout(() => {
+          star.remove();
+        }, duration * 1000 + 100);
+      }
+
+      // 初回は1.5秒後、以降は 1.5秒〜4.5秒の頻繁な間隔で流れ星を降らせる
+      function startShootingStars() {
+        setTimeout(function run() {
+          createShootingStar();
+          const nextDelay = Math.random() * 3000 + 1500; // 1500ms 〜 4500ms (頻度を大幅アップ)
+          setTimeout(run, nextDelay);
+        }, 1500);
+      }
+      
+      startShootingStars();
+
+      // 3. 送信時エフェクトの処理
+      const overlay = document.getElementById('cosmo-overlay');
+      const warpStarsContainer = document.getElementById('warp-stars');
+      const cosmoText = document.getElementById('cosmo-text');
+      const flash = document.getElementById('big-bang-flash');
+
+      // すべてのフォーム送信をフック
+      document.querySelectorAll('form').forEach(form => {
+        form.addEventListener('submit', function(e) {
+          const actionInput = form.querySelector('input[name="action"]');
+          let actionType = 'submit';
+          if (actionInput) {
+            actionType = actionInput.value;
+          }
+
+          // 削除時の二重確認
+          if (actionType === 'delete') {
+            const name = form.getAttribute('data-name') || '社員';
+            const confirmed = confirm('⚠️ 削除確認\n\n本当に「' + name + '」さんの情報を削除しますか？\n\n⚠️ この操作は元に戻せません。');
+            if (!confirmed) {
+              e.preventDefault();
+              return;
+            }
+          }
+
+          // デフォルト送信を一旦キャンセル
+          e.preventDefault();
+
+          // アクションに応じたテキスト変更
+          if (actionType === 'add') {
+            cosmoText.textContent = 'Cosmo Awakening... (社員生成中)';
+          } else if (actionType === 'update') {
+            cosmoText.textContent = 'Galaxy Upgrading... (情報更新中)';
+          } else if (actionType === 'delete') {
+            cosmoText.textContent = 'Black Hole Submersion... (情報消滅中)';
+          } else {
+            cosmoText.textContent = 'Connecting to Universe...';
+          }
+
+          // ワープエフェクト用の星々を動的生成
+          warpStarsContainer.innerHTML = '';
+          const warpStarCount = 70;
+          for (let i = 0; i < warpStarCount; i++) {
+            const warpStar = document.createElement('div');
+            warpStar.classList.add('warp-star');
+            
+            // 放射状に広がるランダムなベクトル
+            const angle = Math.random() * Math.PI * 2;
+            const distance = Math.random() * 400 + 200; // 200px 〜 600px
+            const x = Math.cos(angle) * distance;
+            const y = Math.sin(angle) * distance;
+            const speed = Math.random() * 1.0 + 0.4; // 0.4s 〜 1.4s
+
+            warpStar.style.setProperty('--x', `${x}px`);
+            warpStar.style.setProperty('--y', `${y}px`);
+            warpStar.style.setProperty('--speed', `${speed}s`);
+            
+            // 開始位置を少しずらす
+            warpStar.style.animationDelay = `${Math.random() * 0.3}s`;
+
+            warpStarsContainer.appendChild(warpStar);
+          }
+
+          // エフェクト開始
+          overlay.classList.add('active');
+
+          // 1.3秒後にビッグバン（閃光）をトリガー
+          setTimeout(() => {
+            flash.classList.add('active');
+          }, 1250);
+
+          // 1.5秒後に実際にサブミット
+          setTimeout(() => {
+            form.submit();
+          }, 1500);
+        });
+      });
+    });
+  </script>
 </body>
 </html>
-
