@@ -1,6 +1,12 @@
 AWSTemplateFormatVersion: '2010-09-09'
 Description: 'Day4 HA System Lab - High Availability Employee Management System (AWS Academy Compatible)'
 
+Parameters:
+  LatestAmazonLinux2023AmiId:
+    Type: AWS::SSM::Parameter::Value<AWS::EC2::Image::Id>
+    Default: /aws/service/ami-amazon-linux-latest/al2023-ami-kernel-default-x86_64
+    Description: Latest Amazon Linux 2023 AMI ID
+
 Resources:
   # VPC
   EmployeeAppVpc:
@@ -173,7 +179,7 @@ Resources:
       DBName: employeedb
       DBInstanceClass: db.t3.micro
       Engine: mysql
-      EngineVersion: '8.4.3'
+      EngineVersion: '8.4.9'
       MasterUsername: admin
       MasterUserPassword: password123
       AllocatedStorage: 20
@@ -195,7 +201,7 @@ Resources:
     DependsOn: EmployeeDatabase
     Properties:
       InstanceType: t3.micro
-      ImageId: ami-00ca32bbc84273381  # Amazon Linux 2023 (us-east-1) - Latest
+      ImageId: !Ref LatestAmazonLinux2023AmiId
       SubnetId: !Ref PublicSubnet1
       SecurityGroupIds:
         - !Ref WebServerSecurityGroup
@@ -286,7 +292,7 @@ Resources:
     DependsOn: EmployeeDatabase
     Properties:
       InstanceType: t3.micro
-      ImageId: ami-00ca32bbc84273381  # Amazon Linux 2023 (us-east-1) - Latest
+      ImageId: !Ref LatestAmazonLinux2023AmiId
       SubnetId: !Ref PublicSubnet2
       SecurityGroupIds:
         - !Ref WebServerSecurityGroup
