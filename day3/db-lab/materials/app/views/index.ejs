@@ -38,58 +38,13 @@
           <div class="alert alert-<%= messageType %>"><%= message %></div>
         <% } %>
 
-        <% if (editData) { %>
-          <div class="section">
-            <h3 class="section-title">✏️ 社員情報編集</h3>
-            <form method="POST" id="edit-form">
-              <input type="hidden" name="action" value="update">
-              <input type="hidden" name="id" value="<%= editData.id %>">
-              <div class="form-group">
-                <label for="edit_name">氏名:</label>
-                <input type="text" id="edit_name" name="name" value="<%= editData.name %>" required>
-              </div>
-              <div class="form-group">
-                <label for="edit_email">メールアドレス:</label>
-                <input type="email" id="edit_email" name="email" value="<%= editData.email %>" required>
-              </div>
-              <div class="form-group">
-                <label for="edit_department">部署:</label>
-                <input type="text" id="edit_department" name="department" value="<%= editData.department %>" placeholder="例: 開発部">
-              </div>
-              <!-- btn-group で包み段違いを解消 -->
-              <div class="btn-group">
-                <button type="submit" class="btn btn-primary">更新</button>
-                <a href="/" class="btn btn-secondary">キャンセル</a>
-              </div>
-            </form>
-          </div>
-        <% } else { %>
-          <div class="section">
-            <h3 class="section-title">➕ 新規社員追加</h3>
-            <form method="POST" id="add-form">
-              <input type="hidden" name="action" value="add">
-              <div class="form-group">
-                <label for="name">氏名:</label>
-                <input type="text" id="name" name="name" required>
-              </div>
-              <div class="form-group">
-                <label for="email">メールアドレス:</label>
-                <input type="email" id="email" name="email" required>
-              </div>
-              <div class="form-group">
-                <label for="department">部署:</label>
-                <input type="text" id="department" name="department" placeholder="例: 開発部">
-              </div>
-              <!-- btn-group で包み整列 -->
-              <div class="btn-group">
-                <button type="submit" class="btn btn-primary">社員を追加</button>
-              </div>
-            </form>
-          </div>
-        <% } %>
+        <!-- フォーム類はポップアップ（モーダル）へ移行されました -->
 
         <div class="section">
-          <h3 class="section-title">📋 社員一覧</h3>
+          <div class="section-header-group">
+            <h3 class="section-title" style="margin-bottom: 0;">📋 社員一覧</h3>
+            <button class="btn btn-primary" id="open-add-btn">➕ 新規社員追加</button>
+          </div>
 
           <div class="stats-grid">
             <div class="stat-card">
@@ -153,6 +108,62 @@
       </div>
     </div>
   </div>
+
+  <!-- 新規追加モーダル -->
+  <div class="cosmo-modal-overlay" id="add-modal">
+    <div class="cosmo-modal">
+      <button class="cosmo-modal-close" id="close-add-modal">&times;</button>
+      <h3 class="section-title" style="border-left: none; padding-left: 0; margin-bottom: 20px;">➕ 新規社員追加</h3>
+      <form method="POST" id="add-form">
+        <input type="hidden" name="action" value="add">
+        <div class="form-group">
+          <label for="name">氏名:</label>
+          <input type="text" id="name" name="name" required>
+        </div>
+        <div class="form-group">
+          <label for="email">メールアドレス:</label>
+          <input type="email" id="email" name="email" required>
+        </div>
+        <div class="form-group">
+          <label for="department">部署:</label>
+          <input type="text" id="department" name="department" placeholder="例: 開発部">
+        </div>
+        <div class="btn-group">
+          <button type="submit" class="btn btn-primary">社員を追加</button>
+        </div>
+      </form>
+    </div>
+  </div>
+
+  <!-- 編集モーダル (サーバーから editData がある場合のみレンダリングされて初期状態でアクティブ) -->
+  <% if (editData) { %>
+    <div class="cosmo-modal-overlay active" id="edit-modal">
+      <div class="cosmo-modal">
+        <a href="/" class="cosmo-modal-close" id="close-edit-modal" style="text-decoration: none;">&times;</a>
+        <h3 class="section-title" style="border-left: none; padding-left: 0; margin-bottom: 20px;">✏️ 社員情報編集</h3>
+        <form method="POST" id="edit-form">
+          <input type="hidden" name="action" value="update">
+          <input type="hidden" name="id" value="<%= editData.id %>">
+          <div class="form-group">
+            <label for="edit_name">氏名:</label>
+            <input type="text" id="edit_name" name="name" value="<%= editData.name %>" required>
+          </div>
+          <div class="form-group">
+            <label for="edit_email">メールアドレス:</label>
+            <input type="email" id="edit_email" name="email" value="<%= editData.email %>" required>
+          </div>
+          <div class="form-group">
+            <label for="edit_department">部署:</label>
+            <input type="text" id="edit_department" name="department" value="<%= editData.department %>" placeholder="例: 開発部">
+          </div>
+          <div class="btn-group">
+            <button type="submit" class="btn btn-primary">更新</button>
+            <a href="/" class="btn btn-secondary">キャンセル</a>
+          </div>
+        </form>
+      </div>
+    </div>
+  <% } %>
 
   <!-- 宇宙的演出用スクリプト -->
   <script>
@@ -219,7 +230,35 @@
       
       startShootingStars();
 
-      // 3. 送信時エフェクトの処理
+      // 3. モーダル（ポップアップ）制御の初期化
+      const addModal = document.getElementById('add-modal');
+      const openAddBtn = document.getElementById('open-add-btn');
+      const closeAddModal = document.getElementById('close-add-modal');
+
+      if (openAddBtn && addModal) {
+        openAddBtn.addEventListener('click', () => {
+          addModal.classList.add('active');
+        });
+      }
+
+      if (closeAddModal && addModal) {
+        closeAddModal.addEventListener('click', () => {
+          addModal.classList.remove('active');
+        });
+      }
+
+      // モーダル背景クリックで閉じる処理
+      window.addEventListener('click', (e) => {
+        if (e.target === addModal) {
+          addModal.classList.remove('active');
+        }
+        const editModal = document.getElementById('edit-modal');
+        if (e.target === editModal) {
+          window.location.href = '/'; // URLの ?edit=ID を消して一覧に戻す
+        }
+      });
+
+      // 4. 送信時エフェクトの処理
       const overlay = document.getElementById('cosmo-overlay');
       const warpStarsContainer = document.getElementById('warp-stars');
       const cosmoText = document.getElementById('cosmo-text');
@@ -290,11 +329,15 @@
 
           // 非同期 (fetch) でデータを送信
           const formData = new FormData(form);
-          const searchParams = new URLSearchParams(formData);
+          const params = [];
+          formData.forEach((value, key) => {
+            params.push(encodeURIComponent(key) + '=' + encodeURIComponent(value));
+          });
+          const bodyString = params.join('&');
 
-          const fetchPromise = fetch(form.action || window.location.href, {
-            method: form.method || 'POST',
-            body: searchParams,
+          const fetchPromise = fetch(window.location.pathname + window.location.search, {
+            method: 'POST',
+            body: bodyString,
             headers: {
               'Content-Type': 'application/x-www-form-urlencoded'
             }

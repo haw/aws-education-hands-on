@@ -625,3 +625,78 @@ input[type="text"]:focus, input[type="email"]:focus {
     padding: 12px 8px;
   }
 }
+
+/* ==========================================
+   COSMIC POPUP / MODAL STYLES
+   ========================================== */
+
+.section-header-group {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 25px;
+  width: 100%;
+}
+
+.cosmo-modal-overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100vw;
+  height: 100vh;
+  background: rgba(5, 3, 15, 0.7);
+  backdrop-filter: blur(8px);
+  -webkit-backdrop-filter: blur(8px);
+  z-index: 9999;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  opacity: 0;
+  visibility: hidden; /* 非活性時に背後のクリックを阻害しないよう非表示化 */
+  pointer-events: none;
+  transition: opacity 0.3s ease, visibility 0.3s ease;
+}
+
+.cosmo-modal-overlay.active {
+  opacity: 1;
+  visibility: visible;
+  pointer-events: all;
+}
+
+.cosmo-modal {
+  background: rgba(13, 11, 26, 0.95);
+  border-radius: 16px;
+  border: 1px solid rgba(186, 104, 200, 0.3);
+  box-shadow: 0 15px 40px rgba(0, 0, 0, 0.6), 
+              0 0 25px rgba(186, 104, 200, 0.2);
+  width: 90%;
+  max-width: 500px;
+  padding: 30px;
+  position: relative;
+  transform: scale(0.85);
+  transition: transform 0.35s cubic-bezier(0.34, 1.56, 0.64, 1);
+}
+
+.cosmo-modal-overlay.active .cosmo-modal {
+  transform: scale(1);
+}
+
+.cosmo-modal-close {
+  position: absolute;
+  top: 15px;
+  right: 20px;
+  background: none;
+  border: none;
+  color: #94a3b8;
+  font-size: 28px;
+  cursor: pointer;
+  transition: color 0.2s ease, transform 0.2s ease;
+  line-height: 1;
+}
+
+.cosmo-modal-close:hover {
+  color: #ff007f;
+  transform: scale(1.1) rotate(90deg);
+  text-shadow: 0 0 8px rgba(255, 0, 127, 0.6);
+}
+
