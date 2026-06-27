@@ -285,15 +285,42 @@
           // エフェクト開始
           overlay.classList.add('active');
 
-          // 1.3秒後にビッグバン（閃光）をトリガー
-          setTimeout(() => {
-            flash.classList.add('active');
-          }, 1250);
+          // 最低1.5秒（1500ms）のチャージ演出時間を保証するPromise
+          const minDisplayPromise = new Promise(resolve => setTimeout(resolve, 1500));
 
-          // 1.5秒後に実際にサブミット
-          setTimeout(() => {
-            form.submit();
-          }, 1500);
+          // 非同期 (fetch) でデータを送信
+          const formData = new FormData(form);
+          const searchParams = new URLSearchParams(formData);
+
+          const fetchPromise = fetch(form.action || window.location.href, {
+            method: form.method || 'POST',
+            body: searchParams,
+            headers: {
+              'Content-Type': 'application/x-www-form-urlencoded'
+            }
+          })
+          .then(response => {
+            if (response.redirected) {
+              return response.url;
+            }
+            return '/';
+          });
+
+          // 「サーバー処理の完了」と「最低1.5秒のウェイト」の両方が揃うのを待つ
+          Promise.all([fetchPromise, minDisplayPromise])
+          .then(([redirectUrl]) => {
+            // 両方完了した瞬間にビッグバン（閃光）をトリガー
+            flash.classList.add('active');
+
+            // 閃光が画面を完全に覆うタイミング（約250ms後）でページを遷移させる
+            setTimeout(() => {
+              window.location.href = redirectUrl;
+            }, 250);
+          })
+          .catch(error => {
+            console.error('通信エラー:', error);
+            window.location.href = '/?message=' + encodeURIComponent('❌ 通信エラーが発生しました') + '&type=error';
+          });
         });
       });
     });
