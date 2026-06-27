@@ -50,8 +50,8 @@ app.get('/stress', (req, res) => {
 
 // Routes
 app.get('/', async (req, res) => {
-  let message = '';
-  let messageType = '';
+  let message = req.query.message || '';
+  let messageType = req.query.type || '';
   let editData = null;
 
   if (req.query.edit) {

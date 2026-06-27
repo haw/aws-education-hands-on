@@ -35,7 +35,11 @@
       <div class="card-body">
 
         <% if (message) { %>
-          <div class="alert alert-<%= messageType %>"><%= message %></div>
+          <div class="cosmo-toast <%= messageType %>" id="cosmo-toast">
+            <span class="toast-icon"><%= messageType === 'success' ? '🪐' : '💥' %></span>
+            <div class="toast-body"><%= message %></div>
+            <button class="toast-close" id="close-toast-btn">&times;</button>
+          </div>
         <% } %>
 
         <!-- フォーム類はポップアップ（モーダル）へ移行されました -->
@@ -366,6 +370,36 @@
           });
         });
       });
+
+      // 5. コズミック・トースト（Toast）通知の自動消滅＆URLクリーンアップ
+      const toast = document.getElementById('cosmo-toast');
+      const closeToastBtn = document.getElementById('close-toast-btn');
+
+      if (toast) {
+        // トースト消滅処理
+        const dismissToast = () => {
+          toast.classList.add('dismiss');
+          setTimeout(() => {
+            toast.remove();
+          }, 400); // フェードアウトアニメーション完了後にDOMから削除
+        };
+
+        // 4秒後に自動消滅
+        const autoDismissTimer = setTimeout(dismissToast, 4000);
+
+        // ✕ボタンクリックで即座に消滅
+        if (closeToastBtn) {
+          closeToastBtn.addEventListener('click', () => {
+            clearTimeout(autoDismissTimer);
+            dismissToast();
+          });
+        }
+
+        // トースト表示完了後、アドレスバーのURLパラメータ（?message=...）を消去してクリーンにする
+        if (window.history && window.history.replaceState) {
+          window.history.replaceState(null, null, window.location.pathname);
+        }
+      }
     });
   </script>
 </body>

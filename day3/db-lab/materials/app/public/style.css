@@ -700,3 +700,95 @@ input[type="text"]:focus, input[type="email"]:focus {
   text-shadow: 0 0 8px rgba(255, 0, 127, 0.6);
 }
 
+/* ==========================================
+   COSMIC TOAST NOTIFICATION STYLES
+   ========================================== */
+
+.cosmo-toast {
+  position: fixed;
+  top: 30px;
+  right: 30px;
+  z-index: 10000;
+  display: flex;
+  align-items: center;
+  gap: 15px;
+  width: 90%;
+  max-width: 400px;
+  padding: 16px 20px;
+  border-radius: 12px;
+  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.6);
+  backdrop-filter: blur(12px);
+  -webkit-backdrop-filter: blur(12px);
+  animation: toast-slide-in 0.4s cubic-bezier(0.25, 0.8, 0.25, 1) forwards;
+  transition: opacity 0.4s ease, transform 0.4s ease;
+}
+
+/* 成功時 (ネオン・グリーン/ブルーフュージョン) */
+.cosmo-toast.success {
+  background: rgba(15, 28, 20, 0.9);
+  border: 1px solid rgba(0, 210, 255, 0.4);
+  box-shadow: 0 0 20px rgba(0, 210, 255, 0.2), inset 0 0 10px rgba(76, 175, 80, 0.1);
+  border-left: 5px solid #00d2ff;
+}
+
+.cosmo-toast.success .toast-icon {
+  filter: drop-shadow(0 0 6px rgba(0, 210, 255, 0.8));
+}
+
+/* 失敗時 (警告ネオン・レッド) */
+.cosmo-toast.error {
+  background: rgba(28, 15, 15, 0.9);
+  border: 1px solid rgba(244, 67, 54, 0.4);
+  box-shadow: 0 0 20px rgba(244, 67, 54, 0.2), inset 0 0 10px rgba(244, 67, 54, 0.1);
+  border-left: 5px solid #f44336;
+}
+
+.cosmo-toast.error .toast-icon {
+  filter: drop-shadow(0 0 6px rgba(244, 67, 54, 0.8));
+}
+
+.toast-icon {
+  font-size: 20px;
+}
+
+.toast-body {
+  flex-grow: 1;
+  font-size: 14px;
+  font-weight: 600;
+  color: #f1f5f9;
+  letter-spacing: 0.5px;
+  line-height: 1.4;
+  text-shadow: 0 0 8px rgba(255, 255, 255, 0.2);
+}
+
+.toast-close {
+  background: none;
+  border: none;
+  color: #94a3b8;
+  font-size: 20px;
+  cursor: pointer;
+  transition: color 0.2s ease, transform 0.2s ease;
+  line-height: 1;
+}
+
+.toast-close:hover {
+  color: #ff007f;
+  transform: scale(1.2);
+}
+
+/* 自動消去時のフェードアウトアニメーション用クラス */
+.cosmo-toast.dismiss {
+  opacity: 0;
+  transform: translateX(120%) scale(0.9);
+}
+
+@keyframes toast-slide-in {
+  0% {
+    opacity: 0;
+    transform: translateX(120%) scale(0.9);
+  }
+  100% {
+    opacity: 1;
+    transform: translateX(0) scale(1);
+  }
+}
