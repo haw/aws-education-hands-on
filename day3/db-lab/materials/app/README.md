@@ -13,6 +13,10 @@
 - **`server.js` は極めてシンプルかつピュアな状態を維持する**必要があります。
 - 受講者が混乱しないよう、ポートは本来の `3000` 固定とし、複雑なエラーハンドリングミドルウェアや非同期キャッチなどの追加コードは一切記述していません。
 - データベース接続情報は、AWS 上では Secrets Manager (`Mydbsecret`) から自動取得し、ローカル環境や取得失敗時は環境変数またはデフォルト値にフォールバックする設計（`config.js`）になっています。
+  - 設計はそうなっているが、教材では Secrets Manager (`Mydbsecret`) は未使用
+  - 参考(CloudFormation template)
+    - hands-on/day3/db-lab/cloudformation/day3-db-lab-manual.yaml
+    - hands-on/day4/ha-system-lab/cloudformation/day4-ha-employee-app.yaml
 
 ### 2. UI/UX 側の「コスモ（小宇宙）」演出の分離
 - すべてのド派手な演出（星空背景、流れ星、送信時のビッグバンチャージエフェクト）は、**`views/index.ejs`（JavaScript）と `public/style.css` のみで完結**しています。
@@ -22,7 +26,7 @@
 ### 3. トラブルシューティングの歴史（ポート 3000 競合問題）
 - ローカル環境で `localhost:3000` にアクセスした際、ブラウザに `Error: ENOENT: ... .org.chromium.Chromium...` というエラーが表示される場合があります。
 - これは Express サーバーのエラーではなく、**ポート 3000 を自動フォワードしようとしている外部ツール（VS Code の自動ポート転送や、バックグラウンドで動いている Tauri アプリ等のプロキシ）が内部でクラッシュしていること**が原因です。
-- この現象が発生した場合は、プロキシとなっている該当プロセス（例: `SwiftQuot` など）を `lsof -nP -iTCP:3000` で特定して `kill` するか、一時的に `server.js` のポートを `3005` などに変更してプロキシをバイパスしてください。
+- この現象が発生した場合は、プロキシとなっている該当プロセス（例: `SwiftQuot` など）を `lsof -nP -iTCP:3000 -sTCP:LISTEN` で特定して `kill` するか、一時的に `server.js` のポートを `3005` などに変更してプロキシをバイパスしてください。
 
 ---
 
@@ -47,7 +51,7 @@
 ---
 
 ### ステップ 1: ローカル検証用 MySQL 8.4 の起動 (Docker)
-Docker を使用して、検証用の MySQL 8.4.10 コンテナをバックグラウンドで起動します。
+Docker を使用して、検証用の MySQL 8.4.x コンテナをバックグラウンドで起動します。
 ```bash
 docker run --name db-lab-mysql \
   -e MYSQL_ROOT_PASSWORD=password123 \
