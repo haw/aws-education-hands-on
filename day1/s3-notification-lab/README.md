@@ -4,7 +4,7 @@
 
 - **イベント駆動アーキテクチャ**: ファイルアップロードをトリガーに自動処理
 - **サーバーレス**: サーバー管理不要でシステム構築
-- **AWS連携**: S3 → <ruby>Lambda<rt>ラムダ</rt></ruby> → SNS（<ruby>Simple Notification Service<rt>シンプル・ノーティフィケーション・サービス</rt></ruby>） の連携パターン
+- **AWS連携**: S3（**S**imple **S**torage **S**ervice） → <ruby>Lambda<rt>ラムダ</rt></ruby> → SNS（<ruby>**S**imple **N**otification **S**ervice<rt>シンプル・ノーティフィケーション・サービス</rt></ruby>） の連携パターン
 - **実用的な通知システム**: 実際のシステムでよく使われる構成
 
 ## ️ 構築するシステム
