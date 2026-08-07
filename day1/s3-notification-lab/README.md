@@ -75,7 +75,7 @@
 1. AWSコンソールで「Lambda」を検索・選択
 2. 「関数の作成」
 3. **関数名**: `s3-notification-handler`
-4. **ランタイム**: Python 3.14 または Node.js 24.x (お好きな方を選んでください。どちらか迷ったらPythonを選んでください)
+4. **ランタイム**: Python 3.14
 5. カスタム設定 > その他の設定 > **カスタム実行ロール** をONにする
    ![](images/LambdaExecutionCustom.png)
 6. 「実行ロール」で、 **LabRole** を選択し、「保存」
@@ -88,10 +88,6 @@
 #### Python版コード
 
 <a href="https://github.com/haw/aws-education-materials/blob/main/day1/s3-notification-lab/materials/lambda-python.py" target="_blank" rel="noopener noreferrer">lambda-python.py</a> を参照してください。AWSコンソール上の「コード」タブで、Copy & Pasteしてください。  
-
-#### Node.js版コード
-
-<a href="https://github.com/haw/aws-education-materials/blob/main/day1/s3-notification-lab/materials/lambda-nodejs.js" target="_blank" rel="noopener noreferrer">lambda-nodejs.js</a> を参照してください。AWSコンソール上の「コード」タブで、Copy & Pasteしてください。  
 
 ### Step 5: SNSトピックARNの設定
 
