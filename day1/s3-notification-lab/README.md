@@ -58,8 +58,9 @@
       ![](images/SNSSubscriptionConfirmation.png)
 
    - **購読完了の例**:
-      ![](images/Subscription-confirmed.png)
       **⚠️「click here to unsubscribe.」のリンクは押さない。**
+
+      ![](images/Subscription-confirmed.png)
 
 ### Step 3: S3バケット作成
 
