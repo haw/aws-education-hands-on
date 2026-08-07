@@ -57,7 +57,7 @@
    - **メールの例**:
       ![](images/SNSSubscriptionConfirmation.png)
 
-   - **購読完了の例**:
+   - **購読完了の例**:  
       **⚠️「click here to unsubscribe.」のリンクは押さない。**
 
       ![](images/Subscription-confirmed.png)
