@@ -57,6 +57,9 @@
    - **メールの例**:
       ![](images/SNSSubscriptionConfirmation.png)
 
+   - **購読完了の例**:
+      ![](images/Subscription-confirmed.png)
+      **⚠️「click here to unsubscribe.」のリンクは押さない。**
 
 ### Step 3: S3バケット作成
 
