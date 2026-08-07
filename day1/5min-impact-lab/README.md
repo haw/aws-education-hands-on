@@ -146,7 +146,8 @@
 **📚コラム: JumpingBallRunner-SingleFile.html**
 
 ```
-このゲームはChatGPT-5が制作しました。驚きなのは、数行だけの指示でできあがります。
+このゲームは、2025年にChatGPT-5を使って制作しました。
+驚きなのは、数行だけの指示でできあがります。
 
 Prompt: Create a single-page app in a single HTML file with the following requirements:
 - Name: Jumping Ball Runner
