@@ -31,12 +31,12 @@
 
 ---
 
-## 🚀 Phase 1: Default VPCでEC2起動（25分）
+## 🚀 Phase 1: Default VPCでEC2起動
 
 ### 目標
 「まずは簡単に！Default VPCでWebサーバを起動してみよう」
 
-### Step 1: セキュリティグループ作成（5分）
+### Step 1: セキュリティグループ作成
 
 1. **EC2コンソール**にアクセス
 2. 左側の「ネットワークとセキュリティ」から「セキュリティグループ」を開く
@@ -59,7 +59,7 @@
 
 4. 「セキュリティグループを作成」をクリック
 
-### Step 2: EC2インスタンス起動（10分）
+### Step 2: EC2インスタンス起動
 
 1. **EC2コンソール**にアクセス
 2. 「インスタンスを起動」をクリック
@@ -112,13 +112,13 @@
 
 ![](images/ec2-show-all-instances.png)
 
-### Step 3: 動作確認（5分）
+### Step 3: 動作確認
 
 1. インスタンスが「実行中」状態かつステータスチェックが「2/2のチェックに合格しました」になるまで待機 (2分〜5分程度)
 
     ![](images/ec2-running.png)  
 
-    [Status checks for Amazon EC2 instances](https://docs.aws.amazon.com/AWSEC2/latest/UserGuide/monitoring-system-instance-status-check.html)  
+    参考: [Status checks for Amazon EC2 instances](https://docs.aws.amazon.com/AWSEC2/latest/UserGuide/monitoring-system-instance-status-check.html)  
 
 2. パブリックIPアドレスをコピー
 
@@ -129,10 +129,13 @@
 
     ![](images/ec2-web-app.png)
 
-### Step 4: Session Managerで接続体験（5分）
+### Step 4: Session Managerで接続体験
 
 1. インスタンスを選択
-2. 「接続」→「セッションマネージャー」
+2. 「接続」→「ウェブブラウザで」→「SSMセッションマネージャー」
+
+    ![](images/session-manager.png)
+
 3. 「接続」をクリック
 4. ブラウザ内でLinuxコマンドを実行
     ```bash
@@ -151,12 +154,12 @@
 
 ---
 
-## 🏗️ Phase 2: カスタムVPCでの本格構築（30分）
+## 🏗️ Phase 2: カスタムVPCでの本格構築
 
 ### 目標
 「本格的なネットワーク設計！自分専用のVPCを構築しよう」
 
-### Step 1: VPC作成（10分）
+### Step 1: VPC作成
 
 1. **VPCコンソール**にアクセス
 2. 「VPCを作成」をクリック
@@ -182,7 +185,7 @@
 
     ![](images/vpc-02.png)
 
-### Step 2: セキュリティグループ作成（5分）
+### Step 2: セキュリティグループ作成
 
 1. **EC2コンソール**で、左側の「ネットワークとセキュリティ」から「セキュリティグループ」を開く
 2. 「セキュリティグループを作成」をクリック
@@ -204,7 +207,7 @@
 
 3. 「セキュリティグループを作成」をクリック
 
-### Step 3: カスタムVPCでEC2起動（10分）
+### Step 3: カスタムVPCでEC2起動
 
 1. **EC2コンソール**で「インスタンスを起動」
 
@@ -250,7 +253,7 @@
 
 ![](images/ec2-show-all-instances.png)
 
-### Step 4: 動作確認と比較（5分）
+### Step 4: 動作確認と比較
 
 1. 新しいインスタンスの動作確認 (Phase 1と同じ)
 2. Default VPCとカスタムVPCの違いを確認
