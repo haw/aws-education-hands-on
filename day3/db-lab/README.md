@@ -127,6 +127,8 @@ _パッチ適用などで送信(アウトバウンド)が必要な場合は、Pu
   - `employee-app-vpc-subnet-private1-us-east-1a`
   - `employee-app-vpc-subnet-private2-us-east-1b`
 
+![](images/db-subnet-group-add-subnets.png)
+
 ### Step 2: セキュリティグループ作成
 
 1. **EC2コンソール**→「セキュリティグループ」
