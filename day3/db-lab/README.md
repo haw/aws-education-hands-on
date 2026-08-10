@@ -239,10 +239,10 @@ _パッチ適用などで送信(アウトバウンド)が必要な場合は、Pu
 
 - **ユーザーデータ**: <a href="https://github.com/haw/aws-education-materials/blob/main/day3/db-lab/materials/user-data-webapp.txt" target="_blank" rel="noopener noreferrer">user-data-webapp.txt</a> の内容をコピー & ペースト  
     - `YOUR_RDS_ENDPOINT_HERE`を`[RDSエンドポイント]`(※次参照)で書き換える（先頭の方に1箇所）
-    - `[RDSエンドポイント]` = RDSコンソール→データベース→`employee-database`→接続とセキュリティ→エンドポイントの値 (RDSのコンソールに戻っても表示されない場合は待つ。「待つ」のも仕事のうち!)
+    - `[RDSエンドポイント]` = RDSコンソール→データベース→`employee-database`→接続とセキュリティ→エンドポイントの値 (RDSのコンソールに戻っても表示されない場合は待つ。ステータスが「利用可能」となるのを待つ。「待つ」のも仕事のうち!)
 
 
-    ![](images/rds-endpoint.png)  
+    ![](images/copy-rds-endpoint.png)
 
 #### インスタンスを起動
 
