@@ -241,8 +241,14 @@ _パッチ適用などで送信(アウトバウンド)が必要な場合は、Pu
     - `YOUR_RDS_ENDPOINT_HERE`を`[RDSエンドポイント]`(※次参照)で書き換える（先頭の方に1箇所）
     - `[RDSエンドポイント]` = RDSコンソール→データベース→`employee-database`→接続とセキュリティ→エンドポイントの値 (RDSのコンソールに戻っても表示されない場合は待つ。ステータスが「利用可能」となるのを待つ。「待つ」のも仕事のうち!)
 
-
     ![](images/copy-rds-endpoint.png)
+
+    ---
+    ---
+
+    ![](images/ec2-edit-user-data.png)
+
+    ---
 
 #### インスタンスを起動
 
@@ -261,7 +267,7 @@ _パッチ適用などで送信(アウトバウンド)が必要な場合は、Pu
     sudo systemctl status employee-app
     ```
 
-    **以下のようなログがでていれば成功**  =>  Phase 4へ進む
+    **以下のようなログがでていれば成功**  =>  「🚀 Phase 4: 動作確認とテスト」へ進む
 
     ```
     ● employee-app.service - Employee Management Node.js App
@@ -313,7 +319,7 @@ _パッチ適用などで送信(アウトバウンド)が必要な場合は、Pu
     sudo systemctl status employee-app
     ```
 
-上記でも解決しない場合は、以下のコマンドでエラー原因をつきとめて修正する必要がある。EC2インスタンスを終了し、もう一度EC2インスタンスを作り直すほうが早いかもしれない。  
+上記でも解決しない場合は、以下のコマンドでエラー原因をつきとめて修正する必要がある。  
 
 ```
 sudo cloud-init status
@@ -322,6 +328,8 @@ sudo tail -f /var/log/cloud-init-output.log
 sudo cat /var/log/cloud-init.log
 sudo systemctl status employee-app
 ```
+
+原因がはっきりしない場合は、EC2インスタンスを終了し、もう一度EC2インスタンスを作り直すほうが早いかもしれない。  
 
 ---
 
@@ -332,6 +340,8 @@ sudo systemctl status employee-app
 1. EC2インスタンスのパブリックIPをコピー
 2. ブラウザで `http://[パブリックIP]:3000` にアクセス (⚠️`http`です。`3000`番ポートです。)
 3. Node.js製社員管理システムが表示されることを確認
+
+![](images/EmployeeManagementConsoleCosmosEdition.png)
 
 ### Step 2: データベース機能テスト
 
