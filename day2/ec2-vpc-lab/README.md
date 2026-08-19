@@ -61,7 +61,7 @@
 
 ### Step 2: EC2インスタンス起動
 
-1. **EC2コンソール**にアクセス
+1. **EC2コンソール**の左側メニューから「インスタンス」→「インスタンス」を開く
 2. 「インスタンスを起動」をクリック
 
 #### 基本設定
@@ -100,7 +100,7 @@
   
   > **AWS Academy環境ではない方は**: セッションマネージャーを使用するため、`AmazonSSMManagedInstanceCore`ポリシーがアタッチされたIAMロールを作成し、インスタンスプロファイルとして設定してください。
 
-- **ユーザーデータ**: <a href="https://github.com/haw/aws-education-materials/blob/main/day2/ec2-vpc-lab/materials/user-data-apache.txt" target="_blank" rel="noopener noreferrer">user-data-apache.txt</a> の内容をコピー&ペースト
+- **ユーザーデータ**: <a href="https://github.com/haw/aws-education-hands-on/blob/main/day2/ec2-vpc-lab/materials/user-data-apache.txt" target="_blank" rel="noopener noreferrer">user-data-apache.txt</a> の内容をコピー&ペースト
 
     `user-data-apache.txt`: Apacheの自動セットアップとカスタムWebページ作成を行うスクリプト  
 
@@ -243,7 +243,7 @@
   
   > **AWS Academy環境ではない方は**: セッションマネージャーを使用するため、`AmazonSSMManagedInstanceCore`ポリシーがアタッチされたIAMロールを作成し、インスタンスプロファイルとして設定してください。
 
-- **ユーザーデータ**: <a href="https://github.com/haw/aws-education-materials/blob/main/day2/ec2-vpc-lab/materials/user-data-apache.txt" target="_blank" rel="noopener noreferrer">user-data-apache.txt</a>  の内容をコピー&ペースト
+- **ユーザーデータ**: <a href="https://github.com/haw/aws-education-hands-on/blob/main/day2/ec2-vpc-lab/materials/user-data-apache.txt" target="_blank" rel="noopener noreferrer">user-data-apache.txt</a>  の内容をコピー&ペースト
 
 #### インスタンスを起動
 
