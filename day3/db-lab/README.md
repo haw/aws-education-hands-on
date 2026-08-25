@@ -269,22 +269,7 @@ _パッチ適用などで送信(アウトバウンド)が必要な場合は、Pu
 
     **以下のようなログがでていれば成功**  =>  「🚀 Phase 4: 動作確認とテスト」へ進む
 
-    ```
-    ● employee-app.service - Employee Management Node.js App
-         Loaded: loaded (/etc/systemd/system/employee-app.service; enabled; preset: disabled)
-         Active: active (running) since Wed 2025-09-03 07:31:47 UTC; 5min ago
-       Main PID: 26973 (node)
-          Tasks: 11 (limit: 4564)
-         Memory: 23.8M
-            CPU: 492ms
-         CGroup: /system.slice/employee-app.service
-                 └─26973 /usr/bin/node server.js
-
-    Dec 19 14:17:20 ip-10-0-1-181.ec2.internal systemd[1]: Started employee-app.service - Employee Management System.
-    Dec 19 14:17:21 ip-10-0-1-181.ec2.internal node[25390]: [CONFIG] Secrets Manager not available. Using default values.
-    Dec 19 14:17:21 ip-10-0-1-181.ec2.internal node[25390]: サーバーがポート3000で起動しました
-    Dec 19 14:17:21 ip-10-0-1-181.ec2.internal node[25390]: データベースに接続しました
-    ```
+    ![](../../day4/ha-system-lab/images/systemctl-status.png)
 
     **失敗している場合は、たいてい以下のどちらかに問題がある**  
 
