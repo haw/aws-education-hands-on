@@ -77,7 +77,7 @@ Day 3演習内容(VPC + DB Subnet Group + SG + RDS + EC2)と同じものをCloud
     - `[RDSエンドポイント]` = RDSコンソール→データベース→`employee-database-cf`→接続とセキュリティ→エンドポイントの値 (RDSのコンソールに戻っても表示されない場合は待つ。「待つ」のも仕事のうち!)
 
 
-    ![](../../day3/db-lab/images/rds-endpoint.png)  
+    ![](../../day3/db-lab/images/copy-rds-endpoint.png)  
 
 
 
