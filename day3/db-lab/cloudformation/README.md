@@ -2,7 +2,7 @@
 
 ## 🎯 概要
 
-Day3のデータベース実習をCloudFormationで自動化したバージョンです。手動でのRDSエンドポイント設定が不要になり、完全自動でEmployee Management Systemが構築されます。
+Day3のデータベース演習をCloudFormationで自動化したバージョンです。手動でのRDSエンドポイント設定が不要になり、完全自動でEmployee Management Systemが構築されます。
 
 ## 🏗️ 構築されるリソース
 

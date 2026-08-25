@@ -7,7 +7,7 @@ title: Day 4
 
 ## ハンズオン資料
 
-- [高可用性システム実習 - Day 3をもう一度手動で作成](ha-system-lab/)
-- [高可用性システム実習 - Day 3をCloudFormationでショートカット](ha-system-lab/README-shortcut-with-cloudformation.md)
+- [高可用性システム演習 - Day 3をもう一度手動で作成](ha-system-lab/)
+- [高可用性システム演習 - Day 3をCloudFormationでショートカット](ha-system-lab/README-shortcut-with-cloudformation.md)
 
 [← ホームに戻る](../)

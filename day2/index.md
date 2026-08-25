@@ -7,6 +7,6 @@ title: Day 2
 
 ## ハンズオン資料
 
-- [EC2・VPC実習](ec2-vpc-lab/)
+- [EC2・VPC演習](ec2-vpc-lab/)
 
 [← ホームに戻る](../)

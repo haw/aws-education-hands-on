@@ -155,7 +155,7 @@ CREATE TABLE employees (
 );
 ```
 
-このアプリケーションは、AWS Academy Cloud Foundationsの実習において、EC2とRDSの連携を学習するための実践的な教材として設計されています。
+このアプリケーションは、AWS Academy Cloud Foundationsのサンドボックスラボでの演習において、EC2とRDSの連携を学習するための実践的な教材として設計されています。
 
 ---
 
