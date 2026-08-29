@@ -190,7 +190,7 @@ Resources:
       BackupRetentionPeriod: 0
       MultiAZ: false
       PubliclyAccessible: false
-      StorageEncrypted: false
+      StorageEncrypted: true
       Tags:
         - Key: Name
           Value: employee-database-cf-day4
