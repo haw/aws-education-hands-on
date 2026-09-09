@@ -61,14 +61,16 @@
 
 ### Step 2: EC2インスタンス起動
 
-1. **EC2コンソール**の左側メニューから「インスタンス」→「インスタンス」を開く
+1. **EC2コンソール**にアクセス
 2. 「インスタンスを起動」をクリック
+
+    ![](images/ec2-dashboard-launch-instance.png)
 
 #### 基本設定
 - **名前**: `my-first-webserver`
 - **AMI**: Amazon Linux 2023 AMI
 
-    > 一覧に `Amazon Linux 2023 kernel-6.18 AMI` と `Amazon Linux 2023 kernel-6.1 AMI` の2種類が表示されます。既定で選択されているものをそのまま使ってください。
+    > 一覧に kernel のバージョンが異なるものが複数表示されることがあります。既定で選択されているものをそのまま使ってください。
 
 - **インスタンスタイプ**: t3.micro
 
