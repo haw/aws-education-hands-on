@@ -97,6 +97,8 @@
 
 2. Lambda関数のコードで `YOUR_TOPIC_ARN_HERE` を実際のSNSトピックARNに置換 (例: arn:aws:sns:us-east-1:975xxxxxxxx:file-upload-notifications)
 
+   ⚠️ このとき、前後のシングルクォート（`'`）は消さずに中のARN部分だけ置き換えてください。クォートごと消すとLambda実行時にエラーとなり、通知メールが届きません。
+
 3. 「Deploy」をクリック
 
     ![](images/Lambda-deploy.png)
